@@ -16,8 +16,8 @@
 //
 // LICENSE@@@
 
-/* THIS FILE IS DEPRECATED. USE Email.js INSTEAD. */
-
-var Message = {};
-
-
+enyo.paths({
+    "base": "..",
+    "images": "$base/images",
+    "css": "$base/css"
+});
