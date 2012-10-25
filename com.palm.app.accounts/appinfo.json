@@ -6,6 +6,5 @@
 	"main": "index.html",
 	"title": "Accounts",
 	"icon": "icon.png",
-	"splashicon": "icon-256x256.png",
 	"uiRevision": 2
 }

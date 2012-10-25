@@ -7,6 +7,5 @@
     "main"      : "index.html",
     "title"     : "Contacts",
     "icon"      : "icon.png",
-    "splashicon": "icon-256x256.png",
     "removable" : false
 }
