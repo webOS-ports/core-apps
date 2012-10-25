@@ -6,7 +6,7 @@
 	"main": "index.html",
 	"title": "Clock",
 	"icon": "icon.png",
-   "splashicon": "icon-256x256.png",
+   "splashicon": "icon.png",
 	"noWindow": true,
 	"uiRevision": 2,
 	"debug": false,

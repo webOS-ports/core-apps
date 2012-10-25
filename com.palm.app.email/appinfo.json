@@ -6,7 +6,6 @@
     "main"           : "index.html",
     "title"          : "Email",
     "icon"           : "icon.png",
-    "splashicon"     : "icon-256x256.png",
     "noWindow"       : true,
     "uiRevision"     : 2,
     "mimeTypes"      : [
