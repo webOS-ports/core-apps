@@ -38,8 +38,8 @@ enyo.kind({
         
         kind: "enyo.Pane",
         components: [
-                     {name: "small", kind: "Calc.Small"},
                      {name: "big", kind: "Calc.Simple"},
+                     {name: "small", kind: "Calc.Small"},
                      {kind: "AppMenu",
                       style: "width: 210px; height: 160px",  //height needs 200 w/toggle. 210 is the min-width specified in the inherited styling
                       components: [
