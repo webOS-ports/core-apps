@@ -182,10 +182,10 @@ EmailApp.Util.setUpConnectionWatch = function () {
             app.connectionStatus = resp;
         }, /// onSuccess
         function (resp) {
-            console.log("connectionmanager 'getStatus' request failed." + JSON.stringify(resp));
+            console.log("connectionmanager 'getstatus' request failed." + JSON.stringify(resp));
         }); // onFailure
 
-    enyo.application.connectionWatch = EmailApp.Util.callService("palm://com.palm.connectionmanager/getStatus", { subscribe: true }, reqHandler);
+    enyo.application.connectionWatch = EmailApp.Util.callService("palm://com.palm.connectionmanager/getstatus", { subscribe: true }, reqHandler);
     // how do we do resubscribe: true?
 
     enyo.application.isConnectionAvailable = function () {
