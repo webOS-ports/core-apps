@@ -184,7 +184,7 @@ img {
 .edit .editable-label {
     border: 12px;
     margin: 0 0 0 13px;
-    -webkit-border-image: url(../images/bg_prefix.png) 12 repeat;
+    -webkit-border-image: url(../images/bg_prefix.png) 12;
 }
 
 .edit .label,

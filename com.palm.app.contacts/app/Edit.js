@@ -59,7 +59,7 @@ enyo.kind({
         ]},
         {name: "EditDetails", kind: "Scroller", width: "100%", flex: 1, horizontal: false, autoHorizontal: false, components: [
             {kind: "HFlexBox", pack: "center", components: [
-                {kind: "Control", style: "width:700px;padding:20px 0;", components: [
+                {kind: "Control", style: "width:100%;padding:20px 0;", components: [
                     {kind: "HFlexBox", align: "start", pack: "start", components: [
                         {className: "avatar", components: [
                             {name: "photoImage", className: "img", kind: "Control"},
@@ -120,8 +120,8 @@ enyo.kind({
             ]}
         ]},
         {kind: "Toolbar", className: "enyo-toolbar-light", pack: "center", components: [
-            {kind: "Button", content: $L("Cancel"), onclick: "cancelEditContact", width: "15rem;margin:0 0.8em 0 0"},
-            {kind: "Button", content: $L("Done"), className: "enyo-button-dark", onclick: "doneEditContact", width: "15rem;"}
+            {kind: "Button", content: $L("Cancel"), onclick: "cancelEditContact", width: "40%;margin:0 0.8em 0 0"},
+            {kind: "Button", content: $L("Done"), className: "enyo-button-dark", onclick: "doneEditContact", width: "40%;"}
         ]},
         {name: "DeleteDialog", kind: "ModalDialog", components: [
             {name: "DeleteDialogTitle", className: "enyo-item enyo-first", style: "padding: 12px", content: ""},
