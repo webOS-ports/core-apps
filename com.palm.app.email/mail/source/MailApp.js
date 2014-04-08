@@ -505,7 +505,13 @@ enyo.kind({
     },
 
     folderChosen: function (inSender, inFolder) {
-//		console.log("### FOLDER CHOSEN");
+        console.log("### FOLDER CHOSEN");
+
+        if (!this.$.slidingPane.getMultiView()) {
+            // single pane mode; switch to list pane
+            this.$.slidingPane.selectView(this.$.mailSliding);
+        }
+
         enyo.application.dashboardManager.setFilter(inFolder.accountId, inFolder._id);
         this.$.mail.setFolder(inFolder);
         if (!this.$.mail.getLastEmail(inFolder._id)) {
@@ -538,6 +544,14 @@ enyo.kind({
         if (message) {
             // Select in list of messages
             this.$.mail.selectMessage(message._id);
+        }
+
+        if (!this.$.slidingPane.getMultiView()) {
+            // single pane mode; switch to message pane
+            this.$.slidingPane.selectView(this.$.bodySliding);
+        } else if (userActivated && (window.innerWidth < 900) && (this.$.slidingPane.view === this.$.folderSliding)) {
+            // narrow screen (e.g. portrait mode); hide accounts pane
+            this.$.slidingPane.selectView(this.$.bodySliding);
         }
 
         //this.$.bodySliding.setShowing(!!message);
