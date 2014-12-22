@@ -86,7 +86,7 @@ enyo.kind({
                             {name: "status", captureState: false, kind: "Image", className: "mail-icon-padding", src: "", wantsEvents: false},
                             {name: "invite", captureState: false, kind: "Image", className: "mail-icon-padding", src: "../images/list-cal-invite.png", wantsEvents: false}
                         ]},
-                        {name: "rightflex", kind: "VFlexBox", height: "60px", width: "284px", style: "margin-top:14px; padding-bottom:14px", components: [
+                        {name: "rightflex", kind: "VFlexBox", height: "60px", width: "90%", style: "margin-top:14px; padding-bottom:14px", components: [
                             {kind: "HFlexBox", components: [
                                 {name: "from", captureState: false, className: "mail-from", width: "100%", wantsEvents: false},
                                 {name: "attach", captureState: false, canGenerate: false, kind: "Image", className: "mail-attach-icon", src: "../images/attachment-icon.png", wantsEvents: false},
