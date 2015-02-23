@@ -45,7 +45,7 @@ enyo.kind({
 			{className:"accounts-header-shadow"},
 			{kind: "Scroller", flex: 1, components: [
 				{kind:"Control", className:"box-center", components: [
-					{kind: "RowGroup", className:"accounts-group", caption:$L("HP WEBOS ACCOUNT"), components: [
+					{kind: "RowGroup", className:"accounts-group", caption:$L("Local Account"), components: [
 						{kind: "Item", layoutKind: "HFlexLayout", tapHighlight: true, disabled:true, className:"enyo-single" , onclick: "editPalmidProfile", align:"center", components:[
 							{kind: "Image", name: "profileIcon", className:"icon-image"},
 							{name:"palmProfileName", className:"enyo-text-ellipsis", flex:1}
