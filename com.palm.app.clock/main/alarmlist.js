@@ -160,13 +160,12 @@ enyo.kind({
 		this.log(sender);
 		this.log(intDeleteIndex);
 		
-		this.log(sender);
-		if(this.arAlarms[event.rowIndex])
+		if(this.arAlarms[intDeleteIndex])
 		{
-			this.log(this.arAlarms[event.rowIndex]);
-			this.$.alarmDbManager.deleteAlarm(this.arAlarms[event.rowIndex]._id);
+			this.log(this.arAlarms[intDeleteIndex]);
+			this.$.alarmDbManager.deleteAlarm(this.arAlarms[intDeleteIndex]._id);
 			
-			this.$.activityManager.clearAlarmTimeout(this.arAlarms[event.rowIndex]);				
+			this.$.activityManager.clearAlarmTimeout(this.arAlarms[intDeleteIndex]);				
 
 		}
 		return true;
