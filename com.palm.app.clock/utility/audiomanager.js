@@ -21,7 +21,6 @@ enyo.kind(
 	name: "AudioManager",
 	kind: "Component",
 	
-	
 	//boolAudioSetup: false, May not end up using
 	
 	published: {boolAudioPaused: true, boolAudioPlaying: false, boolLoop: true},
@@ -33,13 +32,9 @@ enyo.kind(
 		this.inherited(arguments);
 
 		this.setupAudio();
-		
-		
-	
 	},
 	
 	_boolAudioLoaded: false,
-	
 	
 	setupAudio: function ()
 	{
@@ -59,9 +54,7 @@ enyo.kind(
 			
 			this.objAudio.addEventListener('error', enyo.bind(this, this.onError_Play), false);
 			this.objAudio.addEventListener('stalled', enyo.bind(this, this.onError_Stall), false);
-			
 		}		
-		
 	},
 	
 	resetAudio: function ()
@@ -69,22 +62,18 @@ enyo.kind(
 		
 	},
 	
-		
-
-	
 	playAudio: function (strAudioFile, intStartTime, boolForced)
 	{
 		try
 		{
 			this.log("playing: ", strAudioFile);
-			this.objAudio.src = strAudioFile;
+			this.objAudio.src = "file://" + strAudioFile;
 			
-			this.doSrcChanged(boolForced);
+//			this.doSrcChanged(boolForced);
 			
 			//this.log("raised doSrcChanged");
 			
-			
-			this.objAudio.load();
+//			this.objAudio.load();
 			this.objAudio.play();			
 		}
 		catch (err)
@@ -117,9 +106,6 @@ enyo.kind(
 		}
 		
 		return this.boolAudioPlaying;
-		
-
-		
 	},
 	
 	onAudioConnected: function (event)
@@ -199,12 +185,13 @@ enyo.kind(
 		
 	},
 	*/
-	
-	
-	onError_Play: function (event)
+
+	onError_Play: function (inEvent)
 	{
-		this.log(event);
-		this.doAudioError(event);
+	    for (x in inEvent) {
+		this.log(x + ": " + inEvent[x]);
+	    }
+	    this.doAudioError(inEvent);
 	},
 	
 	onError_Stall: function (event)
@@ -231,10 +218,6 @@ enyo.kind(
 	
 	getAudioDuration: function()
 	{
-		
 		return this.objAudio.duration;
 	}
-	
-	
-	
 });
