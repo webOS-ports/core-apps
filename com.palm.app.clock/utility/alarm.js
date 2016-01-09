@@ -60,39 +60,27 @@ enyo.kind(
 	
 	windowParamsChangeHandler: function ()
 	{
-		
 		this.log(enyo.windowParams);
 		
-		
-		if(enyo.windowParams.action)
-		{
-			
-			switch (enyo.windowParams.action)
-			{
-				
+		if(enyo.windowParams.action) {
+			switch (enyo.windowParams.action) {
+				case "ring":
+					this.alarmAction = enyo.bind(this, "ringAlarm");
+					break;
 				case "dismiss":
 					this.alarmAction = enyo.bind(this, "dismissAlarm");
 					break;
-				
 				case "snooze":
 					this.alarmAction = enyo.bind(this, "snoozeAlarm");
 					break;
-				
 			}
 			
-			if(enyo.application.prefs && this.alarmAction)
-			{
+			if(enyo.application.prefs && this.alarmAction) {
 				this.alarmAction();
+			} else {
+				this.log("prefs not loaded or action not set");
 			}
-			else
-			{
-				this.log("prefs not loaded");
-
-			}
-			
-			
 		}
-
 	},
 	
 	
@@ -160,11 +148,8 @@ enyo.kind(
 	},
 	
 	
-	
-	
 	ringAlarm: function ()
 	{
-		
 		try
 		{
 
@@ -181,7 +166,6 @@ enyo.kind(
 				}
 				
 				this.showAlarmDash();
-				
 			}
 			else
 			{
@@ -206,7 +190,6 @@ enyo.kind(
 		this.dashControls = enyo.windows.openPopup("dashAlarm.html", "com.palm.app.clock.alarm." + this.objAlarmRecord.key , {objAlarmRecord: this.objAlarmRecord, callbackDismiss: enyo.bind(this, "dismissAlarm"), callbackSnooze: enyo.bind(this, "snoozeAlarm")}, {clickableWhenLocked: true}, 110, true);
 		
 		this.$.displayManager.lockDisplay(true);
-		
 	},
 	
 	closeAlarmDash: function ()
@@ -219,33 +202,28 @@ enyo.kind(
 			this.dashControls = null;
 		}				
 		this.$.displayManager.lockDisplay(false);
-		
 	},
 	
 	playRingtone: function ()
 	{
 		this.log();
-		this.$.audioManager.playAudio(this.objAlarmRecord.alarmSoundFile);
-		
+//		this.$.audioManager.playAudio(this.objAlarmRecord.alarmSoundFile);
+		this.$.audioManager.playAudio(this.kAlarmSoundDefaultFile);
 	},
 	
 	stopRingtone: function ()
 	{
 		this.log();
 		this.$.audioManager.pauseAudio(false);		
-		
 	},
 	
 	
 	dismissAlarm: function ()
 	{
-		
 		this.log();
 		
 		this.stopRingtone();
 		this.setNextAlarm();
-		
-		
 	},
 	
 	
@@ -316,13 +294,10 @@ enyo.kind(
 		this.closeAlarmDash();
 		
 		this.setNextSnooze();
-		
 	},	
 	
 	setNextSnooze: function()
 	{
-	
-	
 		var now = new Date();
 		
 		var intSnoozeDuration = 10;
@@ -336,10 +311,8 @@ enyo.kind(
 		this.log(now);
 		
 		this.$.activityManager.setAlarmTimeout(this.objAlarmRecord, now);
-
 	},
 	
-
 	
 	kAlarmCookie: "alarmcookie",
 	
@@ -365,7 +338,7 @@ enyo.kind(
 	kCookieAlarmSoundFile: "alarmsoundfile",
 	kCookieAlarmSoundTitle: "alarmsoundtitle",
 	// TODO ALWAYS MAKE SURE THIS IS VALID
-	kAlarmSoundDefaultFile: "/media/internal/ringtones/Flurry.mp3",
+	kAlarmSoundDefaultFile: "/usr/palm/sounds/alert.wav",
 	kAlarmSoundDefaultTitle: "Flurry",
 
 });
