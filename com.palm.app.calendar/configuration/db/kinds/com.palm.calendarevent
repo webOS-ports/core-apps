@@ -16,7 +16,7 @@
 				{"name":"location",	"tokenize":"default"},
 				{"name":"note",		"tokenize":"default"}
 			]}
-		]}, 
+		]} 
 	],
 	"revSets": 
 	[
