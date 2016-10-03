@@ -149,7 +149,9 @@ enyo.kind({
 				if (this.palmProfileAccount === undefined)  {
 					//Jira: CWS-4249
 					//We just want to reset the account name if for some reason it changed on the server. 
-					this.$.getPalmProfileAccountInfo.call({});
+					//FIXME: We don't have a Palm Profile or similar functionality yet, so we skip this call, since we don't have palm://com.palm.accountservices/ available either
+					//This otherwise would give the following error in the logs: ls-hubd.private LSHUB_NOT_LSTED {"SERVICE_NAME":"com.palm.accountservices","EXE":"/usr/lib/qt5/libexec/QtWebEngineProcess","APP_ID":"com.palm.app.accounts 1006","PID":1147} Service not listed in service files (cmdline: /usr/lib/qt5/libexec/QtWebEngineProcess --type=renderer --disable-accelerated-video-decode --enable-overlay-scrollbar --enable-pinch --enable-threaded-compositing --enable-viewport --enable-viewport-meta --main-frame-resizes-are-orientation-changes --no-sandbox --profiler-timing=0 --use-gl=egl --disable-composited-antialiasing --lang=en --enable-pinch --enable-delegated-renderer --num-raster-threads=1 --gpu-rasterization-msaa-sample-count=8 )
+					//this.$.getPalmProfileAccountInfo.call({});
 				}
 				this.palmProfileAccount = account;
 
