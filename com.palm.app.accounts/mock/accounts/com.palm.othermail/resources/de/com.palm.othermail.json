@@ -1,0 +1,34 @@
+[
+	{
+		"capabilityProviders": [
+			{
+				"capability": "MAIL",
+				"icon": {
+					"loc_32x32": "images/othermail32.png",
+					"loc_48x48": "images/othermail48.png"
+				},
+				"id": "com.palm.other.mail"
+			}
+		],
+		"hidden": false,
+		"icon": {
+			"loc_32x32": "images/othermail32.png",
+			"loc_48x48": "images/othermail48.png"
+		},
+		"loc_name": "E-Mail-Konto",
+		"readPermissions": [
+
+		],
+		"templateId": "com.palm.othermail",
+		"validator": {
+			"address": "palm://com.palm.dummy/dummy",
+			"customUI": {
+				"appId": "com.palm.app.email",
+				"name": "accounts/wizard.html"
+			}
+		},
+		"writePermissions": [
+
+		]
+	}
+]

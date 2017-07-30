@@ -1,0 +1,25 @@
+{
+	"capabilityProviders": [
+		{
+			"capability": "DOCUMENTS",
+			"id": "com.palm.boxnet.documents"
+		}
+	],
+	"icon": {
+		"loc_32x32": "images/box_net_32.png",
+		"loc_48x48": "images/box_net_48.png",
+		"loc_64x64": "images/box_net_64.png"
+	},
+	"loc_name": "Box.net",
+	"loc_usernameLabel": "INDIRIZZO E-MAIL",
+	"readPermissions": [
+		"com.quickoffice.webos",
+		"com.quickoffice.ar"
+	],
+	"templateId": "com.palm.boxnet",
+	"validator": "palm://com.palm.service.boxnet/checkCredentials",
+	"writePermissions": [
+		"com.quickoffice.webos",
+		"com.quickoffice.ar"
+	]
+}

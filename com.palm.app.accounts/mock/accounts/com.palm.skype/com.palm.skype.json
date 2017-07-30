@@ -1,0 +1,95 @@
+[{
+    "templateId": "com.palm.skype",
+    "loc_name": "Skype",
+    "icon": {
+        "loc_32x32": "images/skype32.png",
+        "loc_48x48": "images/skype48.png"
+    },
+    "validator": {
+        "customUI": {
+            "appId": "com.palm.app.skype",
+            "name": "validator.html"
+        },
+        "address": "palm://com.palm.skypevalidator/updateCredentials"
+    },
+    "onCredentialsChanged": "palm://com.palm.skypevalidator/credentialsChanged",
+    "readPermissions": [
+    "com.palm.app.phone",
+    "com.palm.app.skype",
+    "com.palm.app.messaging",
+    "com.palm.app.contacts",
+    "com.palm.service.contacts",
+    "com.palm.service.contacts.linker",
+    "com.palm.skype"
+    ],
+    "writePermissions": [
+    "com.palm.app.phone",
+    "com.palm.app.skype",
+    "com.palm.app.messaging",
+    "com.palm.app.contacts",
+    "com.palm.service.contacts",
+    "com.palm.service.contacts.linker",
+    "com.palm.skype"
+    ],
+    "capabilityProviders": [
+    {
+        "capability": "MESSAGING",
+        "capabilitySubtype": "IM",
+        "id": "com.palm.skype.messaging",
+        "loc_shortName": "Skype",
+        "alwaysOn": true,
+        "icon": {
+            "loc_32x32": "images/skype32.png",
+            "loc_48x48": "images/skype48.png",
+            "splitter": "images/skype32.png"
+        },
+        "implementation": "palm://com.palm.skype/",
+        "onEnabled": "palm://com.palm.skype/onEnabled",
+        "serviceName": "type_skype",
+        "dbkinds": {
+            "immessage": "com.palm.immessage.skypem:1",
+            "imcommand": "com.palm.imcommand.skypem:1"
+        },
+        "settingsUI": {
+            "appId": "com.palm.app.skype",
+            "sceneName": "accountlogin"
+        },
+        "invites": {
+            "supportsCustomMessage": true,
+            "loc_bannerText": "Skype contact request"
+        },
+        "groupChat": {
+            "supported": true,
+            "topicsSupported": true,
+            "invitesSupportMessages": false
+        },
+        "chatWithNonBuddies": true
+    },
+    {
+        "capability": "CONTACTS",
+        "id": "com.palm.skype.contacts",
+        "alwaysOn": true,
+        "implementation": "palm://com.palm.skype/",
+        "sync": "palm://com.palm.skype/sync",
+        "readOnlyData": true,
+        "db_kinds": {
+            "contact": "com.palm.contact.skypem:1"
+        }
+    },
+    {
+        "capability": "PHONE",
+        "id": "com.palm.skype.call",
+        "alwaysOn": true,
+        "implementation": "palm://com.palm.skype/",
+        "serviceName": "type_skype",
+        "wanAllowed": true,
+        "wifiAllowed": true,
+        "pausePrompt": false,
+        "pauseCode": [],
+        "waitCode": [],
+        "keyHoldMappings": [],
+        "launchCode": "##"
+    }
+    ]
+}]
+

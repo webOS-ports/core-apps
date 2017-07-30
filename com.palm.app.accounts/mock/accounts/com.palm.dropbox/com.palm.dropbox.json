@@ -1,0 +1,17 @@
+{
+	"templateId": "com.palm.dropbox",
+	"loc_name": "Dropbox",
+	"icon": {
+		"loc_32x32": "images/dropbox-32x32.png",
+		"loc_48x48": "images/dropbox-48x48.png"
+	},
+        "disallowed_locales": [ "en_cn", "zh_cn", "zh_hk" ],
+	"validator": "palm://com.palm.service.dropbox/checkCredentials",
+	"loc_usernameLabel": "EMAIL ADDRESS",
+	"readPermissions": ["com.quickoffice.webos", "com.quickoffice.ar"],
+    "writePermissions": ["com.quickoffice.webos", "com.quickoffice.ar"],
+	"capabilityProviders": [{
+		"capability": "DOCUMENTS",
+		"id": "com.palm.dropbox.documents"
+	}]
+}

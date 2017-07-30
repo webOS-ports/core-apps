@@ -1,0 +1,116 @@
+{
+	"capabilityProviders": [
+		{
+			"capability": "CONTACTS",
+			"dbkinds": {
+				"contact": "com.palm.contact.yahoo:1"
+			},
+			"id": "com.palm.yahoo.contacts",
+			"implementation": "palm://com.palm.service.contacts.yahoo/",
+			"onCreate": "palm://com.palm.service.contacts.yahoo/onCreate",
+			"onCredentialsChanged": "palm://com.palm.service.contacts.yahoo/credentialsChanged",
+			"onDelete": "palm://com.palm.service.contacts.yahoo/onDelete",
+			"onEnabled": "palm://com.palm.service.contacts.yahoo/onEnabled",
+			"readOnlyData": true,
+			"sync": "palm://com.palm.service.contacts.yahoo/sync",
+			"validator": "palm://com.palm.service.contacts.yahoo/checkCredentials"
+		},
+		{
+			"capability": "MESSAGING",
+			"capabilitySubtype": "IM",
+			"dbkinds": {
+				"imcommand": "com.palm.imcommand.yahoo:1",
+				"immessage": "com.palm.immessage.yahoo:1"
+			},
+			"icon": {
+				"loc_32x32": "images/yim-32x32.png",
+				"loc_48x48": "images/yim-48x48.png",
+				"splitter": "images/yim-32x32.png"
+			},
+			"id": "com.palm.yahoo.im",
+			"implementation": "palm://com.palm.imyahoo/",
+			"invites": {
+				"supportsCustomMessage": true
+			},
+			"loc_shortName": "Yahoo!",
+			"onCredentialsChanged": "palm://com.palm.imyahoo/onCredentialsChanged",
+			"onEnabled": "palm://com.palm.imyahoo/onEnabled",
+			"serviceName": "type_yahoo",
+			"supportsInvisibleStatus": true
+		},
+		{
+			"capability": "MAIL",
+			"config": {
+				"encryption": "ssl",
+				"port": 993,
+				"server": "palm.imap.mail.yahoo.com",
+				"smtpConfig": {
+					"encryption": "ssl",
+					"port": 465,
+					"server": "palm.smtp.mail.yahoo.com",
+					"useSmtpAuth": true
+				}
+			},
+			"dbkinds": {
+				"email": "com.palm.imap.email:1"
+			},
+			"id": "com.palm.yahoo.mail",
+			"implementation": "palm://com.palm.imap/",
+			"onCreate": "palm://com.palm.imap/accountCreated",
+			"onCredentialsChanged": "palm://com.palm.imap/credentialsChanged",
+			"onDelete": "palm://com.palm.imap/accountDeleted",
+			"onEnabled": "palm://com.palm.imap/accountEnabled",
+			"subKind": "com.palm.imap.email:1"
+		},
+		{
+			"capability": "CALENDAR",
+			"dbkinds": {
+				"calendar": "com.palm.calendar.yahoo:1",
+				"calendarevent": "com.palm.calendarevent.yahoo:1"
+			},
+			"id": "com.palm.yahoo.calendar",
+			"implementation": "palm://com.palm.service.calendar.yahoo/",
+			"onCreate": "palm://com.palm.service.calendar.yahoo/onCreate",
+			"onCredentialsChanged": "palm://com.palm.service.calendar.yahoo/credentialsChanged",
+			"onDelete": "palm://com.palm.service.calendar.yahoo/onDelete",
+			"onEnabled": "palm://com.palm.service.calendar.yahoo/onEnabled",
+			"subKind": "com.palm.calendarevent.yahoo:1",
+			"sync": "palm://com.palm.service.calendar.yahoo/sync"
+		}
+	],
+	"disallowed_locales": [
+		"en_cn",
+		"zh_cn",
+		"zh_hk"
+	],
+	"icon": {
+		"loc_32x32": "images/yahoo-32x32.png",
+		"loc_48x48": "images/yahoo-48x48.png"
+	},
+	"loc_name": "Yahoo!",
+	"loc_usernameLabel": "ADRESSE EMAIL",
+	"readPermissions": [
+		"com.palm.imap",
+		"com.palm.smtp",
+		"com.palm.imyahoo",
+		"com.palm.yahoo",
+		"com.palm.service.contacts",
+		"com.palm.service.calendar.yahoo",
+		"com.palm.service.contacts.yahoo",
+		"com.palm.service.contacts.linker",
+		"com.palm.app.messaging",
+		"com.palm.app.calendar",
+		"com.palm.app.contacts",
+		"com.palm.app.email"
+	],
+	"templateId": "com.palm.yahoo",
+	"validator": "palm://com.palm.yahoo/validate",
+	"writePermissions": [
+		"com.palm.yahoo",
+		"com.palm.service.contacts.yahoo",
+		"com.palm.app.messaging",
+		"com.palm.app.calendar",
+		"com.palm.app.contacts",
+		"com.palm.app.email"
+	]
+}

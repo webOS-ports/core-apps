@@ -1,0 +1,63 @@
+{
+	"capabilityProviders": [
+		{
+			"capability": "DOCUMENTS",
+			"id": "com.palm.mobileme.documents"
+		},
+		{
+			"capability": "MAIL",
+			"config": {
+				"encryption": "ssl",
+				"port": 993,
+				"server": "mail.me.com",
+				"smtpConfig": {
+					"encryption": "tls",
+					"port": 587,
+					"server": "smtp.me.com",
+					"useSmtpAuth": true
+				}
+			},
+			"dbkinds": {
+				"email": "com.palm.imap.email:1"
+			},
+			"id": "com.palm.mobileme.mail",
+			"implementation": "palm://com.palm.imap/",
+			"onCreate": "palm://com.palm.imap/accountCreated",
+			"onCredentialsChanged": "palm://com.palm.imap/credentialsChanged",
+			"onDelete": "palm://com.palm.imap/accountDeleted",
+			"onEnabled": "palm://com.palm.imap/accountEnabled",
+			"subKind": "com.palm.imap.email:1"
+		}
+	],
+	"config": {
+		"encryption": "ssl",
+		"port": 993,
+		"server": "mail.me.com",
+		"smtpConfig": {
+			"encryption": "tls",
+			"port": 587,
+			"server": "smtp.me.com",
+			"useSmtpAuth": true
+		}
+	},
+	"icon": {
+		"loc_32x32": "images/mobileme-32x31.png",
+		"loc_48x48": "images/mobileme-48x47.png"
+	},
+	"loc_name": "MobileMe",
+	"loc_usernameLabel": "DIRECCIÓN DE CORREO ELECTRÓNICO",
+	"readPermissions": [
+		"com.palm.imap",
+		"com.palm.smtp",
+		"com.palm.app.email",
+		"com.quickoffice.webos",
+		"com.quickoffice.ar"
+	],
+	"templateId": "com.palm.mobileme",
+	"validator": "palm://com.palm.service.mobileme/checkCredentials",
+	"writePermissions": [
+		"com.palm.app.email",
+		"com.quickoffice.webos",
+		"com.quickoffice.ar"
+	]
+}

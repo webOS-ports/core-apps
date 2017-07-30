@@ -1,0 +1,31 @@
+{
+	"templateId": "com.palm.sim",
+	"loc_name": "SIM",
+	"icon": {
+		"loc_32x32": "images/sim-32x32.png",
+		"loc_48x48": "images/sim-48x48.png"
+	},
+	"disableRemove": true,
+	"readPermissions": [
+		"com.palm.service.contacts",
+		"com.palm.service.contacts.linker",
+		"com.palm.service.contacts.sim",
+		"com.palm.app.contacts"
+		],
+    "writePermissions": [
+		"com.palm.service.contacts.sim"
+		],
+	"capabilityProviders": [{
+		"capability": "CONTACTS",
+		"id": "com.palm.sim.contacts",
+		"implementation": "palm://com.palm.service.contacts.sim/",
+		"onCreate": "palm://com.palm.service.contacts.sim/onCreate",
+		"onEnabled": "palm://com.palm.service.contacts.sim/onEnabled",
+		"onDelete": "palm://com.palm.service.contacts.sim/onDelete",
+		"sync": "palm://com.palm.service.contacts.sim/sync",
+		"readOnlyData": false,
+		"db_kinds": {
+			"contact": "com.palm.contact.sim:1"
+		}
+	}]
+}

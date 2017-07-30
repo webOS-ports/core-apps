@@ -38,9 +38,9 @@
                     "id": "com.palm.palmprofile.sms",
                     "capabilitySubtype": "SMS",
                     "icon": {
-                        "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.palmprofile\/images\/sms-32x32.png",
-                        "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.palmprofile\/images\/sms-48x48.png",
-                        "splitter": "\/usr\/palm\/public\/accounts\/com.palm.palmprofile\/images\/sms-32x32.png"
+                        "loc_32x32": "mock\/accounts\/com.palm.palmprofile\/images\/sms-32x32.png",
+                        "loc_48x48": "mock\/accounts\/com.palm.palmprofile\/images\/sms-48x48.png",
+                        "splitter": "mock\/accounts\/com.palm.palmprofile\/images\/sms-32x32.png"
                     },
                     "loc_name": "SMS Account",
                     "loc_shortName": "Text"
@@ -51,8 +51,8 @@
                     "id": "com.palm.palmprofile.voice",
                     "alwaysOn": true,
                     "icon": {
-                        "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.palmprofile\/images\/mypalm-32x32.png",
-                        "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.palmprofile\/images\/mypalm-48x48.png"
+                        "loc_32x32": "mock\/accounts\/com.palm.palmprofile\/images\/mypalm-32x32.png",
+                        "loc_48x48": "mock\/accounts\/com.palm.palmprofile\/images\/mypalm-48x48.png"
                     },
                     "loc_name": "Carrier",
                     "loc_shortName": "Carrier"
@@ -61,8 +61,8 @@
             "templateId": "com.palm.palmprofile",
             "username": "Dr. Skipped Firstuse",
             "icon": {
-                "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.palmprofile\/images\/mypalm-32x32.png",
-                "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.palmprofile\/images\/mypalm-48x48.png"
+                "loc_32x32": "mock\/accounts\/com.palm.palmprofile\/images\/mypalm-32x32.png",
+                "loc_48x48": "mock\/accounts\/com.palm.palmprofile\/images\/mypalm-48x48.png"
             },
             "loc_name": "Palm Profile"
         },
