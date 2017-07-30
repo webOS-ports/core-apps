@@ -10,7 +10,7 @@
                         "immessage": "com.palm.immessage.libpurple:1"
                     },
                     "icon": {
-                        "splitter": "\/usr\/palm\/public\/accounts\/com.palm.aol\/images\/aim-32x32.png"
+                        "splitter": "mock\/accounts\/com.palm.aol\/images\/aim-32x32.png"
                     },
                     "id": "com.palm.aol.aim",
                     "implementation": "palm:\/\/com.palm.imlibpurple\/",
@@ -21,8 +21,8 @@
                 }
             ],
             "icon": {
-                "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.aol\/images\/aim-32x32.png",
-                "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.aol\/images\/aim-logo.png"
+                "loc_32x32": "mock\/accounts\/com.palm.aol\/images\/aim-32x32.png",
+                "loc_48x48": "mock\/accounts\/com.palm.aol\/images\/aim-logo.png"
             },
             "loc_name": "AIM",
 	    "username":"myusername@palm.com",
@@ -37,9 +37,9 @@
                 }
             ],
             "icon": {
-                "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.boxnet\/images\/box_net_32.png",
-                "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.boxnet\/images\/box_net_48.png",
-                "loc_64x64": "\/usr\/palm\/public\/accounts\/com.palm.boxnet\/images\/box_net_64.png"
+                "loc_32x32": "mock\/accounts\/com.palm.boxnet\/images\/box_net_32.png",
+                "loc_48x48": "mock\/accounts\/com.palm.boxnet\/images\/box_net_48.png",
+                "loc_64x64": "mock\/accounts\/com.palm.boxnet\/images\/box_net_64.png"
             },
             "loc_name": "Box.net",
 	    "username":"myusername@palm.com",
@@ -55,8 +55,8 @@
                 }
             ],
             "icon": {
-                "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.dropbox\/images\/dropbox-32x32.png",
-                "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.dropbox\/images\/dropbox-48x48.png"
+                "loc_32x32": "mock\/accounts\/com.palm.dropbox\/images\/dropbox-32x32.png",
+                "loc_48x48": "mock\/accounts\/com.palm.dropbox\/images\/dropbox-48x48.png"
             },
             "loc_name": "Dropbox",
 	    "username":"myusername@palm.com",
@@ -104,8 +104,8 @@
                 }
             ],
             "icon": {
-                "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.facebook\/images\/facebook-32x32.png",
-                "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.facebook\/images\/facebook-48x48.png"
+                "loc_32x32": "mock\/accounts\/com.palm.facebook\/images\/facebook-32x32.png",
+                "loc_48x48": "mock\/accounts\/com.palm.facebook\/images\/facebook-48x48.png"
             },
             "loc_name": "Facebook",
 	    "username":"myusername@palm.com",
@@ -148,9 +148,9 @@
                         "immessage": "com.palm.immessage.libpurple:1"
                     },
                     "icon": {
-                        "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.google\/images\/gtalk-32x32.png",
-                        "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.google\/images\/gtalk-48x48.png",
-                        "splitter": "\/usr\/palm\/public\/accounts\/com.palm.google\/images\/gtalk-32x32.png"
+                        "loc_32x32": "mock\/accounts\/com.palm.google\/images\/gtalk-32x32.png",
+                        "loc_48x48": "mock\/accounts\/com.palm.google\/images\/gtalk-48x48.png",
+                        "splitter": "mock\/accounts\/com.palm.google\/images\/gtalk-32x32.png"
                     },
                     "id": "com.palm.google.talk",
                     "implementation": "palm:\/\/com.palm.imlibpurple\/",
@@ -166,8 +166,8 @@
                         "calendarevent": "com.palm.calendarevent.google:1"
                     },
                     "icon": {
-                        "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.google\/images\/googlecalendar-32x32.png",
-                        "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.google\/images\/googlecalendar-48x48.png"
+                        "loc_32x32": "mock\/accounts\/com.palm.google\/images\/googlecalendar-32x32.png",
+                        "loc_48x48": "mock\/accounts\/com.palm.google\/images\/googlecalendar-48x48.png"
                     },
                     "id": "com.palm.google.calendar",
                     "implementation": "palm:\/\/com.palm.service.calendar.google\/",
@@ -210,8 +210,8 @@
                 }
             ],
             "icon": {
-                "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.google\/images\/google-32x32.png",
-                "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.google\/images\/google-48x48.png"
+                "loc_32x32": "mock\/accounts\/com.palm.google\/images\/google-32x32.png",
+                "loc_48x48": "mock\/accounts\/com.palm.google\/images\/google-48x48.png"
             },
             "loc_name": "Google",
 	    "username":"myusername@palm.com",
@@ -246,8 +246,8 @@
                     "alwaysOn": true,
                     "capability": "PHONE",
                     "icon": {
-                        "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.palmprofile\/images\/mypalm-32x32.png",
-                        "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.palmprofile\/images\/mypalm-48x48.png"
+                        "loc_32x32": "mock\/accounts\/com.palm.palmprofile\/images\/mypalm-32x32.png",
+                        "loc_48x48": "mock\/accounts\/com.palm.palmprofile\/images\/mypalm-48x48.png"
                     },
                     "id": "com.palm.palmprofile.voice",
                     "loc_name": "Carrier",
@@ -257,9 +257,9 @@
                     "capability": "MESSAGING",
                     "capabilitySubtype": "SMS",
                     "icon": {
-                        "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.palmprofile\/images\/sms-32x32.png",
-                        "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.palmprofile\/images\/sms-48x48.png",
-                        "splitter": "\/usr\/palm\/public\/accounts\/com.palm.palmprofile\/images\/sms-32x32.png"
+                        "loc_32x32": "mock\/accounts\/com.palm.palmprofile\/images\/sms-32x32.png",
+                        "loc_48x48": "mock\/accounts\/com.palm.palmprofile\/images\/sms-48x48.png",
+                        "splitter": "mock\/accounts\/com.palm.palmprofile\/images\/sms-32x32.png"
                     },
                     "id": "com.palm.palmprofile.sms",
                     "loc_name": "SMS Account",
@@ -267,8 +267,8 @@
                 }
             ],
             "icon": {
-                "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.palmprofile\/images\/mypalm-32x32.png",
-                "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.palmprofile\/images\/mypalm-48x48.png"
+                "loc_32x32": "mock\/accounts\/com.palm.palmprofile\/images\/mypalm-32x32.png",
+                "loc_48x48": "mock\/accounts\/com.palm.palmprofile\/images\/mypalm-48x48.png"
             },
             "loc_name": "HP webOS Account",
             "templateId": "com.palm.palmprofile"
@@ -292,8 +292,8 @@
                 }
             ],
             "icon": {
-                "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.linkedin\/images\/linkedin-32x32.png",
-                "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.linkedin\/images\/linkedin-48x48.png"
+                "loc_32x32": "mock\/accounts\/com.palm.linkedin\/images\/linkedin-32x32.png",
+                "loc_48x48": "mock\/accounts\/com.palm.linkedin\/images\/linkedin-48x48.png"
             },
             "loc_name": "LinkedIn",
 	    "username":"myusername@palm.com",
@@ -309,8 +309,8 @@
                         "task": "com.palm.email.eas:1"
                     },
                     "icon": {
-                        "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.eas\/images\/easmail32.png",
-                        "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.eas\/images\/easmail48.png"
+                        "loc_32x32": "mock\/accounts\/com.palm.eas\/images\/easmail32.png",
+                        "loc_48x48": "mock\/accounts\/com.palm.eas\/images\/easmail48.png"
                     },
                     "id": "com.palm.eas.mail",
                     "implementation": "palm:\/\/com.palm.eas\/",
@@ -324,8 +324,8 @@
                         "contact": "com.palm.contact.eas:1"
                     },
                     "icon": {
-                        "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.eas\/images\/easmail32.png",
-                        "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.eas\/images\/easmail48.png"
+                        "loc_32x32": "mock\/accounts\/com.palm.eas\/images\/easmail32.png",
+                        "loc_48x48": "mock\/accounts\/com.palm.eas\/images\/easmail48.png"
                     },
                     "id": "com.palm.eas.contacts",
                     "implementation": "palm:\/\/com.palm.eas\/",
@@ -335,8 +335,8 @@
                 {
                     "capability": "REMOTECONTACTS",
                     "icon": {
-                        "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.eas\/images\/eascontacts32.png",
-                        "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.eas\/images\/eascontacts48.png"
+                        "loc_32x32": "mock\/accounts\/com.palm.eas\/images\/eascontacts32.png",
+                        "loc_48x48": "mock\/accounts\/com.palm.eas\/images\/eascontacts48.png"
                     },
                     "id": "com.palm.eas.remotecontacts",
                     "implementation": "palm:\/\/com.palm.eas\/",
@@ -349,8 +349,8 @@
                         "calendarevent": "com.palm.calendarevent.eas:1"
                     },
                     "icon": {
-                        "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.eas\/images\/easmail32.png",
-                        "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.eas\/images\/easmail48.png"
+                        "loc_32x32": "mock\/accounts\/com.palm.eas\/images\/easmail32.png",
+                        "loc_48x48": "mock\/accounts\/com.palm.eas\/images\/easmail48.png"
                     },
                     "id": "com.palm.eas.calendar",
                     "implementation": "palm:\/\/com.palm.eas\/",
@@ -363,8 +363,8 @@
                         "task": "com.palm.task.eas:1"
                     },
                     "icon": {
-                        "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.eas\/images\/eastasks32.png",
-                        "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.eas\/images\/eastasks48.png"
+                        "loc_32x32": "mock\/accounts\/com.palm.eas\/images\/eastasks32.png",
+                        "loc_48x48": "mock\/accounts\/com.palm.eas\/images\/eastasks48.png"
                     },
                     "id": "com.palm.eas.tasks",
                     "implementation": "palm:\/\/com.palm.eas\/",
@@ -373,8 +373,8 @@
             ],
             "hidden": false,
             "icon": {
-                "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.eas\/images\/easmail32.png",
-                "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.eas\/images\/easmail48.png"
+                "loc_32x32": "mock\/accounts\/com.palm.eas\/images\/easmail32.png",
+                "loc_48x48": "mock\/accounts\/com.palm.eas\/images\/easmail48.png"
             },
             "loc_name": "Microsoft Exchange",
 	    "username":"myusername@palm.com",
@@ -437,8 +437,8 @@
                 }
             },
             "icon": {
-                "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.mobileme\/images\/mobileme-32x31.png",
-                "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.mobileme\/images\/mobileme-48x47.png"
+                "loc_32x32": "mock\/accounts\/com.palm.mobileme\/images\/mobileme-32x31.png",
+                "loc_48x48": "mock\/accounts\/com.palm.mobileme\/images\/mobileme-48x47.png"
             },
             "loc_name": "MobileMe",
 	    "username":"myusername@palm.com",
@@ -462,8 +462,8 @@
                 }
             ],
             "icon": {
-                "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.photobucket\/images\/32.png",
-                "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.photobucket\/images\/48.png"
+                "loc_32x32": "mock\/accounts\/com.palm.photobucket\/images\/32.png",
+                "loc_48x48": "mock\/accounts\/com.palm.photobucket\/images\/48.png"
             },
             "loc_name": "Photobucket",
 	    "username":"myusername@palm.com",
@@ -475,8 +475,8 @@
             "loc_name": "POP",
 	    "username":"myusername@palm.com",
             "icon": {
-                "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.pop\/images\/popmail32.png",
-                "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.pop\/images\/popmail48.png"
+                "loc_32x32": "mock\/accounts\/com.palm.pop\/images\/popmail32.png",
+                "loc_48x48": "mock\/accounts\/com.palm.pop\/images\/popmail48.png"
             },
             "hidden": true,
             "validator": {
@@ -522,8 +522,8 @@
             ],
             "disableRemove": true,
             "icon": {
-                "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.sim\/images\/sim-32x32.png",
-                "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.sim\/images\/sim-32x32.png"
+                "loc_32x32": "mock\/accounts\/com.palm.sim\/images\/sim-32x32.png",
+                "loc_48x48": "mock\/accounts\/com.palm.sim\/images\/sim-32x32.png"
             },
             "loc_name": "SIM",
 	    "username":"myusername@palm.com",
@@ -534,8 +534,8 @@
             "loc_name": "Skype",
 	    "username":"myusername@palm.com",
             "icon": {
-                "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.skype\/images\/skype32.png",
-                "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.skype\/images\/skype48.png"
+                "loc_32x32": "mock\/accounts\/com.palm.skype\/images\/skype32.png",
+                "loc_48x48": "mock\/accounts\/com.palm.skype\/images\/skype48.png"
             },
             "validator": {
                 "customUI": {
@@ -553,9 +553,9 @@
                     "loc_shortName": "Skype",
                     "alwaysOn": true,
                     "icon": {
-                        "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.skype\/images\/skype32.png",
-                        "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.skype\/images\/skype48.png",
-                        "splitter": "\/usr\/palm\/public\/accounts\/com.palm.skype\/images\/skype32.png"
+                        "loc_32x32": "mock\/accounts\/com.palm.skype\/images\/skype32.png",
+                        "loc_48x48": "mock\/accounts\/com.palm.skype\/images\/skype48.png",
+                        "splitter": "mock\/accounts\/com.palm.skype\/images\/skype32.png"
                     },
                     "implementation": "palm:\/\/com.palm.skype\/",
                     "onEnabled": "palm:\/\/com.palm.skype\/onEnabled",
@@ -620,8 +620,8 @@
                 }
             ],
             "icon": {
-                "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.snapfish\/images\/32.png",
-                "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.snapfish\/images\/48.png"
+                "loc_32x32": "mock\/accounts\/com.palm.snapfish\/images\/32.png",
+                "loc_48x48": "mock\/accounts\/com.palm.snapfish\/images\/48.png"
             },
             "loc_name": "Snapfish",
 	    "username":"myveryveryveryverylongusername@palm.com",
@@ -688,9 +688,9 @@
                         "immessage": "com.palm.immessage.yahoo:1"
                     },
                     "icon": {
-                        "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.yahoo\/images\/yim-32x32.png",
-                        "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.yahoo\/images\/yim-48x48.png",
-                        "splitter": "\/usr\/palm\/public\/accounts\/com.palm.yahoo\/images\/yim-32x32.png"
+                        "loc_32x32": "mock\/accounts\/com.palm.yahoo\/images\/yim-32x32.png",
+                        "loc_48x48": "mock\/accounts\/com.palm.yahoo\/images\/yim-48x48.png",
+                        "splitter": "mock\/accounts\/com.palm.yahoo\/images\/yim-32x32.png"
                     },
                     "id": "com.palm.yahoo.im",
                     "implementation": "palm:\/\/com.palm.imyahoo\/",
@@ -743,8 +743,8 @@
                 }
             ],
             "icon": {
-                "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.yahoo\/images\/yahoo-32x32.png",
-                "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.yahoo\/images\/yahoo-48x48.png"
+                "loc_32x32": "mock\/accounts\/com.palm.yahoo\/images\/yahoo-32x32.png",
+                "loc_48x48": "mock\/accounts\/com.palm.yahoo\/images\/yahoo-48x48.png"
             },
             "loc_name": "Yahoo!",
 	    "username":"myveryveryverylongusername@palm.com",
@@ -763,8 +763,8 @@
             ],
             "hidden": true,
             "icon": {
-                "loc_32x32": "\/usr\/palm\/public\/accounts\/com.palm.youtube\/images\/youtube-32x32.png",
-                "loc_48x48": "\/usr\/palm\/public\/accounts\/com.palm.youtube\/images\/youtube-48x48.png"
+                "loc_32x32": "mock\/accounts\/com.palm.youtube\/images\/youtube-32x32.png",
+                "loc_48x48": "mock\/accounts\/com.palm.youtube\/images\/youtube-48x48.png"
             },
             "loc_name": "YouTube",
 	    "username":"myusername@palm.com",

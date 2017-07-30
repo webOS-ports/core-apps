@@ -1,0 +1,104 @@
+[
+	{
+		"capabilityProviders": [
+			{
+				"capability": "MAIL",
+				"dbkinds": {
+					"task": "com.palm.email.eas:1"
+				},
+				"icon": {
+					"loc_32x32": "images/easmail32.png",
+					"loc_48x48": "images/easmail48.png"
+				},
+				"id": "com.palm.eas.mail",
+				"implementation": "palm://com.palm.eas/",
+				"onCreate": "palm://com.palm.eas/accountCreated",
+				"onDelete": "palm://com.palm.eas/accountDeleted",
+				"subKind": "com.palm.email.eas:1"
+			},
+			{
+				"capability": "CONTACTS",
+				"dbkinds": {
+					"contact": "com.palm.contact.eas:1"
+				},
+				"icon": {
+					"loc_32x32": "images/easmail32.png",
+					"loc_48x48": "images/easmail48.png"
+				},
+				"id": "com.palm.eas.contacts",
+				"implementation": "palm://com.palm.eas/",
+				"subKind": "com.palm.contact.eas:1",
+				"sync": "palm://com.palm.eas/syncAllContacts"
+			},
+			{
+				"capability": "REMOTECONTACTS",
+				"icon": {
+					"loc_32x32": "images/eascontacts32.png",
+					"loc_48x48": "images/eascontacts48.png"
+				},
+				"id": "com.palm.eas.remotecontacts",
+				"implementation": "palm://com.palm.eas/",
+				"loc_name": "Global Address Lookup",
+				"query": "palm://com.palm.eas/queryGal"
+			},
+			{
+				"capability": "CALENDAR",
+				"dbkinds": {
+					"calendarevent": "com.palm.calendarevent.eas:1"
+				},
+				"icon": {
+					"loc_32x32": "images/easmail32.png",
+					"loc_48x48": "images/easmail48.png"
+				},
+				"id": "com.palm.eas.calendar",
+				"implementation": "palm://com.palm.eas/",
+				"subKind": "com.palm.calendarevent.eas:1",
+				"sync": "palm://com.palm.eas/syncAllCalendars"
+			},
+			{
+				"capability": "TASKS",
+				"dbkinds": {
+					"task": "com.palm.task.eas:1"
+				},
+				"icon": {
+					"loc_32x32": "images/eastasks32.png",
+					"loc_48x48": "images/eastasks48.png"
+				},
+				"id": "com.palm.eas.tasks",
+				"implementation": "palm://com.palm.eas/",
+				"subKind": "com.palm.task.eas:1"
+			}
+		],
+		"hidden": false,
+		"icon": {
+			"loc_32x32": "images/easmail32.png",
+			"loc_48x48": "images/easmail48.png"
+		},
+		"loc_name": "Microsoft Exchange",
+		"onCapabilitiesChanged": "palm://com.palm.eas/accountCapabilities",
+		"onCredentialsChanged": "palm://com.palm.eas/accountUpdated",
+		"readPermissions": [
+			"com.palm.app.email",
+			"com.palm.eas",
+			"com.palm.app.calendar",
+			"com.palm.app.contacts",
+			"com.palm.app.tasks",
+			"com.palm.service.contacts",
+			"com.palm.service.contacts.linker"
+		],
+		"templateId": "com.palm.eas",
+		"validator": {
+			"address": "palm://com.palm.eas/validateAccount",
+			"customUI": {
+				"appId": "com.palm.app.email",
+				"name": "accounts/wizard.html"
+			}
+		},
+		"writePermissions": [
+			"com.palm.app.email",
+			"com.palm.app.calendar",
+			"com.palm.app.contacts",
+			"com.palm.app.tasks"
+		]
+	}
+]

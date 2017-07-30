@@ -1,0 +1,31 @@
+{
+	"templateId": "com.palm.telephony",
+	"loc_name": "Telephony Interface Layer",
+
+        "hidden" : true,
+        "invisible" : true,
+        "disableRemove" : true,
+
+        "readPermissions": [
+        "com.palm.telephony"
+        ],
+        "writePermissions": [
+        "com.palm.telephony"
+        ],
+
+	"capabilityProviders": [
+		{
+			"id": "com.palm.telephony",
+			"capability": "PHONE",
+
+			"implementation": "palm://com.palm.telephony/",
+			"serviceName":"com.palm.telephony",
+			"wanAllowed": true,
+			"wifiAllowed": false,
+			"pausePrompt": true,
+			"pauseCode": ["p"],
+			"waitCode": ["w"],
+                        "keyHoldMappings": [{"0":"+"}, {"*":"p"}, {"#":"w"}],
+      		}
+	]
+}

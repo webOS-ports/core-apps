@@ -1,0 +1,27 @@
+{
+	"capabilityProviders": [
+		{
+			"capability": "PHOTO.UPLOAD",
+			"id": "com.palm.service.photos",
+			"implementation": "palm://com.palm.service.photos",
+			"onCredentialsChanged": "palm://com.palm.service.photos/onCredentialsChanged",
+			"onDelete": "palm://com.palm.service.photos/onDelete",
+			"onEnabled": "palm://com.palm.service.photos/onEnabled"
+		}
+	],
+	"icon": {
+		"loc_32x32": "images/32.png",
+		"loc_48x48": "images/48.png"
+	},
+	"loc_name": "Photobucket",
+	"readPermissions": [
+		"com.palm.app.photos",
+		"com.palm.service.photos",
+		"com.palm.service.photos.photobucket"
+	],
+	"templateId": "com.palm.photobucket",
+	"validator": "palm://com.palm.service.photos.photobucket/checkCredentials",
+	"writePermissions": [
+		"com.palm.app.photos"
+	]
+}

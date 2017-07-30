@@ -1,0 +1,27 @@
+{
+	"templateId": "com.palm.snapfish",
+	"loc_name": "Snapfish",
+	"icon": {
+		"loc_32x32": "images/32.png",
+		"loc_48x48": "images/48.png"
+	},
+	"validator": "palm://com.palm.service.photos.snapfish/checkCredentials",
+	"readPermissions": [
+		"com.palm.app.photos",
+		"com.palm.service.photos",
+		"com.palm.service.photos.snapfish"
+		],
+    "writePermissions": [
+		"com.palm.app.photos"
+		],
+	"capabilityProviders": [
+		{
+			"capability": "PHOTO.UPLOAD",
+			"id": "com.palm.service.photos",
+			"implementation": "palm://com.palm.service.photos",
+			"onDelete": "palm://com.palm.service.photos/onDelete",
+			"onEnabled": "palm://com.palm.service.photos/onEnabled",
+			"onCredentialsChanged":"palm://com.palm.service.photos/onCredentialsChanged"
+		}
+	]
+}

@@ -1,0 +1,14 @@
+{
+	"templateId": "com.palm.youtube",
+	"loc_name": "YouTube",
+	"icon": {
+		"loc_32x32": "images/youtube-32x32.png",
+		"loc_48x48": "images/youtube-48x48.png"
+	},
+	"validator": "palm://com.palm.service.videos.youtube/checkCredentials",
+	"capabilityProviders": [{
+		"capability": "VIDEO.UPLOAD",
+		"id": "com.palm.youtube.videoupload",
+		"implementation": "palm://com.palm.service.videos.youtube/"
+	}]
+}
