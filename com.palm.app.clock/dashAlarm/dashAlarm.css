@@ -42,6 +42,7 @@ body {
 }
 .music-notification .playback-controls .enyo-button {
 	-webkit-border-image:none;
+	border-style: solid;
 	background:none;
 }
 .music-notification .playback-controls .enyo-button.play .enyo-button-icon {

@@ -172,6 +172,7 @@
 	text-align: center;
 	position:relative;
 	border-width: 9px;
+	border-style: solid;
 	-webkit-border-image: url(../images/Flipper_Landscape.png) 9;
 }
 
@@ -181,6 +182,7 @@
 	font-size:3em;
 	position:relative;
 	border-width: 7px;
+	border-style: solid;
 	-webkit-border-image: url(../images/Date_Flipper_Landscape.png) 7;
 }
 
