@@ -74,7 +74,7 @@ enyo.kind(
 		
 		var dateAlarm;
 		
-		if(enyo.application.arAlarms.length > 0)
+		if(enyo.application.arAlarms && enyo.application.arAlarms.length > 0)
 		{
 			enyo.application.utilities.sortAlarmsByNextDate(enyo.application.arAlarms);
 			
@@ -102,7 +102,10 @@ enyo.kind(
 	{
 
 		this.log(objAlarmRecord.niceTime + " " + objAlarmRecord.niceDay);
-		this.$.dashboard.push({icon:"images/notification-alarm-small.png", title: objAlarmRecord.title, text: objAlarmRecord.niceTime + " " + objAlarmRecord.niceDay, alarmkey: objAlarmRecord.key});
+		if(this.$.dashboard)
+		{
+			this.$.dashboard.push({icon:"images/notification-alarm-small.png", title: objAlarmRecord.title, text: objAlarmRecord.niceTime + " " + objAlarmRecord.niceDay, alarmkey: objAlarmRecord.key});
+		}
 	},
 	
 	
