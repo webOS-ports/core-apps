@@ -156,6 +156,7 @@ img {
     border: 12px;
     float: left;
     -webkit-border-image: url(../images/bg_prefix.png) 12 repeat;
+	border-style: solid;
 }
 
 .edit .field-button-inner {
@@ -185,6 +186,7 @@ img {
     border: 12px;
     margin: 0 0 0 13px;
     -webkit-border-image: url(../images/bg_prefix.png) 12;
+	border-style: solid;
 }
 
 .edit .label,
@@ -234,6 +236,7 @@ img {
 
 .details .container {
     -webkit-border-image: url(../images/bg_details.png) 9 repeat;
+	border-style: solid;
     border-width: 9px;
 }
 
@@ -361,6 +364,7 @@ img {
 
 .details .enyo-group {
     -webkit-border-image: none;
+	border-style: solid;
     border: 0;
     border-bottom: 1px solid #d8d8d8;
     -webkit-border-radius: 0;

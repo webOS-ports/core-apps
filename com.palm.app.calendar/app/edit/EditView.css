@@ -199,6 +199,7 @@
 
 .calendar .edit .note-input-focus {
     -webkit-border-image: url(./images/input-focus.png) 14 14 14 14 repeat repeat;
+	border-style			: solid;
 }
 
 .btn-del-edit {
@@ -221,7 +222,10 @@
 .edit-view-icon-time			{ background-image: url(edit/images/timedate-icon.png);		}
 .edit-view-icon-location		{ background-image: url(edit/images/room-icon.png);			}
 .edit-view-icon-repeat			{ background-image: url(edit/images/repeat-icon.png);			}
-.edit-view-icon-reminder		{ -webkit-border: url(edit/images/reminder-icon.png) 0 32 0 32;		}
+.edit-view-icon-reminder		{ 
+	-webkit-border-image: url(edit/images/reminder-icon.png) 0 32 0 32;		
+	border-style			: solid;
+}
 .edit-view-icon-attendees		{ background-image: url(edit/images/participants-icon.png);	}
 
 /* Calendar calendar.JumpToView */

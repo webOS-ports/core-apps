@@ -24,7 +24,7 @@ enyo.kind({
 	components: [
 		{kind: "PrefsManager", onGotPrefs: "gotPrefs", onPrefUpdated: "onSuccess_updatePref", onPrefInserted: "onSuccess_insertPref"},
 		{kind:enyo.PageHeader, className:"enyo-toolbar-light prefs-header", pack:"center", components:[
-			{kind: enyo.Image, src: "../images/header-icon-calendar48x48.png", className: "prefsIcon"},
+			{kind: enyo.Image, src: "images/header-icon-clock-48x48.png", className: "prefsIcon"},
 			{content: $L("Preferences"), className:""}
 		]},
 		{className:"accounts-header-shadow"},

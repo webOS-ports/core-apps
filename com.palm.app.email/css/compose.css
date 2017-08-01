@@ -46,10 +46,12 @@ img {
 
 .compose-send-button {
     -webkit-border-image: url(../images/compose-send-button.png) 0 18 80 18 repeat repeat;
+    border-style: solid;
 }
 
 .compose-send-button.enyo-button-down {
     -webkit-border-image: url(../images/compose-send-button.png) 40 18 40 18 repeat repeat;
+    border-style: solid;
 }
 
 .contacts-button {
@@ -60,10 +62,12 @@ img {
 
 .contacts-button {
     -webkit-border-image: url(../images/address-book.png) 0 18 80 18 repeat repeat;
+    border-style: solid;
 }
 
 .contacts-button.enyo-button-down {
     -webkit-border-image: url(../images/address-book.png) 40 18 40 18 repeat repeat;
+    border-style: solid;
 }
 
 .compose-to-text {
@@ -96,6 +100,7 @@ img {
     font-size: 16px;
     line-height: 37px;
     border-width: 0px 16px;
+    border-style: solid;
     height: 38px;
     min-width: 38px;
     text-align: center;
@@ -104,6 +109,7 @@ img {
 
 .compose-send-button.enyo-button-down {
     -webkit-border-image: url(../images/square-button-sprite.png) 40 16 0 16 no-repeat;
+    border-style: solid;
 }
 
 .enyo-row input {
@@ -313,6 +319,7 @@ img {
 
 .desktop-background-gradient {
     -webkit-border-image: url('../images/compose-background-shadow.png') 0 128 stretch;
+    border-style: solid;
     border-width: 0 128px;
     margin: 0 -128px;
 }
@@ -330,6 +337,7 @@ img {
 .compose-header-bar {
     margin: 0 -2px;
     -webkit-border-image: url('../images/header_chrome_tile.png') 0 6 repeat;
+    border-style: solid;
     border-width: 0 6px;
     position: relative;
     margin-bottom: -6px;
