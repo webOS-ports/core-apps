@@ -68,6 +68,7 @@
 .footerPageEffect			{
   	 height					: 6px;
 	 -webkit-border-image 	: url(../images/pages.jpg) 0 4 0 4 repeat;
+	 border-style			: solid;
 	 margin					: -3px 0;
 }
 
