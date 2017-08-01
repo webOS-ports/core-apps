@@ -47,6 +47,7 @@
     -webkit-border-image: url(../images/attachment-count-badge.png) 0 12 28 12;
     -webkit-box-sizing: border-box;
     border-width: 0px 12px 0px 12px;
+    border-style: solid;
 }
 
 .attachment-count-label {
@@ -148,6 +149,7 @@
     right: 0px;
     background-color: #dedede;
     border-width: 15px;
+    border-style: solid;
     -webkit-border-image: url(../images/download-background.png) 15 15 15 15 repeat repeat;
     border-image-width: auto;
 }
@@ -160,6 +162,7 @@
     left: 0px;
     background-color: #ececec;
     border-width: 15px;
+    border-style: solid;
     -webkit-border-image: url(../images/download-progress.png) 15 15 15 15 repeat repeat;
 }
 
@@ -176,11 +179,11 @@
     position: absolute;
     background-color: #dedede;
     border-width: 15px;
+    border-style: solid;
     height: 51px;
     width: 100%;
     top: 0px;
     z-index: 0;
-
     -webkit-border-image: url(../images/download-background.png) 15 15 15 15 repeat repeat;
 }
 
@@ -191,6 +194,7 @@
     left: 0px;
     background-color: #ececec;
     border-width: 15px;
+    border-style: solid;
     -webkit-border-image: url(../images/download-progress.png) 15 15 15 15 repeat repeat;
 }
 
@@ -203,11 +207,11 @@
     position: absolute;
     background-color: #dedede;
     border-width: 15px;
+    border-style: solid;
     height: 51px;
     width: 100%;
     top: 0px;
     z-index: 0;
-
     -webkit-border-image: url(../images/download-background.png) 15 15 15 15 repeat repeat;
 }
 
@@ -218,6 +222,7 @@
     left: 0px;
     background-color: #ececec;
     border-width: 15px;
+    border-style: solid;
     -webkit-border-image: url(../images/download-progress.png) 15 15 15 15 repeat repeat;
 }
 

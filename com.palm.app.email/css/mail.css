@@ -110,6 +110,7 @@ img {
     float: right;
     padding: 4px 0px;
     border-width: 0px 11px 0px 11px;
+    border-style: solid;
     -webkit-border-image: url(../images/dashboard-unread.png) 0 11 0 11;
     color: white;
     font-size: 16px;
@@ -179,6 +180,7 @@ img {
 .mail-unread {
     float: right;
     border-width: 0px 11px 0px 11px;
+    border-style: solid;
     -webkit-border-image: url(../images/email-badge.png) 0 11 0 11;
     color: white;
     font-size: 16px;
@@ -190,6 +192,7 @@ img {
 
 .mail-unread-header {
     border-width: 0px 11px 0px 11px;
+    border-style: solid;
     -webkit-border-image: url(../images/dashboard-unread.png) 0 11 0 11;
     color: white;
     font-size: 16px;
@@ -493,6 +496,7 @@ img .accountIcon {
 
 .enyo-toolbar-light.multiselect-color {
     -webkit-border-image: url(../images/multi-select-header.png) 1 4 1 4 repeat repeat;
+    border-style: solid;
 }
 
 .mark-unread-text {
@@ -504,6 +508,7 @@ img .accountIcon {
 
 .flag-message {
     border-width: 0px 6px;
+    border-style: solid;
     line-height: 40px;
     height: 44px;
     min-width: 32px;
@@ -513,6 +518,7 @@ img .accountIcon {
 
 .flag-message.enyo-button-down {
     -webkit-border-image: url(../images/square-button-sprite.png) 40 6 0 6;
+    border-style: solid;
 }
 
 .flag-message img {

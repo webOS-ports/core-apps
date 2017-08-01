@@ -67,7 +67,7 @@ enyo.kind({
                 ]}
             ]},
             {components: [
-                {name: "searchBox", style: "-webkit-border-image: none; background: white;", className: "enyo-box-input", kind: "SearchInput", hint: $L("Search"), changeOnInput: true, onchange: "filterMail", onblur: "hideKeyboard", onCancel: "filterMail"}
+                {name: "searchBox", style: "-webkit-border-image: none; background: white; border-style: solid;", className: "enyo-box-input", kind: "SearchInput", hint: $L("Search"), changeOnInput: true, onchange: "filterMail", onblur: "hideKeyboard", onCancel: "filterMail"}
             ]}
         ]},
 //		{kind: "Divider", caption: "TODAY", showing: false, className: "today-divider"},

@@ -155,22 +155,27 @@
 .enyo-gemstone.enyo-menu-button-shape {
     color: #606060;
     -webkit-border-image: url(../images/button-menu.png) 0 25 50 25 no-repeat;
+    border-style: solid;
 }
 
 .enyo-gemstone.enyo-menu-button-shape.enyo-button-down {
     -webkit-border-image: url(../images/button-menu.png) 50 25 0 25 no-repeat;
+    border-style: solid;
 }
 
 .enyo-gemstone.enyo-menu-button-shape.enyo-button-depressed {
     -webkit-border-image: url(../images/button-menu.png) 50 25 0 25 no-repeat;
+    border-style: solid;
 }
 
 .enyo-gemstone.enyo-menu-button-shape.enyo-button-default {
     -webkit-border-image: url(../images/button-menu.png) 0 25 50 25 no-repeat;
+    border-style: solid;
 }
 
 .enyo-gemstone.enyo-menu-button-shape.enyo-button-default.enyo-button-down {
     -webkit-border-image: url(../images/button-menu.png) 50 25 0 25 no-repeat;
+    border-style: solid;
 }
 
 .enyo-gemstone.enyo-menu-button-shape > .enyo-button-icon {
