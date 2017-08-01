@@ -135,6 +135,7 @@
 	border: none;
 	border-width: 0;
 	-webkit-border-image: none;
+	border-style: solid;
 	margin: 0;
 	background: url(../images/grid/underline.png) center bottom repeat-x;
 }
