@@ -1,0 +1,16 @@
+{
+	"returnValue": true,
+	"results": [{
+		"_id": "++KKpIuCOt8OctoL",
+		"_kind": "com.palm.account.syncstate:1",
+		"_rev": 527,
+		"accountId": "++KHnkjk2UsA7qJh",
+		"busAddress": "com.palm.imap",
+		"capabilityProvider": "com.palm.imap.mail",
+		"collectionId": "++KHnkkBrACFhuUn",
+		"errorCode": "",
+		"errorText": "",
+		"metadata": null,
+		"syncState": "IDLE"
+	}]
+}

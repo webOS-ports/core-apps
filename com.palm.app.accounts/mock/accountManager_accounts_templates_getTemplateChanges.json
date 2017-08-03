@@ -1,0 +1,10 @@
+{
+	"returnValue": true,
+	"results": [{
+		"_id": "++KKls7VqJovE47L",
+		"_kind": "com.palm.signaling:1",
+		"_rev": 16,
+		"appId": "com.palm.accounts.templates",
+		"templates": "com.palm.aol,com.palm.boxnet,com.palm.dropbox,com.palm.eas,com.palm.facebook,com.palm.google,com.palm.imap,com.palm.linkedin,com.palm.mobileme,com.palm.othermail,com.palm.palmprofile,com.palm.photobucket,com.palm.pop,com.palm.sim,com.palm.skype,com.palm.snapfish,com.palm.telephony,com.palm.yahoo"
+	}]
+}
