@@ -1,0 +1,17 @@
+{
+	"returnValue": true,
+	"results": [{
+		"_id": "++Hoa4oyzWC28A+0",
+		"_kind": "com.palm.account:1",
+		"_rev": 58654,
+		"_sync": true,
+		"beingDeleted": false,
+		"capabilityProviders": [{
+			"_id": "2b5",
+			"capability": "CONTACTS",
+			"id": "com.palm.sim.contacts"
+		}],
+		"templateId": "com.palm.sim",
+		"username": "310410433090340"
+	}]
+}
