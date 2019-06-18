@@ -642,9 +642,9 @@ enyo.kind({
             this.$.body.setContent(email.data.summary);
 
         }*/
-    	var body = email.getBodyPart();
-    	this.$.body.loadUrl("file://" + body.path, body.mimeType);
-    	
+        var body = email.getBodyPart();
+        //this.$.body.loadUrl("file://" + body.path, body.mimeType);
+        this.$.body.loadUrl(body.path, body.mimeType);
     },
     _buildMessageHTML: function (path, mimeType, replyOrForward) {
 

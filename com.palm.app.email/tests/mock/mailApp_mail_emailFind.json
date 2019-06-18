@@ -35,7 +35,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 575,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/PO/RI3ABIF.txt",
+                    "path": "file-cache/email/PO/RI3ABIF.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -105,7 +105,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 533,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/L_/6cfwBIE.txt",
+                    "path": "mock/file-cache/email/6cfwbie.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -168,7 +168,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 538,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/YD/ir3QBID.txt",
+                    "path": "mock/file-cache/email/ir3qbid.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -231,7 +231,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 456,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/c_/7_BwBIC.txt",
+                    "path": "mock/file-cache/email/7_bwbic.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -295,7 +295,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 384,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/MP/sERwBIB.txt",
+                    "path": "file-cache/email/MP/sERwBIB.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -359,7 +359,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 460,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/KZ/HF7QBIA.txt",
+                    "path": "file-cache/email/KZ/HF7QBIA.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -423,7 +423,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 877,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Fj/MK+wBH_.txt",
+                    "path": "file-cache/email/Fj/MK+wBH_.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -489,7 +489,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 440,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/cU/47sQBH+.txt",
+                    "path": "file-cache/email/cU/47sQBH+.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -555,7 +555,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 440,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/X6/BUEQBH9.txt",
+                    "path": "file-cache/email/X6/BUEQBH9.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -618,7 +618,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 655,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/M5/0htQBH8.txt",
+                    "path": "file-cache/email/M5/0htQBH8.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -681,7 +681,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 413,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Y+/YjbgBH7.txt",
+                    "path": "file-cache/email/Y+/YjbgBH7.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -744,7 +744,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 539,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/bN/hOvwBH6.txt",
+                    "path": "file-cache/email/bN/hOvwBH6.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -807,7 +807,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 471,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/TN/KH8QBH5.txt",
+                    "path": "file-cache/email/TN/KH8QBH5.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -870,7 +870,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 460,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/RJ/2VGQBHz.txt",
+                    "path": "file-cache/email/RJ/2VGQBHz.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -933,7 +933,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 460,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Js/oPqABHy.txt",
+                    "path": "file-cache/email/Js/oPqABHy.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -996,7 +996,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 570,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/NC/xobQBH0.txt",
+                    "path": "file-cache/email/NC/xobQBH0.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -1059,7 +1059,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 511,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Tq/6iQwBH1.txt",
+                    "path": "file-cache/email/Tq/6iQwBH1.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -1122,7 +1122,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 727,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Vo/8xKABH2.txt",
+                    "path": "file-cache/email/Vo/8xKABH2.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -1185,7 +1185,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 797,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Ss/LA+QBH3.txt",
+                    "path": "file-cache/email/Ss/LA+QBH3.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -1248,7 +1248,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 777,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/ca/urlQBH4.txt",
+                    "path": "file-cache/email/ca/urlQBH4.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -1311,7 +1311,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 612,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/cn/UjXABIZ.txt",
+                    "path": "file-cache/email/cn/UjXABIZ.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -1374,7 +1374,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 655,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/cc/RbGwBIY.txt",
+                    "path": "file-cache/email/cc/RbGwBIY.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -1437,7 +1437,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 653,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/AO/SJRwBIX.txt",
+                    "path": "file-cache/email/AO/SJRwBIX.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -1500,7 +1500,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 460,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/bi/2CRgBIW.txt",
+                    "path": "file-cache/email/bi/2CRgBIW.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -1563,7 +1563,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 460,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/NN/uD8ABIV.txt",
+                    "path": "file-cache/email/NN/uD8ABIV.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -1626,7 +1626,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 468,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/PO/JDhABIU.txt",
+                    "path": "file-cache/email/PO/JDhABIU.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -1689,7 +1689,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 478,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/B+/QAYgBIT.txt",
+                    "path": "file-cache/email/B+/QAYgBIT.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -1752,7 +1752,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 384,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Ne/XSgwBIS.txt",
+                    "path": "file-cache/email/Ne/XSgwBIS.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -1815,7 +1815,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 460,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/CC/IK8gBIR.txt",
+                    "path": "file-cache/email/CC/IK8gBIR.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -1878,7 +1878,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 460,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/ZZ/od1QBIQ.txt",
+                    "path": "file-cache/email/ZZ/od1QBIQ.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -1941,7 +1941,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 460,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/JT/_QXgBIP.txt",
+                    "path": "file-cache/email/JT/_QXgBIP.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -2004,7 +2004,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 460,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Wg/wDtgBIO.txt",
+                    "path": "file-cache/email/Wg/wDtgBIO.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -2067,7 +2067,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 1046,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Op/P6ZgBIN.txt",
+                    "path": "file-cache/email/Op/P6ZgBIN.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -2130,7 +2130,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 495,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Ok/lccwBIM.txt",
+                    "path": "file-cache/email/Ok/lccwBIM.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -2193,7 +2193,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 599,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Rj/OXcABIL.txt",
+                    "path": "file-cache/email/Rj/OXcABIL.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -2256,7 +2256,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 645,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Vz/QAqABIK.txt",
+                    "path": "file-cache/email/Vz/QAqABIK.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -2319,7 +2319,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 647,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Ns/gW3wBIJ.txt",
+                    "path": "file-cache/email/Ns/gW3wBIJ.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -2382,7 +2382,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 460,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Wd/vgNgBII.txt",
+                    "path": "file-cache/email/Wd/vgNgBII.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -2445,7 +2445,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 492,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Bi/Po6ABIH.txt",
+                    "path": "file-cache/email/Bi/Po6ABIH.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -2508,7 +2508,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 384,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/M5/ekbABIG.txt",
+                    "path": "file-cache/email/M5/ekbABIG.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -2571,7 +2571,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 460,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Lz/rpdgBIq.txt",
+                    "path": "file-cache/email/Lz/rpdgBIq.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -2634,7 +2634,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 460,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Fn/sYTQBIp.txt",
+                    "path": "file-cache/email/Fn/sYTQBIp.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -2697,7 +2697,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 1305,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Hr/S96gBIo.txt",
+                    "path": "file-cache/email/Hr/S96gBIo.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -2760,7 +2760,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 460,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Ca/ThVgBIm.txt",
+                    "path": "file-cache/email/Ca/ThVgBIm.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -2823,7 +2823,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 428,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/ev/ZERQBIn.txt",
+                    "path": "file-cache/email/ev/ZERQBIn.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -2886,7 +2886,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 460,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/es/rRHABIl.txt",
+                    "path": "file-cache/email/es/rRHABIl.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -2949,7 +2949,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 2976,
                     "mimeType": "text/html",
-                    "path": "/var/file-cache/email/Lm/SfXQBIy.html",
+                    "path": "file-cache/email/Lm/SfXQBIy.html",
                     "section": "2",
                     "type": "body"
                 }
@@ -3012,7 +3012,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 688,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Ag/gebQBIz.txt",
+                    "path": "file-cache/email/Ag/gebQBIz.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -3075,7 +3075,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 47596,
                     "mimeType": "text/html",
-                    "path": "/var/file-cache/email/Ot/87VgBJO.html",
+                    "path": "file-cache/email/Ot/87VgBJO.html",
                     "section": "2",
                     "type": "body"
                 }
@@ -3138,7 +3138,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 674,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/DE/MJvABIk.txt",
+                    "path": "file-cache/email/DE/MJvABIk.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -3201,7 +3201,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 538,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Bf/KqzwBIj.txt",
+                    "path": "file-cache/email/Bf/KqzwBIj.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -3264,7 +3264,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 606,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/d6/+TlwBIi.txt",
+                    "path": "file-cache/email/d6/+TlwBIi.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -3327,7 +3327,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 460,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Nm/gs2gBIh.txt",
+                    "path": "file-cache/email/Nm/gs2gBIh.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -3390,7 +3390,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 460,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Hd/yggABIg.txt",
+                    "path": "file-cache/email/Hd/yggABIg.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -3453,7 +3453,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 695,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/M4/hmJABIf.txt",
+                    "path": "file-cache/email/M4/hmJABIf.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -3516,7 +3516,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 819,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Pj/vKbQBIe.txt",
+                    "path": "file-cache/email/Pj/vKbQBIe.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -3579,7 +3579,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 634,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Om/eQgABId.txt",
+                    "path": "file-cache/email/Om/eQgABId.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -3642,7 +3642,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 460,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Dm/hRMABIc.txt",
+                    "path": "file-cache/email/Dm/hRMABIc.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -3705,7 +3705,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 546,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/FO/PmYgBIb.txt",
+                    "path": "file-cache/email/FO/PmYgBIb.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -3768,7 +3768,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 486,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/JI/bvdgBIa.txt",
+                    "path": "file-cache/email/JI/bvdgBIa.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -3831,7 +3831,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 533,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Kr/M0VwBJB.txt",
+                    "path": "file-cache/email/Kr/M0VwBJB.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -3894,7 +3894,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 473,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/X9/0QnABJA.txt",
+                    "path": "file-cache/email/X9/0QnABJA.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -3957,7 +3957,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 7510,
                     "mimeType": "text/html",
-                    "path": "/var/file-cache/email/Za/O3WgBI+.html",
+                    "path": "file-cache/email/Za/O3WgBI+.html",
                     "section": "2",
                     "type": "body"
                 }
@@ -4020,7 +4020,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 479,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/S3/6i2ABI9.txt",
+                    "path": "file-cache/email/S3/6i2ABI9.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -4083,7 +4083,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 603,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/aG/1OHQBI1.txt",
+                    "path": "file-cache/email/aG/1OHQBI1.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -4146,7 +4146,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 446,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/fi/IoBABI0.txt",
+                    "path": "file-cache/email/fi/IoBABI0.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -4209,7 +4209,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 460,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/C0/7_gABI8.txt",
+                    "path": "file-cache/email/C0/7_gABI8.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -4272,7 +4272,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 488,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/S0/jHGABI7.txt",
+                    "path": "file-cache/email/S0/jHGABI7.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -4335,7 +4335,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 470,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/KY/vkkQBI6.txt",
+                    "path": "file-cache/email/KY/vkkQBI6.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -4398,7 +4398,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 454,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/RD/XitwBI5.txt",
+                    "path": "file-cache/email/RD/XitwBI5.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -4461,7 +4461,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 519,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/aJ/pg6wBI4.txt",
+                    "path": "file-cache/email/aJ/pg6wBI4.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -4524,7 +4524,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 550,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Qf/GpNABI3.txt",
+                    "path": "file-cache/email/Qf/GpNABI3.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -4587,7 +4587,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 532,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/OC/bF4QBI2.txt",
+                    "path": "file-cache/email/OC/bF4QBI2.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -4650,7 +4650,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 460,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Ro/ac9QBIx.txt",
+                    "path": "file-cache/email/Ro/ac9QBIx.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -4713,7 +4713,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 588,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/HZ/QN5gBIw.txt",
+                    "path": "file-cache/email/HZ/QN5gBIw.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -4776,7 +4776,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 651,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/I3/FUDgBIv.txt",
+                    "path": "file-cache/email/I3/FUDgBIv.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -4839,7 +4839,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 593,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/eL/_oSABIu.txt",
+                    "path": "file-cache/email/eL/_oSABIu.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -4902,7 +4902,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 461,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/XU/P7DQBIt.txt",
+                    "path": "file-cache/email/XU/P7DQBIt.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -4965,7 +4965,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 508,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/JV/6FegBIs.txt",
+                    "path": "file-cache/email/JV/6FegBIs.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -5028,7 +5028,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 502,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Jg/jU_ABIr.txt",
+                    "path": "file-cache/email/Jg/jU_ABIr.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -5091,7 +5091,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 7312,
                     "mimeType": "text/html",
-                    "path": "/var/file-cache/email/bS/mdiQBJS.html",
+                    "path": "file-cache/email/bS/mdiQBJS.html",
                     "section": "2",
                     "type": "body"
                 }
@@ -5154,7 +5154,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 43190,
                     "mimeType": "text/html",
-                    "path": "/var/file-cache/email/QC/B_YABJU.html",
+                    "path": "file-cache/email/QC/B_YABJU.html",
                     "section": "2",
                     "type": "body"
                 }
@@ -5217,7 +5217,7 @@
                     "encoding": "binary",
                     "estimatedSize": 59,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/EQ/4U8QBJP.txt",
+                    "path": "file-cache/email/EQ/4U8QBJP.txt",
                     "section": "1",
                     "type": "body"
                 },
@@ -5290,7 +5290,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 574,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/bM/qS_QBI_.txt",
+                    "path": "file-cache/email/bM/qS_QBI_.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -5353,7 +5353,7 @@
                     "encoding": "7bit",
                     "estimatedSize": 22786,
                     "mimeType": "text/html",
-                    "path": "/var/file-cache/email/Gk/K8zwBJN.html",
+                    "path": "file-cache/email/Gk/K8zwBJN.html",
                     "section": "2",
                     "type": "body"
                 }
@@ -5416,7 +5416,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 638,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/es/THrgBJL.txt",
+                    "path": "file-cache/email/es/THrgBJL.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -5479,7 +5479,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 581,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Ku/EmUgBJK.txt",
+                    "path": "file-cache/email/Ku/EmUgBJK.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -5542,7 +5542,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 590,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Qe/C5vgBJJ.txt",
+                    "path": "file-cache/email/Qe/C5vgBJJ.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -5605,7 +5605,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 702,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/HV/s7BABJI.txt",
+                    "path": "file-cache/email/HV/s7BABJI.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -5668,7 +5668,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 579,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Wy/u8gwBJH.txt",
+                    "path": "file-cache/email/Wy/u8gwBJH.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -5731,7 +5731,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 450,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Zk/fJxwBJG.txt",
+                    "path": "file-cache/email/Zk/fJxwBJG.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -5794,7 +5794,7 @@
                     "encoding": "7bit",
                     "estimatedSize": 13456,
                     "mimeType": "text/html",
-                    "path": "/var/file-cache/email/QG/UxpQBJD.html",
+                    "path": "file-cache/email/QG/UxpQBJD.html",
                     "section": "2",
                     "type": "body"
                 }
@@ -5857,7 +5857,7 @@
                     "encoding": "7bit",
                     "estimatedSize": 13448,
                     "mimeType": "text/html",
-                    "path": "/var/file-cache/email/Ze/sAzgBJF.html",
+                    "path": "file-cache/email/Ze/sAzgBJF.html",
                     "section": "2",
                     "type": "body"
                 }
@@ -5920,7 +5920,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 490,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Kh/LL2wBJE.txt",
+                    "path": "file-cache/email/Kh/LL2wBJE.txt",
                     "section": "1",
                     "type": "body"
                 }
@@ -5983,7 +5983,7 @@
                     "encoding": "quoted-printable",
                     "estimatedSize": 434,
                     "mimeType": "text/plain",
-                    "path": "/var/file-cache/email/Qe/DOkABJC.txt",
+                    "path": "file-cache/email/Qe/DOkABJC.txt",
                     "section": "1",
                     "type": "body"
                 }
