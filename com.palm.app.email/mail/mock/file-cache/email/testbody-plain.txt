@@ -1,0 +1,1 @@
+Generic plain text email test body for testing the Email app on Desktop browsers.
