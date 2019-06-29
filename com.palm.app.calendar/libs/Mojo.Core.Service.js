@@ -40,9 +40,15 @@ Mojo.Core.Service = (function () {
                 console.warn("No activity id available for service request!");
             }
             else {
-                parameters.$activity = {
-                    activityId: PalmSystem.activityId
-                };
+                if (true) {
+                    console.log("Mojo.Core.Service.Request: skipping problematic activity id decoration!");
+                }
+                else {
+                    // dead code
+                    parameters.$activity = {
+                        activityId: PalmSystem.activityId
+                    };
+                }
             }
         }
 
