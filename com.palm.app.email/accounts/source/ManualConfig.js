@@ -103,7 +103,7 @@ enyo.kind({
                                 kind: "ListSelector",
                                 onChange: "checkInPorts",
                                 label: $L("Encryption"),
-                                value: ProtocolSettings.NO_ENCRYPTION,
+                                value: ProtocolSettings.SSL,
                                 items: [
                                     {caption: $L("None"), value: ProtocolSettings.NO_ENCRYPTION},
                                     {caption: $L("SSL"), value: ProtocolSettings.SSL},
@@ -156,7 +156,7 @@ enyo.kind({
                                     kind: "ListSelector",
                                     onChange: "checkOutPorts",
                                     label: $L("Encryption"),
-                                    value: ProtocolSettings.NO_ENCRYPTION,
+                                    value: ProtocolSettings.SSL,
                                     items: [
                                         {caption: $L("None"), value: ProtocolSettings.NO_ENCRYPTION},
                                         {caption: $L("SSL"), value: ProtocolSettings.SSL},
