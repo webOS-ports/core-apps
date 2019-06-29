@@ -53,7 +53,7 @@ enyo.kind({
                     onHeaderTap: "headerTap"
                 }
             ]},
-            {flex: 1, name: "bodySliding", dragAnywhere: false, onResize: "resizeBody", showing: true, components: [
+            {width: "320px", name: "bodySliding", dragAnywhere: false, fixedWidth: true, onResize: "resizeBody", showing: true, components: [
                 {
                     name: "body",
                     kind: "MessagePane",
