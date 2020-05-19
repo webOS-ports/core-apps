@@ -6,9 +6,10 @@
 	"main": "index.html",
 	"title": "Clock",
 	"icon": "icon.png",
-   "splashicon": "icon.png",
+	"splashicon": "icon.png",
 	"noWindow": true,
 	"uiRevision": 2,
 	"debug": false,
-	"removable": false
+	"removable": false,
+	"requiredPermissions": ["applications.internal", "applications", "activities.manage", "devices", "settings", "settings.read", "services", "database", "database.internal", "filecache", "system", "networking", "networking.internal", "time", "activities.manage"]
 }
