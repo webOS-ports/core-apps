@@ -50,8 +50,9 @@ enyo.kind({
 				{name: "lblHour1", className:"digit"},
 				{kind: "Image", src: "images/digital_landscape_time_bg.png", className: "digit-hour-overlay"}
 			]},
-			{layoutKind:"VFlexLayout", pack:"center", align: "center", height: "220px", components: [
-				{content: ":", className:"clock-separator"}
+			/*{layoutKind:"VFlexLayout", pack:"center", align: "center", height: "220px", components: [*/
+			{name: "", className: "digital-hour",  pack: "center", align: "center", components:[
+				{content: ":", className:"clock-separator"},
 			]},
 			{name: "", className: "time digital-min", pack: "center", align: "center", components:[
 				{name: "lblMinute0", className:"digit"},

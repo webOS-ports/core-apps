@@ -22,6 +22,7 @@ enyo.kind({
 	className:"analog clockbg",
 	published: {boolShowSeconds: true},
 	components: [
+		{ kind: "ApplicationEvents", onUnload: "detachEventHandler", onWindowActivated: "scaleClock", onWindowRotated: "scaleClock" },
 		{name: "handHour", className:"clockHand Hour"},
 		{name: "handMin", className:"clockHand Min"},
 		{name: "handSec", className:"clockHand Sec"},
@@ -33,13 +34,49 @@ enyo.kind({
 		}
 	],
 	
-	
 	create: function ()
 	{
 		this.inherited(arguments);
 		this.log();
 		this.local_weekday_formatter = new enyo.g11n.DateFmt({format: "EEE"});	
-		this.local_day_formatter = new enyo.g11n.DateFmt({format: "dd"});	
+		this.local_day_formatter = new enyo.g11n.DateFmt({format: "dd"});
+		this.scaleClock();
+		window.addEventListener ("resize", this.scaleClock, false);
+	},
+
+	scaleClock: function () 
+	{
+		var scale, marginL, marginR, marginT;
+		marginT = "";
+		if (window.innerWidth < 600 || window.innerHeight < 600) {
+			scale = "scale(0.7)";
+			marginL = "-100px";
+			marginR = "-100px";
+			if (window.innerHeight < 550) {
+				scale = "scale(0.6)";
+				marginT = "-100px";
+			}
+		}
+		else if (window.innerWidth > 1200 || window.innerHeight >= 900) {
+			scale = "scale(1.5)";
+		}
+		else {
+			scale = "scale(1.0)";
+		}
+
+		var clocks = document.getElementsByClassName("analog");
+		for (var i=0;i<clocks.length;i++) {
+			clocks[i].style.marginLeft = marginL;
+			clocks[i].style.marginRight = marginR;
+			clocks[i].style.marginTop = marginT;
+			clocks[i].style.transform = scale;
+			clocks[i].style.display = "block";
+		}
+	},
+
+	detachEventHandler: function ()
+	{
+		window.removeEventListener("resize", this.scaleClock);
 	},
 	
 	tock: function ()

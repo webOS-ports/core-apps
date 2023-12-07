@@ -26,23 +26,18 @@
 
 .clockContainer {
 	background-color: #0c0c0c;
-	
-	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .analog {
 	margin: auto;
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
+	/*display: none;*/ /*TODO: Add this back when onWindowActivated bug is fixed */
 }
 
-
-
 .clockbg {
-	background-image: url(../images/clockbg.png);
+	background-image: url(../images/clockbg.png);	
 	height: 514px;
 	width: 514px;
 }
@@ -66,7 +61,8 @@
 .clockHand.Sec {
 	background-image: url(../images/seconds.png);	
 	z-index: 911;
-	/*-webkit-transition: all .2s ease;*/
+	-webkit-transition: all .2s ease;
+	transition: all .2s ease;
 }
 
 .clockLabel
@@ -77,24 +73,19 @@
 	z-index: 902;
 	top: 230px;
 	left: 102px;
-	
 }
 
 .clockLabel .weekday
 {
 	width: 100px;
-	/*border: solid 1px blue;*/
 	text-align: center;
 }
 
 .clockLabel .day
 {
 	width: 100px;
-	/*border: solid 1px green;*/
 	text-align: center;
- 
 }
-
 
 .alarms
 {
@@ -105,7 +96,6 @@
 	left: 0;
 	right: 0;	
 }
-
 
 /*** Glass Clock Face ***/
 
@@ -149,10 +139,9 @@
 }
 
 .digitalClock {
-	background: url(../images/clock-bg.png) 0 -165px no-repeat;
+	/*background: url(../images/clock-bg.png) 0 -165px no-repeat;*/
 	margin: 0 auto;
 	height: 100%;
-	
 } 
 
 .digital {
@@ -162,13 +151,13 @@
 
 .digital .time .time-meridian {
 	position:absolute;
-	top:15px;
-	left: 10px;
-	font-size:1.30em;
+	top:0.7vmin;
+	left: 8px;
+	font-size:2vmin;
 }
 
 .digital .time {
-	height: 235px;
+	height: 20vmin;
 	text-align: center;
 	position:relative;
 	border-width: 9px;
@@ -177,25 +166,37 @@
 }
 
 .digital .date {
-	width: 53px;
+	width: 4vmin;
 	text-align: center;
-	font-size:3em;
+	font-size:5vmin;
 	position:relative;
 	border-width: 7px;
+	left: 7.0vmin;	/*moves the face*/
 	border-style: solid;
+	margin-left:-7.0vmin; /* spaces out each character */
 	-webkit-border-image: url(../images/Date_Flipper_Landscape.png) 7;
 }
 
+.digit-date-overlay {
+	position: relative;
+	left: -0.5vmin;	/*moves the overlay*/
+	height: 100px;
+	width: 7.2vmin; /* spaces out each character AND the overlay*/
+	top: 1vmin;
+}
+
 .digital .digit {
-	font-size:10em;
-	margin-top:-15px
+	font-size: 20vmin;
+	margin-top:-3vmin;
+	padding-left: 2px;
 }
 
 .digitalClock .clock-separator {
-	width: 80px;
-	font-size:5em;
+	width: 8vmin;
+	font-size:12vmin;
 	color: #fff;
 	text-align:center;
+	margin-top: 40%;
 }
 
 .digital-month {
@@ -204,18 +205,10 @@
 
 .digit-hour-overlay {
 	position: relative;
-	height: 235px;
-	top: -260px;
+	height: 20vmin;
+	top: -22vmin;
 	left: 0;
 	padding:0px;
 	margin-left: -10px;
 	margin-right: -10px;
-	margin-top: 20px;
-}
-
-.digit-date-overlay {
-	position: relative;
-	height: 100px;
-	width: 73px;
-	margin-left:-73px;
 }
