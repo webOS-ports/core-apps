@@ -28,14 +28,14 @@ PowerUser.prototype = {
     start: function (durationMs) {
         this.started = true;
 
-        this._startRequest = EmailApp.Util.callService("palm://com.palm.power/com/palm/power/activityStart",
+        this._startRequest = EmailApp.Util.callService("palm://com.webos.service.sleep/com/palm/power/activityStart",
             {id: this.id, duration_ms: durationMs}
         );
     },
 
     stop: function () {
         if (this.started) {
-            this._stopRequest = EmailApp.Util.callService("palm://com.palm.power/com/palm/power/activityEnd",
+            this._stopRequest = EmailApp.Util.callService("palm://com.webos.service.sleep/com/palm/power/activityEnd",
                 {id: this.id}
             );
             this.started = false;

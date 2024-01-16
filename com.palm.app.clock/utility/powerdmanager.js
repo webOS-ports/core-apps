@@ -23,9 +23,9 @@ enyo.kind(
 	events: {onSetAlarmTimeOut: "", onFailure: ""},
 	components: [
 		
-		{name: "psAlarmSet", kind: "PalmService", service: "palm://com.palm.power/", method: "timeout/set", onSuccess: "onSuccess_AlarmSet", onFailure: "onFailure_AlarmSet"},
+		{name: "psAlarmSet", kind: "PalmService", service: "palm://com.webos.service.sleep/", method: "timeout/set", onSuccess: "onSuccess_AlarmSet", onFailure: "onFailure_AlarmSet"},
 		
-		{name: "psAlarmClear", kind: "PalmService", service: "palm://com.palm.power/", method: "timeout/clear", onSuccess: "onSuccess_AlarmClear", onFailure: "onFailure_AlarmClear"},
+		{name: "psAlarmClear", kind: "PalmService", service: "palm://com.webos.service.sleep/", method: "timeout/clear", onSuccess: "onSuccess_AlarmClear", onFailure: "onFailure_AlarmClear"},
 	],
 		
 	create: function ()
@@ -70,7 +70,7 @@ enyo.kind(
 	
 	onFailure_AlarmSet: function (sender, response)
 	{
-		this.log(response);		
+		this.log(response);
 	},
 
 
@@ -91,7 +91,7 @@ enyo.kind(
 	
 	onFailure_AlarmClear: function (sender, response)
 	{
-		this.log(response);		
+		this.log(response);
 	},
 
 

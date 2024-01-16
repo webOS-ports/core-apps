@@ -214,7 +214,7 @@ enyo.kind(
 	stopRingtone: function ()
 	{
 		this.log();
-		this.$.audioManager.pauseAudio(false);		
+		this.$.audioManager.pauseAudio(false);
 	},
 	
 	
@@ -242,7 +242,7 @@ enyo.kind(
 			else
 			{
 				this.objAlarmRecord.enabled = false;
-				this.$.activityManager.clearAlarmTimeout(this.objAlarmRecord);				
+				this.$.activityManager.clearAlarmTimeout(this.objAlarmRecord);
 			}
 		}
 	},
@@ -257,7 +257,7 @@ enyo.kind(
 	onClearAlarmTimeout: function ()
 	{
 		this.log();
-		this.$.alarmDbManager.updateAlarm(this.objAlarmRecord);		
+		this.$.alarmDbManager.updateAlarm(this.objAlarmRecord);
 	},
 
 
@@ -328,7 +328,7 @@ enyo.kind(
 	kAlarmSchedulerKeySnooze: "timequakeSnooze",
 	kAlarmCookieTime: "alarmTime",
 	kAlarmCookieEnabled: "alarmEnabled",
-	kAlarmSchedulerUri: "luna://com.palm.power/timeout/",
+	kAlarmSchedulerUri: "luna://com.webos.service.sleep/timeout/",
 	kAlarmLaunchUri: "luna://com.palm.applicationManager/launch",
 	kAlarmLaunchParams: '{"id":"com.palm.app.clock","params":{"action":"ring"}}',	//?? Can I just make this an object?
 	kAlarmSnoozeLongDuration: "00:20:00",
