@@ -9,5 +9,5 @@
     "icon"      : "icon.png",
     "removable" : false,
     "trustLevel" : "trusted",
-    "requiredPermissions": ["accountsservice.management", "accountsservice.operation", "application.launcher", "activity.operation", "contactslinker-service.operation", "contacts-service.operation", "database.management", "database.operation", "settings.read", "tempdatabase.management", "tempdatabase.operation"]
+    "requiredPermissions": ["accountsservice.management", "accountsservice.operation", "application.launcher", "activity.operation", "contactslinkerservice.operation", "contactsservice.operation", "database.management", "database.operation", "settings.read", "tempdatabase.management", "tempdatabase.operation"]
 }
