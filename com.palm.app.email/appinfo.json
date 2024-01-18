@@ -51,5 +51,5 @@
             }
         }
     },
-    "requiredPermissions": ["accountsservice.management", "accountsservice.operation", "activity.operation", "application.launcher", "application.operation", "database.operation", "filecache.operation", "filecache.management", "luna-sysmgr.operation", "mojomail-imap.operation", "mojomail-pop.operation", "mojomail-smtp.operation", "networkconnection.query", "sleep.management", "settings.read", "systemsettings.query", "tempdatabase.operation"]
+    "requiredPermissions": ["accountsservice.management", "accountsservice.operation", "activity.operation", "application.launcher", "application.operation", "database.operation", "filecache.operation", "filecache.management", "luna-sysmgr.operation", "mojomail-imap.operation", "mojomail-pop.operation", "mojomail-smtp.operation", "networkconnection.query", "sleep.management", "settings.query", "systemsettings.query", "tempdatabase.operation"]
 }

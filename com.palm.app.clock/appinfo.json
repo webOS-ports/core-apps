@@ -12,5 +12,5 @@
 	"debug": false,
 	"removable": false,
 	"trustLevel" : "trusted",
-	"requiredPermissions": ["application.launcher", "activity.operation", "settings.read", "database.operation"]
+	"requiredPermissions": ["application.launcher", "activity.operation", "settings.query", "database.operation"]
 }
