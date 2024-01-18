@@ -42,5 +42,5 @@
             }
         }
     },
-    "requiredPermissions": ["accountsservice.management", "activity.operation", "appmanager.management", "application.launcher", "calendarremindersservice.operation", "database.operation", "networkconnection.management", "networkconnection.query", "settings.read", "systemsettings.query", "tempdatabase.operation", "time.query", "universalsearch.operation", "wifi.query", "wifi.management"]
+    "requiredPermissions": ["accountsservice.management", "activity.operation", "appmanager.management", "application.launcher", "calendarremindersservice.operation", "database.operation", "networkconnection.management", "networkconnection.query", "settings.query", "systemsettings.query", "tempdatabase.operation", "time.query", "universalsearch.operation", "wifi.query", "wifi.management"]
 }
