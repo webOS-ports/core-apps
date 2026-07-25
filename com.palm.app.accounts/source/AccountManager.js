@@ -74,13 +74,18 @@ enyo.kind({
 		{kind: "AccountsModify", name: "AccountsModify", lazy:true, capability: this.capability, onAccountsModify_Done: "accountsDone"},
 
 		{kind: "MyApps.PalmID",  name: "palmprofile", lazy:true, capability: this.capability, onAccountsModify_Done: "accountsDone"},
+		{kind: "Accounts.RetainedDataView", name: "retainedDataView", lazy:true, onRetainedData_Done: "accountsDone"},
 		{kind: "Accounts.getAccounts", name: "accounts", onGetAccounts_AccountsAvailable: "onAccountsAvailable"},
 		{kind:"VFlexBox", components: [
-			{name: "appMenu", kind: "AppMenu", components: [{kind: "HelpMenu", target: "http://help.palm.com/accountsmgr/index.html"}]},
+			{name: "appMenu", kind: "AppMenu", components: [
+				{name: "deleteDataMenuItem", caption: $L("Delete Account Data"), onclick: "showRetainedData", showing: false},
+				{kind: "HelpMenu", target: "http://help.palm.com/accountsmgr/index.html"}
+			]},
 		]},
 		
 		{kind: "PalmService", name: "getPalmProfileAccountInfo", service: "palm://com.palm.accountservices/", method: "getAccountInfo", onSuccess: "setPalmProfileNameSuccess"},
 		{kind: "PalmService", name: "modifyPalmProfileAccountName", service: enyo.palmServices.accounts, method: "modifyAccount"},
+		{kind: "PalmService", name: "retainedQuery", service: "palm://com.palm.db/", method: "find", onSuccess: "gotRetainedData", onFailure: "gotRetainedData"},
 	],
 	
 	create: function() {
@@ -226,7 +231,11 @@ enyo.kind({
 			this.$.synergyAccounts.show();
 		else
 			this.$.synergyAccounts.hide();
-		
+
+		// Only offer "Delete Account Data" in the app menu if there are retained-data markers for accounts
+		// that are not currently active (re-added accounts don't count).
+		this.checkRetainedData();
+
 		// Was the accounts app launched to change credentials?
 		if (this.changeLoginAccountId || this.modifyAccountId) {
 			// Deep-linked to a specific account: modifyAccountId opens the full modify view (with Remove);
@@ -301,6 +310,39 @@ enyo.kind({
 	// Go to the prefs and accounts view
 	accountsDone: function(inSender, e) {
 		this.selectViewByName("prefsAndAccounts");
+	},
+
+	// App menu -> "Delete Account Data": open the retained-data page (swipe-to-delete list of accounts
+	// that were removed with their data kept on the device).
+	showRetainedData: function() {
+		this.$.appMenu.close();
+		this.selectViewByName("retainedDataView");
+		// Pass the active accounts too so a re-added account is filtered out of the delete list.
+		this.$.retainedDataView.load(this.templates, this.accounts);
+	},
+
+	// Query the retained-data markers and show the "Delete Account Data" menu item only if any belong to
+	// an account that is NOT currently active (a re-added account's marker doesn't count).
+	checkRetainedData: function() {
+		this.$.retainedQuery.call({query: {from: "com.palm.imretaineddata:1"}});
+	},
+	gotRetainedData: function(inSender, resp) {
+		var results = (resp && resp.results) || [];
+		var active = {}, i;
+		for (i = 0; i < this.accounts.length; i++) {
+			var a = this.accounts[i];
+			if (a && a.templateId)
+				active[this.retainedKey(a.templateId, a.username)] = true;
+		}
+		var count = 0;
+		for (i = 0; i < results.length; i++) {
+			if (!active[this.retainedKey(results[i].templateId, results[i].username)])
+				count++;
+		}
+		this.$.deleteDataMenuItem.setShowing(count > 0);
+	},
+	retainedKey: function(templateId, username) {
+		return (templateId || "") + "|" + String(username || "").toLowerCase().replace(/[^a-z0-9]/g, "");
 	},
 	
 	// Open or close the App Menu

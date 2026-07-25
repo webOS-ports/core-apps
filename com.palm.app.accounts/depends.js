@@ -19,6 +19,7 @@
 ﻿enyo.depends(
 	"$enyo-lib/accounts/",
 	"source/AccountManager.js",
+	"source/RetainedDataView.js",
 	"css/PalmID.css",
  	"source/palmID/PalmID.js",
 	"source/palmID/Initialize.js",
