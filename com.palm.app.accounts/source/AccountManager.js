@@ -51,9 +51,9 @@ enyo.kind({
 							{name:"palmProfileName", className:"enyo-text-ellipsis", flex:1}
 						]}
 					]},                                        
-					{kind: "RowGroup", className:"accounts-group", name: "synergyAccounts", caption:$L("SYNERGY ACCOUNTS"), components: [
+					{kind: "Control", name: "synergyAccounts", components: [
 						// This is the one-line kind to get the list of accounts.  It is initialized in your create method below                                 
-						{kind: "Accounts.accountsList", name: "accountsList", onAccountsList_AccountSelected: "editAccount", onAccountsList_Ready: "listReady"}
+						{kind: "Accounts.accountsList", name: "accountsList", grouped: true, groupTitle: $L("SYNERGY ACCOUNTS"), onAccountsList_AccountSelected: "editAccount", onAccountsList_Ready: "listReady"}
 					]},
 					{kind: "RowGroup", className:"accounts-group", name: "simAccountGroup", components: [
 						{kind: "Accounts.accountsList", name: "SIMAccountsList", onAccountsList_AccountSelected: "editAccount", onAccountsList_Ready: "listReady"}
@@ -339,7 +339,8 @@ enyo.kind({
 			if (!active[this.retainedKey(results[i].templateId, results[i].username)])
 				count++;
 		}
-		this.$.deleteDataMenuItem.setShowing(count > 0);
+		var _mi = this.$.deleteDataMenuItem || (this.$.appMenu && this.$.appMenu.$ && this.$.appMenu.$.deleteDataMenuItem);
+		if (_mi) { _mi.setShowing(count > 0); }
 	},
 	retainedKey: function(templateId, username) {
 		return (templateId || "") + "|" + String(username || "").toLowerCase().replace(/[^a-z0-9]/g, "");
