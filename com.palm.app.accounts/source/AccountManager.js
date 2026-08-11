@@ -93,7 +93,24 @@ enyo.kind({
 		
 		// Start the spinner
 		this.$.getAccountsSpinner.show();
-		
+
+		// Handle a deep-link launch param (e.g. Phone prefs -> manage a specific account). On a fresh
+		// launch enyo's windowParamsChangeHandler wiring doesn't reach this app root, so read PalmSystem
+		// launch params directly here; onAccountsAvailable() acts on them once the account list loads.
+		try {
+			var lp = (window.PalmSystem && PalmSystem.launchParams) ? enyo.json.parse(PalmSystem.launchParams) : null;
+			if (lp && lp.accountId) {
+				if (lp.launchType === "modifyAccount") {
+					console.log("Accounts app: deep-link modify account " + lp.accountId);
+					this.modifyAccountId = lp.accountId;
+				} else if (lp.launchType === "changelogin") {
+					console.log("Accounts app: deep-link change credentials " + lp.accountId);
+					this.changeLoginAccountId = lp.accountId;
+				}
+			}
+		} catch (e) {
+			console.log("Accounts app: launchParams parse error: " + e);
+		}
 	},
 	
 	listReady: function () {
@@ -107,17 +124,27 @@ enyo.kind({
 	
 	// App was launched to change credentials
 	windowParamsChangeHandler: function(inSender, inEvent) {
-		var p = inEvent.params;
+		// enyo may invoke this as (params) [enyo.call convention, params is the first arg] or as
+		// (inSender, {params}) [ApplicationEvents convention]. Read whichever form arrived.
+		var p = (inEvent && inEvent.params) || (inSender && inSender.params) || inSender || {};
 		if (p && p.launchType === "changelogin" && p.accountId) {
 			console.log("Accounts app: Change credentials for " + p.accountId);
 			// Wait until all the accounts are retrieved before acting on this information
 			this.changeLoginAccountId = p.accountId;
 		}
+		else if (p && p.launchType === "modifyAccount" && p.accountId) {
+			// Deep-link (e.g. from Phone prefs) to manage/remove a specific account. Acted on once the
+			// account list has loaded (see onAccountsAvailable).
+			console.log("Accounts app: Modify account " + p.accountId);
+			this.modifyAccountId = p.accountId;
+		}
 	},
-	
+
 	// App was already running when credential dashboard was tapped
 	applicationRelaunchHandler: function(inSender, inEvent) {
-		var p = inEvent.params;
+		// enyo may invoke this as (params) [enyo.call convention, params is the first arg] or as
+		// (inSender, {params}) [ApplicationEvents convention]. Read whichever form arrived.
+		var p = (inEvent && inEvent.params) || (inSender && inSender.params) || inSender || {};
 		if (p && p.launchType === "changelogin" && p.accountId) {
 			console.log("Accounts app: Change credentials for " + p.accountId);
 			
@@ -136,8 +163,24 @@ enyo.kind({
 				this.changeLoginAccountId = p.accountId;
 			}
 		}
+		else if (p && p.launchType === "modifyAccount" && p.accountId) {
+			// Deep-link to manage/remove a specific account. Open its full modify view (with Remove) now if
+			// the accounts are loaded, otherwise defer to onAccountsAvailable.
+			console.log("Accounts app: Modify account " + p.accountId);
+			if (this.accounts) {
+				for (var i=0, l=this.accounts.length; i<l; i++) {
+					if (this.accounts[i]._id === p.accountId) {
+						this.selectViewByName("AccountsModify");
+						this.$.AccountsModify.ModifyAccount(this.accounts[i]);
+					}
+				}
+			}
+			else {
+				this.modifyAccountId = p.accountId;
+			}
+		}
 	},
-	
+
 	onAccountsAvailable: function(inSender, inResponse) {
 		this.accounts = inResponse.accounts;    // Accounts are returned as an array
 		this.templates = inResponse.templates;
@@ -185,15 +228,24 @@ enyo.kind({
 			this.$.synergyAccounts.hide();
 		
 		// Was the accounts app launched to change credentials?
-		if (this.changeLoginAccountId) {
+		if (this.changeLoginAccountId || this.modifyAccountId) {
+			// Deep-linked to a specific account: modifyAccountId opens the full modify view (with Remove);
+			// changeLoginAccountId opens the credentials view. modifyAccount wins if somehow both are set.
+			var _targetId = this.modifyAccountId || this.changeLoginAccountId;
+			var _fullModify = !!this.modifyAccountId;
+			delete this.changeLoginAccountId;
+			delete this.modifyAccountId;
 			// Find the account
 			for (var i=0, l=this.accounts.length; i<l; i++) {
-				if (this.accounts[i]._id === this.changeLoginAccountId) {
-					delete this.changeLoginAccountId;
+				if (this.accounts[i]._id === _targetId) {
 					this.selectViewByName("AccountsModify");
-					this.$.AccountsModify.ModifyCredentials(this.accounts[i]);
+					if (_fullModify)
+						this.$.AccountsModify.ModifyAccount(this.accounts[i]);
+					else
+						this.$.AccountsModify.ModifyCredentials(this.accounts[i]);
+					break;
 				}
-			}			
+			}
 		}
 		else {
 			// Go to the Accounts view, if the current view is "Loading Accounts"
