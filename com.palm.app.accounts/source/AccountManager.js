@@ -45,7 +45,7 @@ enyo.kind({
 			{className:"accounts-header-shadow"},
 			{kind: "Scroller", flex: 1, components: [
 				{kind:"Control", className:"box-center", components: [
-					{kind: "RowGroup", className:"accounts-group", caption:$L("Local Account"), components: [
+					{kind: "RowGroup", name: "palmProfileGroup", className:"accounts-group", caption:$L("Local Account"), showing: false, components: [
 						{kind: "Item", layoutKind: "HFlexLayout", tapHighlight: true, disabled:true, className:"enyo-single" , onclick: "editPalmidProfile", align:"center", components:[
 							{kind: "Image", name: "profileIcon", className:"icon-image"},
 							{name:"palmProfileName", className:"enyo-text-ellipsis", flex:1}
@@ -212,11 +212,20 @@ enyo.kind({
 			return true;
 		}.bind(this));
 		
-		// Update the Profile username and icon
-		this.$.palmProfileName.setContent(enyo.string.escapeHtml(this.palmProfileAccount.username));
-		this.$.profileIcon.src = this.palmProfileAccount.icon.loc_32x32;
-		this.$.profileIcon.srcChanged();
-		
+		// Update the Profile username and icon. We have no Palm Profile (see the FIXME above), so this
+		// account normally doesn't exist at all -- dereferencing it unguarded threw a TypeError that
+		// aborted the rest of this handler and left the app stuck on the "Loading Accounts" view.
+		if (this.palmProfileAccount) {
+			this.$.palmProfileGroup.show();
+			this.$.palmProfileName.setContent(enyo.string.escapeHtml(this.palmProfileAccount.username || ""));
+			if (this.palmProfileAccount.icon && this.palmProfileAccount.icon.loc_32x32) {
+				this.$.profileIcon.src = this.palmProfileAccount.icon.loc_32x32;
+				this.$.profileIcon.srcChanged();
+			}
+		}
+		else
+			this.$.palmProfileGroup.hide();
+
 		// Change the SIM header based on the number of SIM Accounts
 		if (simAccounts === 0)
 			this.$.simAccountGroup.hide();
@@ -282,14 +291,18 @@ enyo.kind({
 	
 	editPalmidProfile:  function(inSender, inResults) {
 		console.log("editPalmidProfile")
+		if (!this.palmProfileAccount)
+			return;
 		this.selectViewByName("palmprofile");
 		this.$.palmprofile.initialize({palmProfileAccount: this.palmProfileAccount});
 	},
 	
 	setPalmProfileNameSuccess: function(inSender, inResponse) {
 		console.log("setPalmProfileNameSuccess");
+		if (!this.palmProfileAccount)
+			return;
 		var accountName = inResponse.firstName + " " + inResponse.lastName;
-		
+
 		var param = {
 			"accountId": this.palmProfileAccount._id,
 			"object": {"username": accountName}
