@@ -45,6 +45,18 @@
 
 	"-9999": $L("Must be connected to a network to communicate with HP's Cloud Services. Check your network connection, or try again."),
 
+	"USERNAME_TAKEN": $L("That username is already taken."),
+	"USERNAME_INVALID": $L("Usernames are 3-32 characters: letters, numbers, and . _ - only, starting with a letter or number."),
+	"USERNAME_RESERVED": $L("That username is reserved."),
+
+};
+
+/* webOS Archive: the subset of the above that UsernameDialog shows inline next
+ * to the field instead of in a popup — these are all "fix your input" errors. */
+ var PALMIDUTILS_USERNAME_ERROR_CODES = {
+	"USERNAME_TAKEN": PALMIDUTILS_ERROR_CODES["USERNAME_TAKEN"],
+	"USERNAME_INVALID": PALMIDUTILS_ERROR_CODES["USERNAME_INVALID"],
+	"USERNAME_RESERVED": PALMIDUTILS_ERROR_CODES["USERNAME_RESERVED"],
 };
 
  var PALMIDUTILS_ERROR_HEADING_CODES = {

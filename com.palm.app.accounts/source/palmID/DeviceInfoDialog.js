@@ -83,6 +83,25 @@ enyo.kind({
 							}
 						]
 					},
+					{
+					kind: "enyo.VFlexBox",
+					components: [
+							{
+								content: $L("Device ID"),
+								className:"enyo-label",
+								style: "padding-right:30px"
+							},
+							{
+								// Not ellipsised and not on one line with its label: a
+								// 40-character id needs the full width to be readable,
+								// and this is the value someone reads out to match a
+								// device or to ask for one to be removed.
+								name: "deviceId",
+								style:"word-wrap:break-word; font-size:80%; opacity:0.7",
+							  	components: []
+							}
+						]
+					},
 					]
 				},	
 		 		{ name: "eraseOption", style: "display: none", kind: "Button", caption: $L("Erase Device"), onclick: "doubleConfirm" },
@@ -109,10 +128,16 @@ enyo.kind({
 		}
 		*/
 		
-		this.$.deviceInfoRowGroup.setCaption(enyo.string.escapeHtml(settings.device.deviceType));
+		// The caption used to be deviceType, i.e. the hardware SKU. The device's own
+		// name is the thing worth putting at the top; "(this device)" answers the
+		// question people actually open this dialog to ask.
+		this.$.deviceInfoRowGroup.setCaption(enyo.string.escapeHtml(
+			settings.device.deviceName + (settings.thisDevice ? $L(" (this device)") : "")));
 		this.$.deviceName.setContent(enyo.string.escapeHtml(settings.device.deviceName));
 		this.$.deviceModel.setContent(enyo.string.escapeHtml(settings.device.deviceModel));
 		this.$.deviceSoftware.setContent(enyo.string.escapeHtml(settings.device.webOSDisplayName));
+		// Full id here — the list row can only show a fragment.
+		this.$.deviceId.setContent(enyo.string.escapeHtml(settings.device.nduId));
 	},
 	
 	doubleConfirm: function()

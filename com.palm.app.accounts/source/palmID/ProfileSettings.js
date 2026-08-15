@@ -44,7 +44,7 @@ enyo.kind({
 
 		{kind:"Toolbar", className:"enyo-toolbar-light accounts-header", pack:"center", components: [
 			{kind: "Image", src: "images/acounts-48x48.png"},
-			{kind: "Control", content: $L("HP webOS Account")}
+			{kind: "Control", content: $L("webOS Community Account")}
 		]},
 		{className:"accounts-header-shadow"},
 		{
@@ -93,19 +93,18 @@ enyo.kind({
 						owner: this.owner
 					},
 					{
+						name: "signOut", kind: "Button", className: "accounts-btn accounts-btn-danger",
+						caption: $L("Sign Out"), onclick: "confirmSignOut"
+					},
+					{
 						name: "nameDialog",
 						kind: "MyApps.PalmID.NameDialog",
 						owner: this.owner
 					},
 					{
-						name: "secDialog",
-						kind: "MyApps.PalmID.SecDialog",
-						owner: this.owner	
-					},
-					{
-						name: "secAnswerDialog",
-						kind: "MyApps.PalmID.SecAnswerDialog",
-						owner: this.owner	
+						name: "usernameDialog",
+						kind: "MyApps.PalmID.UsernameDialog",
+						owner: this.owner
 					},
 					{
 						name: "emailDialog",
@@ -150,24 +149,41 @@ enyo.kind({
 
 		{kind: "MyApps.PalmID.CommErrorDialog", name: "errorDialog"},
 		{kind: "MyApps.PalmID.SpinnerOverlayPopup", name: "spinnerOverlay"},
+
+		{
+			kind: "PalmService", name: "signOutCall",
+			service: "palm://com.palm.accountservices/", method: "signOut",
+			onSuccess: "signOutSuccess", onFailure: "signOutFailure"
+		},
+		{
+			kind: "ModalDialog", lazy: false, name: "signOutConfirm",
+			caption: $L("Sign Out"), scrim: true, dismissWithClick: false, modal: true,
+			components: [
+				{className: "enyo-paragraph", content: $L("Sign out of this webOS Account on this device? Your books, settings and files stay on the device, and you can sign in again at any time.")},
+				{kind: "HFlexBox", components: [
+					{kind: "Button", caption: $L("Cancel"), flex: 1, onclick: "cancelSignOut"},
+					{kind: "Button", caption: $L("Sign Out"), flex: 1, className: "accounts-btn-danger", onclick: "doSignOut"}
+				]}
+			]
+		},
 	],
+	// The account has ONE name column server-side (display_name). firstName and
+	// lastName arrive split only because that is the shape the stock assistant
+	// speaks; they are joined for display and re-split on save, so a name of any
+	// length round-trips unchanged.
 	populateName: function(accountInfo)
 	{
-		var fullName = accountInfo.firstName + " " + accountInfo.lastName;
-		if (this.userName != fullName) {
-			var name = fullName;
-			this.userName = name;
+		var fullName = [accountInfo.firstName, accountInfo.lastName].join(" ").trim();
+		if (this.userName !== fullName) {
+			this.userName  = fullName;
 			this.firstName = accountInfo.firstName;
-			this.lastName = accountInfo.lastName;
-			if (accountInfo.password) {
-				this.password = accountInfo.password; 
-			}
+			this.lastName  = accountInfo.lastName;
 			this.$.nameInfo.destroyControls();
 			this.$.nameInfo.createComponent({
 				name: "nameItem",
 				kind: "MyApps.PalmID.SimpleItem",
 				components: [{
-					content: enyo.string.escapeHtml(name),
+					content: enyo.string.escapeHtml(fullName),
 					className: "enyo-text-ellipsis",
 					flex: 1,
 					owner: this,
@@ -177,12 +193,13 @@ enyo.kind({
 			this.render();
 		}
 	},
-	
+
 	populateLoginInfo: function(details)
 	{
 			this.$.loginInfo.destroyControls();
 			
 			this.email = details.accountInfo.email;
+			this.username = details.accountInfo.username;
 			this.details = details;
 			
 			this.$.resendVerification.applyStyle("display", 
@@ -197,9 +214,12 @@ enyo.kind({
 			handler = this.changePassword;
 			this.$.loginInfo.createComponent({ name: "passItem", kind: "MyApps.PalmID.SimpleItem", components: [ desc, label ], onclick: "changePassword", owner: this });       
 
-			desc = { name: "secDesc", content: $L("Security Question"), style:"padding-right:30px" };
-			label = { name: "secLabel", content: enyo.string.escapeHtml(this.details.acctChallengeQuestions.question), flex: 1, className:"enyo-text-ellipsis", style:"text-align:right"};
- 			this.$.loginInfo.createComponent({ name: "secItem", kind: "MyApps.PalmID.SimpleItem", components: [ desc, label ], onclick: "changeSecQtn", owner: this });   		
+			// webOS Archive: the username lives where HP put the security
+			// question. We store no security questions, and a public handle is
+			// something members can actually share instead of their email.
+			desc = { name: "usernameDesc", content: $L("Username"), style:"padding-right:30px" };
+			label = { name: "usernameLabel", content: enyo.string.escapeHtml(this.username), flex: 1, className:"enyo-text-ellipsis", style:"text-align:right"};
+ 			this.$.loginInfo.createComponent({ name: "usernameItem", kind: "MyApps.PalmID.SimpleItem", components: [ desc, label ], onclick: "changeUsername", owner: this });
 			this.render();
 
 			/*
@@ -211,13 +231,15 @@ enyo.kind({
 	},
 	changeName: function()
 	{
-		
-		this.$.nameDialog.openThisDialog(
-			{firstName: this.firstName, 
-			lastName: this.lastName, 
-			email: this.email, 
-			country : this.details.accountInfo.country,
-			language: this.details.accountInfo.language}, this.password);
+		// No password argument: the re-auth gate is gone and updateAccountInfo
+		// authenticates on the device token alone.
+		this.$.nameDialog.openThisDialog({
+			firstName: this.firstName,
+			lastName:  this.lastName,
+			email:     this.email,
+			country:   this.details.accountInfo.country,
+			language:  this.details.accountInfo.language
+		});
 	},
 	changeEmail: function()
 	{ 
@@ -233,13 +255,24 @@ enyo.kind({
 	{
 		this.$.passwdDialog.openThisDialog(false);
 	},
-	changeSecQtn: function()
+	changeUsername: function()
 	{
-		this.$.secDialog.initAndOpen(this.details.challengeQuestions, this.details.acctChallengeQuestions, this.details.securityQuestionSelectedAnswer);
+		this.$.usernameDialog.openThisDialog(this.username);
 	},
-	changeSecAnswer: function()
+	// Called back by UsernameDialog once the server has accepted the new handle.
+	usernameChanged: function(username)
 	{
-		this.$.secAnswerDialog.initAndOpen(this.details.acctChallengeQuestions, this.details.securityQuestionSelectedAnswer);
+		this.username = username;
+		this.details.accountInfo.username = username;
+		this.$.usernameLabel.setContent(enyo.string.escapeHtml(username));
+	},
+	// A full nduid is 40 hex characters and a PWA id is a uuid — neither fits a
+	// list row, and an ellipsised hash identifies nothing. Show enough of the head
+	// to tell two devices apart; the detail dialog carries the whole value.
+	shortDeviceId: function(nduId)
+	{
+		nduId = String(nduId || "");
+		return nduId.length > 14 ? nduId.substring(0, 12) + "…" : nduId;
 	},
 	showDeviceInfo: function(inSender, inResponse, rowIndex)
 	{
@@ -247,21 +280,39 @@ enyo.kind({
 	},
 	gotDevice: function(device)
 	{
-		this.$.deviceInfo.setDevice({device: device, thisDevice: (this.owner.$.accounts.deviceProfile.deviceInfo.deviceNduid == device.nduId)});
+		// deviceInfo.nduId, not .deviceNduid — the original compared against a
+		// property getDeviceProfile does not return, so it was always undefined and
+		// "is this the device I am holding" was never true.
+		var myNduId = this.owner.deviceProfile.deviceInfo.nduId;
+		this.$.deviceInfo.setDevice({device: device, thisDevice: (myNduId === device.nduId)});
 		this.$.deviceInfo.openAtCenter();
 	},
 	populateDeviceList: function(deviceList)
-	{       
-		deviceList =  (deviceList.length) ? deviceList : [deviceList]; 
+	{
+		// The original wrapped a lone device object in an array by testing
+		// .length — which also wraps an EMPTY array, producing one row of
+		// "undefined". Normalise properly and hide the group when there is
+		// nothing to list.
+		if (!deviceList) {
+			deviceList = [];
+		} else if (Object.prototype.toString.call(deviceList) !== "[object Array]") {
+			deviceList = [deviceList];
+		}
+		this.$.deviceList.setShowing(deviceList.length > 0);
+ 
 		
 		this.$.deviceList.destroyControls();
 		this.deviceList = deviceList;
 		for(var i = 0; i < deviceList.length; ++i)
 		{
-			this.$.deviceList.createComponent({ 
-				name: "deviceItem_"+ i, kind: "MyApps.PalmID.SimpleItem", 
-				components: [ {content: enyo.string.escapeHtml(deviceList[i].deviceType), style:"padding-right:30px" },
-							  {content: enyo.string.escapeHtml(deviceList[i].deviceName), flex: 1, className:"enyo-text-ellipsis", style:"text-align:right"}
+			// Name on the left, device id on the right. The id is what actually
+			// distinguishes two devices with the same name, and it replaces the old
+			// left-hand column, which showed deviceType — in practice the hardware
+			// SKU ("HSTNH-I29C"), which named nothing a person would recognise.
+			this.$.deviceList.createComponent({
+				name: "deviceItem_"+ i, kind: "MyApps.PalmID.SimpleItem",
+				components: [ {content: enyo.string.escapeHtml(deviceList[i].deviceName), flex: 1, className:"enyo-text-ellipsis", style:"padding-right:30px" },
+							  {content: enyo.string.escapeHtml(this.shortDeviceId(deviceList[i].nduId)), className:"enyo-text-ellipsis", style:"text-align:right; opacity:0.6"}
 							],
 				onclick: "showDeviceInfo", 
 				value: i, 
@@ -279,14 +330,17 @@ enyo.kind({
 			capName = capability.loc_name;	
 		} 
 		
-		if (capability.state == undefined) {
-			capability.state = (capability._id ? true : false);
-		} 
+		// Shown capabilities are always on and always locked — there is nothing to
+		// opt out of while app data storage is the only one listed.
+		capability.state = true;
+
+		var label = this.CAPABILITY_LABELS[capability.capability]
+			|| AccountsUtil.getCapabilityText(capability.capability);
 
 		var item = {
 			kind: "MyApps.PalmID.SimpleItem",
-			components: [ 
-				{ content: enyo.string.escapeHtml(AccountsUtil.getCapabilityText(capability.capability)), flex: 1},
+			components: [
+				{ content: enyo.string.escapeHtml(label), flex: 1},
 				//{ name: "app_" + appIndex, kind: "ToggleButton", state: capability.state, onChange: onChange, value: appIndex, disabled: capability.alwaysOn}
 				{ name: "app_" + appIndex, kind: "ToggleButton", state: capability.state, onChange: onChange, value: appIndex, disabled: true}
 			],
@@ -295,13 +349,42 @@ enyo.kind({
 		return item; 
 	},
 		
+	// Which of the account's capabilityProviders to actually show. The local
+	// account still declares all seven (see palm_profile_util's createLocalAccount),
+	// but only app data storage is backed by anything today — listing the rest
+	// promised syncing we do not do. Uncomment a line to bring one back once it
+	// has a real implementation behind it.
+	SHOWN_CAPABILITIES: [
+		// "CONTACTS",
+		// "CALENDAR",
+		// "TASKS",
+		// "MEMOS",
+		// "MESSAGING",          // shows as "SMS Account"
+		// "PHONE",              // shows as "Carrier"
+		"LOCAL.FILESTORAGE"
+	],
+
+	// Labels we override rather than take from AccountsUtil's framework map.
+	CAPABILITY_LABELS: {
+		"LOCAL.FILESTORAGE": $L("App data storage")
+	},
+
 	populateAppList: function(capabilities)
 	{
 		this.$.appList.destroyControls();
 
-		this.capabilities = capabilities;		
+		var shown = [];
 		for (var i = 0; i < capabilities.length; i++) {
-			this.$.appList.createComponent(this.generateItemForAppList(capabilities[i], i, "setAppState"));
+			var cap = capabilities[i];
+			if (cap && this.SHOWN_CAPABILITIES.indexOf(cap.capability) !== -1) {
+				shown.push(cap);
+			}
+		}
+
+		this.capabilities = shown;
+		this.$.appList.setShowing(shown.length > 0);
+		for (var j = 0; j < shown.length; j++) {
+			this.$.appList.createComponent(this.generateItemForAppList(shown[j], j, "setAppState"));
 		};
 
 		this.render();
@@ -358,6 +441,38 @@ enyo.kind({
 	},
 	
 				
+	confirmSignOut: function()
+	{
+		this.$.signOutConfirm.openAtCenter();
+	},
+	cancelSignOut: function()
+	{
+		this.$.signOutConfirm.close();
+	},
+	doSignOut: function()
+	{
+		this.$.signOutConfirm.close();
+		this.$.spinnerOverlay.openAtCenter();
+		this.$.signOutCall.call({});
+	},
+	signOutSuccess: function(inSender, inResponse)
+	{
+		this.$.spinnerOverlay.close();
+		// The service clears the local token even when the server revoke fails, so
+		// the device really is signed out either way — say so when the token is
+		// still live somewhere, rather than pretending it is not.
+		if (inResponse && inResponse.serverTokenRevoked === false) {
+			console.log("Accounts app: signed out locally, but the server token was not revoked");
+		}
+		// Back to the account list, which re-probes and will now find no token.
+		this.owner.backToViewCallback();
+	},
+	signOutFailure: function(inSender, inResponse)
+	{
+		this.$.spinnerOverlay.close();
+		this.$.errorDialog.openAtCenter(inResponse);
+	},
+
 	create: function()
 	{
 		this.inherited(arguments);
