@@ -45,15 +45,15 @@ enyo.kind({
 			{className:"accounts-header-shadow"},
 			{kind: "Scroller", flex: 1, components: [
 				{kind:"Control", className:"box-center", components: [
-					{kind: "RowGroup", className:"accounts-group", caption:$L("Local Account"), components: [
+					{kind: "RowGroup", name: "palmProfileGroup", className:"accounts-group", caption:$L("Local Account"), showing: false, components: [
 						{kind: "Item", layoutKind: "HFlexLayout", tapHighlight: true, disabled:true, className:"enyo-single" , onclick: "editPalmidProfile", align:"center", components:[
 							{kind: "Image", name: "profileIcon", className:"icon-image"},
 							{name:"palmProfileName", className:"enyo-text-ellipsis", flex:1}
 						]}
 					]},                                        
-					{kind: "RowGroup", className:"accounts-group", name: "synergyAccounts", caption:$L("SYNERGY ACCOUNTS"), components: [
+					{kind: "Control", name: "synergyAccounts", components: [
 						// This is the one-line kind to get the list of accounts.  It is initialized in your create method below                                 
-						{kind: "Accounts.accountsList", name: "accountsList", onAccountsList_AccountSelected: "editAccount", onAccountsList_Ready: "listReady"}
+						{kind: "Accounts.accountsList", name: "accountsList", grouped: true, groupTitle: $L("SYNERGY ACCOUNTS"), onAccountsList_AccountSelected: "editAccount", onAccountsList_Ready: "listReady"}
 					]},
 					{kind: "RowGroup", className:"accounts-group", name: "simAccountGroup", components: [
 						{kind: "Accounts.accountsList", name: "SIMAccountsList", onAccountsList_AccountSelected: "editAccount", onAccountsList_Ready: "listReady"}
@@ -74,13 +74,18 @@ enyo.kind({
 		{kind: "AccountsModify", name: "AccountsModify", lazy:true, capability: this.capability, onAccountsModify_Done: "accountsDone"},
 
 		{kind: "MyApps.PalmID",  name: "palmprofile", lazy:true, capability: this.capability, onAccountsModify_Done: "accountsDone"},
+		{kind: "Accounts.RetainedDataView", name: "retainedDataView", lazy:true, onRetainedData_Done: "accountsDone"},
 		{kind: "Accounts.getAccounts", name: "accounts", onGetAccounts_AccountsAvailable: "onAccountsAvailable"},
 		{kind:"VFlexBox", components: [
-			{name: "appMenu", kind: "AppMenu", components: [{kind: "HelpMenu", target: "http://help.palm.com/accountsmgr/index.html"}]},
+			{name: "appMenu", kind: "AppMenu", components: [
+				{name: "deleteDataMenuItem", caption: $L("Delete Account Data"), onclick: "showRetainedData", showing: false},
+				{kind: "HelpMenu", target: "http://help.palm.com/accountsmgr/index.html"}
+			]},
 		]},
 		
 		{kind: "PalmService", name: "getPalmProfileAccountInfo", service: "palm://com.palm.accountservices/", method: "getAccountInfo", onSuccess: "setPalmProfileNameSuccess"},
 		{kind: "PalmService", name: "modifyPalmProfileAccountName", service: enyo.palmServices.accounts, method: "modifyAccount"},
+		{kind: "PalmService", name: "retainedQuery", service: "palm://com.palm.db/", method: "find", onSuccess: "gotRetainedData", onFailure: "gotRetainedData"},
 	],
 	
 	create: function() {
@@ -93,7 +98,24 @@ enyo.kind({
 		
 		// Start the spinner
 		this.$.getAccountsSpinner.show();
-		
+
+		// Handle a deep-link launch param (e.g. Phone prefs -> manage a specific account). On a fresh
+		// launch enyo's windowParamsChangeHandler wiring doesn't reach this app root, so read PalmSystem
+		// launch params directly here; onAccountsAvailable() acts on them once the account list loads.
+		try {
+			var lp = (window.PalmSystem && PalmSystem.launchParams) ? enyo.json.parse(PalmSystem.launchParams) : null;
+			if (lp && lp.accountId) {
+				if (lp.launchType === "modifyAccount") {
+					console.log("Accounts app: deep-link modify account " + lp.accountId);
+					this.modifyAccountId = lp.accountId;
+				} else if (lp.launchType === "changelogin") {
+					console.log("Accounts app: deep-link change credentials " + lp.accountId);
+					this.changeLoginAccountId = lp.accountId;
+				}
+			}
+		} catch (e) {
+			console.log("Accounts app: launchParams parse error: " + e);
+		}
 	},
 	
 	listReady: function () {
@@ -107,17 +129,27 @@ enyo.kind({
 	
 	// App was launched to change credentials
 	windowParamsChangeHandler: function(inSender, inEvent) {
-		var p = inEvent.params;
+		// enyo may invoke this as (params) [enyo.call convention, params is the first arg] or as
+		// (inSender, {params}) [ApplicationEvents convention]. Read whichever form arrived.
+		var p = (inEvent && inEvent.params) || (inSender && inSender.params) || inSender || {};
 		if (p && p.launchType === "changelogin" && p.accountId) {
 			console.log("Accounts app: Change credentials for " + p.accountId);
 			// Wait until all the accounts are retrieved before acting on this information
 			this.changeLoginAccountId = p.accountId;
 		}
+		else if (p && p.launchType === "modifyAccount" && p.accountId) {
+			// Deep-link (e.g. from Phone prefs) to manage/remove a specific account. Acted on once the
+			// account list has loaded (see onAccountsAvailable).
+			console.log("Accounts app: Modify account " + p.accountId);
+			this.modifyAccountId = p.accountId;
+		}
 	},
-	
+
 	// App was already running when credential dashboard was tapped
 	applicationRelaunchHandler: function(inSender, inEvent) {
-		var p = inEvent.params;
+		// enyo may invoke this as (params) [enyo.call convention, params is the first arg] or as
+		// (inSender, {params}) [ApplicationEvents convention]. Read whichever form arrived.
+		var p = (inEvent && inEvent.params) || (inSender && inSender.params) || inSender || {};
 		if (p && p.launchType === "changelogin" && p.accountId) {
 			console.log("Accounts app: Change credentials for " + p.accountId);
 			
@@ -136,8 +168,24 @@ enyo.kind({
 				this.changeLoginAccountId = p.accountId;
 			}
 		}
+		else if (p && p.launchType === "modifyAccount" && p.accountId) {
+			// Deep-link to manage/remove a specific account. Open its full modify view (with Remove) now if
+			// the accounts are loaded, otherwise defer to onAccountsAvailable.
+			console.log("Accounts app: Modify account " + p.accountId);
+			if (this.accounts) {
+				for (var i=0, l=this.accounts.length; i<l; i++) {
+					if (this.accounts[i]._id === p.accountId) {
+						this.selectViewByName("AccountsModify");
+						this.$.AccountsModify.ModifyAccount(this.accounts[i]);
+					}
+				}
+			}
+			else {
+				this.modifyAccountId = p.accountId;
+			}
+		}
 	},
-	
+
 	onAccountsAvailable: function(inSender, inResponse) {
 		this.accounts = inResponse.accounts;    // Accounts are returned as an array
 		this.templates = inResponse.templates;
@@ -164,11 +212,20 @@ enyo.kind({
 			return true;
 		}.bind(this));
 		
-		// Update the Profile username and icon
-		this.$.palmProfileName.setContent(enyo.string.escapeHtml(this.palmProfileAccount.username));
-		this.$.profileIcon.src = this.palmProfileAccount.icon.loc_32x32;
-		this.$.profileIcon.srcChanged();
-		
+		// Update the Profile username and icon. We have no Palm Profile (see the FIXME above), so this
+		// account normally doesn't exist at all -- dereferencing it unguarded threw a TypeError that
+		// aborted the rest of this handler and left the app stuck on the "Loading Accounts" view.
+		if (this.palmProfileAccount) {
+			this.$.palmProfileGroup.show();
+			this.$.palmProfileName.setContent(enyo.string.escapeHtml(this.palmProfileAccount.username || ""));
+			if (this.palmProfileAccount.icon && this.palmProfileAccount.icon.loc_32x32) {
+				this.$.profileIcon.src = this.palmProfileAccount.icon.loc_32x32;
+				this.$.profileIcon.srcChanged();
+			}
+		}
+		else
+			this.$.palmProfileGroup.hide();
+
 		// Change the SIM header based on the number of SIM Accounts
 		if (simAccounts === 0)
 			this.$.simAccountGroup.hide();
@@ -183,17 +240,30 @@ enyo.kind({
 			this.$.synergyAccounts.show();
 		else
 			this.$.synergyAccounts.hide();
-		
+
+		// Only offer "Delete Account Data" in the app menu if there are retained-data markers for accounts
+		// that are not currently active (re-added accounts don't count).
+		this.checkRetainedData();
+
 		// Was the accounts app launched to change credentials?
-		if (this.changeLoginAccountId) {
+		if (this.changeLoginAccountId || this.modifyAccountId) {
+			// Deep-linked to a specific account: modifyAccountId opens the full modify view (with Remove);
+			// changeLoginAccountId opens the credentials view. modifyAccount wins if somehow both are set.
+			var _targetId = this.modifyAccountId || this.changeLoginAccountId;
+			var _fullModify = !!this.modifyAccountId;
+			delete this.changeLoginAccountId;
+			delete this.modifyAccountId;
 			// Find the account
 			for (var i=0, l=this.accounts.length; i<l; i++) {
-				if (this.accounts[i]._id === this.changeLoginAccountId) {
-					delete this.changeLoginAccountId;
+				if (this.accounts[i]._id === _targetId) {
 					this.selectViewByName("AccountsModify");
-					this.$.AccountsModify.ModifyCredentials(this.accounts[i]);
+					if (_fullModify)
+						this.$.AccountsModify.ModifyAccount(this.accounts[i]);
+					else
+						this.$.AccountsModify.ModifyCredentials(this.accounts[i]);
+					break;
 				}
-			}			
+			}
 		}
 		else {
 			// Go to the Accounts view, if the current view is "Loading Accounts"
@@ -221,14 +291,18 @@ enyo.kind({
 	
 	editPalmidProfile:  function(inSender, inResults) {
 		console.log("editPalmidProfile")
+		if (!this.palmProfileAccount)
+			return;
 		this.selectViewByName("palmprofile");
 		this.$.palmprofile.initialize({palmProfileAccount: this.palmProfileAccount});
 	},
 	
 	setPalmProfileNameSuccess: function(inSender, inResponse) {
 		console.log("setPalmProfileNameSuccess");
+		if (!this.palmProfileAccount)
+			return;
 		var accountName = inResponse.firstName + " " + inResponse.lastName;
-		
+
 		var param = {
 			"accountId": this.palmProfileAccount._id,
 			"object": {"username": accountName}
@@ -249,6 +323,40 @@ enyo.kind({
 	// Go to the prefs and accounts view
 	accountsDone: function(inSender, e) {
 		this.selectViewByName("prefsAndAccounts");
+	},
+
+	// App menu -> "Delete Account Data": open the retained-data page (swipe-to-delete list of accounts
+	// that were removed with their data kept on the device).
+	showRetainedData: function() {
+		this.$.appMenu.close();
+		this.selectViewByName("retainedDataView");
+		// Pass the active accounts too so a re-added account is filtered out of the delete list.
+		this.$.retainedDataView.load(this.templates, this.accounts);
+	},
+
+	// Query the retained-data markers and show the "Delete Account Data" menu item only if any belong to
+	// an account that is NOT currently active (a re-added account's marker doesn't count).
+	checkRetainedData: function() {
+		this.$.retainedQuery.call({query: {from: "com.palm.imretaineddata:1"}});
+	},
+	gotRetainedData: function(inSender, resp) {
+		var results = (resp && resp.results) || [];
+		var active = {}, i;
+		for (i = 0; i < this.accounts.length; i++) {
+			var a = this.accounts[i];
+			if (a && a.templateId)
+				active[this.retainedKey(a.templateId, a.username)] = true;
+		}
+		var count = 0;
+		for (i = 0; i < results.length; i++) {
+			if (!active[this.retainedKey(results[i].templateId, results[i].username)])
+				count++;
+		}
+		var _mi = this.$.deleteDataMenuItem || (this.$.appMenu && this.$.appMenu.$ && this.$.appMenu.$.deleteDataMenuItem);
+		if (_mi) { _mi.setShowing(count > 0); }
+	},
+	retainedKey: function(templateId, username) {
+		return (templateId || "") + "|" + String(username || "").toLowerCase().replace(/[^a-z0-9]/g, "");
 	},
 	
 	// Open or close the App Menu
