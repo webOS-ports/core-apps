@@ -25,6 +25,7 @@ enyo.kind({
 	style: "margin: 30px",
 	published : {
 		initialize: function(parms) {
+			this.accountInfoRequested = false;
 			this.$.spinner.show();
 			this.$.getDeviceInfo.call({});
 			
@@ -55,7 +56,19 @@ enyo.kind({
 			service: "palm://com.palm.deviceprofile/",
 			method: "getDeviceProfile",
 			onSuccess: "gotDeviceProfile",
-			onFailure: "deviceInfoFailure" 
+			onFailure: "deviceInfoFailure"
+		},
+		// Push this device's current name up on every open, so a device renamed in
+		// Settings shows its new name here. Read-only on the local name, and the
+		// server upserts by nduid, so repeat calls are cheap. Fire-and-forget: the
+		// profile must still load if this fails.
+		{
+			kind: "PalmService",
+			name: "syncDeviceName",
+			service: "palm://com.palm.accountservices/",
+			method: "syncDeviceName",
+			onSuccess: "syncDeviceNameDone",
+			onFailure: "syncDeviceNameFailure"
 		},
 		
 		
@@ -98,11 +111,32 @@ enyo.kind({
 	
 	
 	gotDeviceProfile: function(inSender, inResponse) {
-		var accounts = this.owner.$.accounts;
-		accounts.setDeviceProfile(inResponse);
-		accounts.backToViewCallback = this.backToViewCallback;
-		accounts.palmProfileAccount = this.palmProfileAccount;
+		// The pane holds this now; backToViewCallback and palmProfileAccount were
+		// already on it, so only the device profile needed rehoming.
+		this.owner.deviceProfile = inResponse;
 		this.$.spinner.show();
+		// Push this device's current name up BEFORE fetching the profile, so the
+		// device list we are about to render already reflects a rename done in
+		// Settings rather than showing it one visit late. Both outcomes continue
+		// to fetchAccountInfo — a stale name is cosmetic, an empty profile is not.
+		this.$.syncDeviceName.call({});
+	},
+
+	// Both the success and failure paths land here; the sync is best-effort.
+	syncDeviceNameDone: function(inSender, inResponse) {
+		this.fetchAccountInfo();
+	},
+
+	syncDeviceNameFailure: function(inSender, inResponse) {
+		console.log("Accounts app: device name sync failed: " + enyo.json.stringify(inResponse));
+		this.fetchAccountInfo();
+	},
+
+	fetchAccountInfo: function() {
+		if (this.accountInfoRequested) {
+			return;   // guard: only ever one aggregate fetch per open
+		}
+		this.accountInfoRequested = true;
 		this.$.getAccountInfo.call({locale: enyo.g11n.currentLocale().locale});
 	},
 	retry: function()
@@ -113,12 +147,13 @@ enyo.kind({
 	},
 	
 	gotAccount: function(inSender, inResponse)
-	{	
-		var accounts = this.owner.$.accounts;
-		accounts.setAccountInfo(inResponse);
+	{
 		this.$.spinner.hide();
-		this.owner.selectViewByName("accounts");
-		this.owner.$.accounts.login();
+		// Straight into the profile. The original re-prompted for the account
+		// password here; the device already holds a per-device token that every
+		// profile call authenticates with, so a second challenge proves nothing
+		// the token has not already established.
+		this.owner.loadAccount(inResponse);
 	},
 	
 	

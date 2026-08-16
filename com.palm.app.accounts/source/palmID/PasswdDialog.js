@@ -140,8 +140,10 @@ enyo.kind({
 		} else if (passwd != confPasswd) {
 			this.$.error2.setContent($L("Passwords do not match."));
 			this.$.error2.setShowing(true);
-		} else if (passwd.length < 6 || passwd.length > 20) {
-			this.$.error1.setContent($L("Password must be 6-20 characters."));
+		} else if (passwd.length < 8 || passwd.length > 20) {
+			// 8 is the floor device.php enforces on account creation and on
+			// changePassword; at 6 the server would just reject the save.
+			this.$.error1.setContent($L("Password must be 8-20 characters."));
 			this.$.error1.setShowing(true);
 			this.$.passwd.forceSelect();
 		} else {

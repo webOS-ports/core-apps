@@ -29,18 +29,16 @@
 		    		this.selectView(this.$.dummy);
 					this.render();
 					this.$.initialize.destroy()
-					this.$.accounts.destroy()
 					this.$.fullProfile.destroy()
 				});
-				
-				
+
+
 			this.createComponents(
 				[
 					{name: "initialize", kind: "MyApps.PalmID.Initialize"},
-					{name: "accounts", kind: "MyApps.PalmID.Accounts"},
 					{name: "fullProfile", kind: "MyApps.PalmID.Profile"}
-				]			
-			);		
+				]
+			);
 			this.render();
 		    this.selectView(this.$.initialize);
 			this.$.initialize.initialize({backToViewCallback: this.backToViewCallback, palmProfileAccount: parms.palmProfileAccount});			
@@ -54,8 +52,32 @@
 	},
 	components: [
 		{name: "dummy", kind: enyo.VFlexBox, content:" "}
-	]
-	
+	],
+
+	// State that used to live on the intermediate "accounts" view. That view listed
+	// the account so you could pick one, but there is only ever one webOS account,
+	// so it was a list of one that existed only to be walked past. Removing it left
+	// its two jobs — holding the fetched profile data, and driving the transition
+	// into the profile — with no owner; the pane is the natural home, since it
+	// already holds palmProfileAccount and backToViewCallback.
+	deviceProfile: null,
+	accountAggregate: null,
+
+	// Called by Initialize once the aggregate arrives. Populates the profile view
+	// and selects it BY NAME: next() would step relative to whatever is currently
+	// selected, which is only correct once any in-flight transition has settled.
+	loadAccount: function(accountAggregate) {
+		this.accountAggregate = accountAggregate;
+
+		var profile = this.$.fullProfile;
+		profile.populateName(accountAggregate.accountInfo);
+		profile.populateLoginInfo(accountAggregate);
+		profile.populateDeviceList(accountAggregate.accountDevices);
+		profile.populateAppList(this.palmProfileAccount.capabilityProviders);
+
+		this.selectViewByName("fullProfile");
+	}
+
 });
 
 console.log("palm.js");

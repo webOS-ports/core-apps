@@ -45,3 +45,19 @@
 	-webkit-border-bottom-right-radius: 8px;
 	-webkit-border-bottom-left-radius: 8px;
 }
+
+/* webOS Archive: destructive action (Sign Out). The framework theme has an
+   affirmative button but no negative one, so this is defined here rather than
+   depending on a class that does not exist. Colors match the stock Palm
+   "negative" button (com.palm.app.deviceinfo's Reset Options erase buttons)
+   rather than an invented flat-UI red. */
+.accounts-btn-danger {
+	background: #BE0009;
+	border: 1px solid #7a0005;
+	border-radius: 5px;
+	color: #fff;
+	text-shadow: 0 -1px 0 rgba(0,0,0,0.4);
+}
+.accounts-btn-danger:active {
+	background: #940007;
+}

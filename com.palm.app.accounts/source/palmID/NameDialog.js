@@ -55,9 +55,8 @@ enyo.kind({
 		{kind: "MyApps.PalmID.SpinnerOverlayPopup", name: "spinnerOverlay"},
 	],
 	
-	openThisDialog: function(acctInfo, password) {
+	openThisDialog: function(acctInfo) {
 		this.acctInfo = acctInfo;
-		this.password = password;
 		this.openAtCenter();
 	},
 	prepareOpen: function() {
@@ -110,8 +109,7 @@ enyo.kind({
 				lastName: lastName, 
 				email: this.acctInfo.email,
 				languageCode: this.acctInfo.language,
-				countryCode: this.acctInfo.country,
-				password: this.password});
+				countryCode: this.acctInfo.country});
 		};
 	},
 	
