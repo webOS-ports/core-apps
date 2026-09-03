@@ -16,7 +16,7 @@
 //
 // LICENSE@@@
 
-﻿enyo.depends(
+enyo.depends(
 	"$enyo-lib/accounts/",
 	"source/AccountManager.js",
 	"source/RetainedDataView.js",
@@ -33,6 +33,5 @@
 	"source/palmID/UsernameDialog.js",
 	"source/palmID/CommErrorDialog.js",
 	"source/palmID/SpinnerOverlay.js",
-	'$enyo/g11n/name/javascript/name.js',
-	'$enyo/g11n/name/javascript/format.js'
+	"$enyo/g11n/name/"
 );

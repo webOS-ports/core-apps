@@ -17,8 +17,6 @@
 // LICENSE@@@
 
 
-var DEBUG = !!(enyo.args && enyo.args.debug);	// Define global DEBUG state used by all modules. TODO: move to AppComponent.debug.
-
 enyo.depends(
     "$enyo-lib/accounts/",
     "$enyo-lib/addressing/",

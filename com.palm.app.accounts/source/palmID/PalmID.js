@@ -16,7 +16,7 @@
 //
 // LICENSE@@@
 
-﻿enyo.kind({
+enyo.kind({
 	name: "MyApps.PalmID",
 	kind: enyo.Pane,
 	published : {
