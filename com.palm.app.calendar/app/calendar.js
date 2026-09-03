@@ -1,3 +1,5 @@
+DEBUG = !!(enyo.args && enyo.args.debug);	// moved out of depends.js: the enyo builder does not preserve code there
+
 // @@@LICENSE
 //
 //      Copyright (c) 2010-2013 LG Electronics, Inc.

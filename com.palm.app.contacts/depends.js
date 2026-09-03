@@ -62,7 +62,7 @@ var mockPathsToImport = [
     "mock/mockStuffs.js"
 ];
 
-runningInBrowser = (window.PalmSystem ? false : true);
+runningInBrowser = (typeof window === "undefined") ? false : (window.PalmSystem ? false : true);
 
 if (!runningInBrowser) {
     /* emulator or device */

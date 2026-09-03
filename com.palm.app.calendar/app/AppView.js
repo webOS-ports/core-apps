@@ -267,9 +267,13 @@ enyo.kind({
             ui.detailPopup.openAtCenter();				//		then show Detail View.
             //ui.detailPopup.resize();
         } else {                                    // Otherwise:
-            ui.pane.validateView("editView");
-            ui.editView.setEvent(eventGUIOrEvent);		//		Update Edit View with the event's content.
-            ui.pane.selectView(ui.editView);			//		then show Edit View.
+            // editView is lazy: its code is not loaded until the first time an event
+            // is actually opened for editing.
+            calendar.loadDeferred(function showEditView() {
+                ui.pane.validateView("editView");
+                ui.editView.setEvent(eventGUIOrEvent);	//		Update Edit View with the event's content.
+                ui.pane.selectView(ui.editView);		//		then show Edit View.
+            });
         }
     },
 
@@ -380,7 +384,10 @@ enyo.kind({
     },
 
     showPreferences: function showPreferences() {
-        this.$.pane.selectViewByName("prefsView");
+        var ui = this.$;
+        calendar.loadDeferred(function showPrefsView() {
+            ui.pane.selectViewByName("prefsView");
+        });
     },
 
     syncNow: function syncNow() {
