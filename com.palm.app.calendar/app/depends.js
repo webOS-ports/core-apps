@@ -22,6 +22,7 @@ enyo.depends(
     "$enyo-lib/addressing/",
     "$enyo-lib/contactsui/",
     "../libs/date.js", // Okay because DateJS now avoids multiple instantiation thereby avoiding the Date.toString() stack overflow issue.
+    "shared/DeferredLoader.js",   // must precede AppView: it hooks editView/prefsView
     "shared/SimpleTransition.js", // We need to include the custom transition before AppView.js
     "AppMenu.js",
     "AppView.css",
@@ -33,22 +34,15 @@ enyo.depends(
     "month/",
     "week/",
 //  "edit/",
-    "edit/ContactView.js",
+    "edit/EditView.css",        // CSS stays eager: these sheets carry global rules
+    "edit/RepeatView.css",
+    "prefs/PreferencesView.css",
     "edit/DeleteConfirm.js",
     "edit/RepeatChangeConfirm.js",
-    "edit/EditView.css",
-    "edit/EditView.js",
-    "edit/TimeSelectView.js",
-    "edit/AttendeesView.js",
-    "edit/RepeatView.js",
-    "edit/RepeatView.css",
     "edit/DetailView.js",
     "edit/DetailView.css",
     "firstLaunch/FirstLaunchView.js",
 //  "prefs/",
-    "prefs/PrefSelector.js",
-    "prefs/PreferencesView.css",
-    "prefs/PreferencesView.js",
     "reminders/MissedRemindersView.js",
     "shared/CalendarEvent.js",
     "shared/MeetingTimeFormatter.js",
