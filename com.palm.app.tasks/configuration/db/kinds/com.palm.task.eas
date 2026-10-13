@@ -1,0 +1,77 @@
+{
+    "id": "com.palm.task.eas:1",
+    "owner": "com.palm.eas",
+    "extends": [
+        "com.palm.task:1"
+    ],
+    "indexes": [
+        {
+            "name": "DeleteAccount",
+            "props": [
+                {
+                    "name": "taskListId"
+                }
+            ]
+        },
+        {
+            "name": "SyncLocalChanges",
+            "props": [
+                {
+                    "name": "taskListId"
+                },
+                {
+                    "name": "syncRev"
+                }
+            ],
+            "incDel": true
+        },
+        {
+            "name": "SyncExistingObjects",
+            "props": [
+                {
+                    "name": "taskListId"
+                },
+                {
+                    "name": "serverId"
+                }
+            ]
+        }
+    ],
+    "revSets": [
+        {
+            "name": "syncRev",
+            "props": [
+                {
+                    "name": "categories"
+                },
+                {
+                    "name": "completed"
+                },
+                {
+                    "name": "dueDate"
+                },
+                {
+                    "name": "isReminderSet"
+                },
+                {
+                    "name": "notes"
+                },
+                {
+                    "name": "priority"
+                },
+                {
+                    "name": "sensitivity"
+                },
+                {
+                    "name": "subject"
+                },
+                {
+                    "name": "taskListId"
+                },
+                {
+                    "name": "_del"
+                }
+            ]
+        }
+    ]
+}
