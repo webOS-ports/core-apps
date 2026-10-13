@@ -1,0 +1,16 @@
+{
+    "id": "com.palm.app.tasks",
+    "title": "Aufgaben",
+    "keywords": [
+        "Aufgabe",
+        "Aufgaben",
+        "Checkliste"
+    ],
+    "universalSearch": {
+        "action": {
+            "displayName": "Neue Aufgabe",
+            "launchParam": "taskSubject",
+            "url": "com.palm.app.tasks"
+        }
+    }
+}

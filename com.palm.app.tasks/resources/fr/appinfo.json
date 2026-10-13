@@ -1,0 +1,16 @@
+{
+    "id": "com.palm.app.tasks",
+    "title": "Tâches",
+    "keywords": [
+        "Tâche à effectuer",
+        "Tâches à effectuer",
+        "Liste de vérification"
+    ],
+    "universalSearch": {
+        "action": {
+            "displayName": "Nouvelle tâche",
+            "launchParam": "taskSubject",
+            "url": "com.palm.app.tasks"
+        }
+    }
+}

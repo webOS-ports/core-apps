@@ -1,0 +1,26 @@
+{
+    "activity"    : {
+        "type"        : {
+            "persist"   : true,
+            "foreground": true,
+            "cancellable": true
+        },
+        "name"        : "tasks.firstrun",
+        "description" : "checks the default task lists on boot and schedules the due task activities",
+        "requirements": {
+            "bootup": true
+        },
+        "callback"    : {
+            "method": "luna://com.webos.service.applicationManager/launch",
+            "params": {
+                "id"    : "com.palm.app.tasks",
+                "params": {
+                    "action": "createDefaultTasklists"
+                }
+            }
+        }
+    },
+    "start"       : true,
+    "replace"     : true,
+    "firstUseSafe": true
+}

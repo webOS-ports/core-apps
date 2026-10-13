@@ -1,0 +1,377 @@
+/* @@@LICENSE
+ *
+ *      Copyright (c) 2026 Herman van Hazendonk <github.com@herrie.org>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * LICENSE@@@ */
+
+.tasks-app {
+	background: #3a3a3a;
+}
+
+/* ---------------------------------------------------------------- headers */
+
+.tasks-header {
+	min-height: 54px;
+	padding: 0 10px;
+	-webkit-box-align: center;
+	box-sizing: border-box;
+}
+
+.tasks-header-title {
+	font-size: 20px;
+	font-weight: bold;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.tasks-header-icon {
+	width: 32px;
+	height: 32px;
+	margin-right: 8px;
+	background: url(../icon.png) center center no-repeat;
+	background-size: 32px 32px;
+}
+
+/* Back buttons only show in a desktop browser; devices use the back gesture. */
+.tasks-back-button.enyo-button {
+	min-width: 0;
+	width: 40px;
+	height: 36px;
+	margin: 0 8px 0 0;
+	padding: 0;
+	position: relative;
+}
+
+.tasks-back-button.enyo-button:after {
+	content: "";
+	position: absolute;
+	left: 15px;
+	top: 11px;
+	width: 10px;
+	height: 10px;
+	border-left: 3px solid #444;
+	border-bottom: 3px solid #444;
+	-webkit-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+
+/* A stock Enyo input: borderless until tapped, then the framed focus look the
+   other apps use for editable fields. The negative margin keeps the name lined
+   up with the other headers while it is not being edited. */
+.tasks-list-title-input {
+	font-size: 20px;
+	font-weight: bold;
+	min-width: 0;
+	margin: -8px 0 -8px -10px;
+}
+
+.tasks-list-title-input.enyo-input-focus input {
+	color: #000;
+}
+
+.tasks-list-title-input input {
+	font-size: 20px;
+	font-weight: bold;
+	background: transparent;
+	border: none;
+	width: 100%;
+	color: inherit;
+}
+
+.tasks-list-title-input.tasks-readonly input {
+	-webkit-user-select: none;
+}
+
+.tasks-order-selector {
+	margin-left: 8px;
+	min-width: 120px;
+	font-size: 16px;
+	white-space: nowrap;
+}
+
+.tasks-order-selector .enyo-listselector-item {
+	-webkit-box-pack: end;
+}
+
+.tasks-search {
+	padding: 6px 10px;
+	background: #e9e7e2;
+	border-bottom: 1px solid #cfccc4;
+}
+
+/* ---------------------------------------------------------------- lists */
+
+.tasks-lists-view .enyo-bg,
+.tasks-lists-scroller {
+	background: #d7d3cb;
+}
+
+.tasks-list-row {
+	min-height: 52px;
+	box-sizing: border-box;
+}
+
+.tasks-list-row.tasks-selected,
+.tasks-task-row.tasks-selected {
+	background-color: rgba(38, 114, 196, 0.18);
+}
+
+.tasks-list-name {
+	font-size: 18px;
+}
+
+.tasks-all-row .tasks-list-name {
+	font-weight: bold;
+}
+
+.tasks-due .tasks-list-name {
+	font-weight: bold;
+}
+
+.tasks-list-icon {
+	width: 24px;
+	height: 24px;
+	margin-left: 6px;
+}
+
+.tasks-due-badge {
+	min-width: 16px;
+	margin-left: 8px;
+	padding: 1px 7px;
+	border-radius: 10px;
+	background: #cb6f23;
+	color: white;
+	font-size: 14px;
+	font-weight: bold;
+	text-align: center;
+}
+
+.tasks-highlight {
+	background: #ffe27a;
+	border-radius: 2px;
+}
+
+.tasks-empty-hint {
+	padding: 30px 20px;
+	color: #8a8474;
+	text-align: center;
+	font-size: 16px;
+}
+
+.tasks-reordering {
+	position: relative;
+	z-index: 10;
+	background-color: #fffdf4 !important;
+	box-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
+}
+
+/* ---------------------------------------------------------------- tasks */
+
+.tasks-paper {
+	background: #fbf9f1;
+}
+
+.tasks-task-row {
+	min-height: 52px;
+	padding: 0 8px 0 4px !important;
+	box-sizing: border-box;
+	border-bottom: 1px solid #e2dccb;
+	-webkit-transition: opacity 0.5s;
+	transition: opacity 0.5s;
+}
+
+.tasks-task-row.tasks-fading {
+	opacity: 0;
+}
+
+.tasks-task-row.tasks-editing {
+	background-color: #fffbe4;
+}
+
+.tasks-check {
+	width: 39px;
+	height: 36px;
+	min-width: 39px;
+	margin: 6px 6px 6px 2px;
+	background: url(../images/checkbox-black.png) top left no-repeat;
+	cursor: pointer;
+}
+
+.tasks-check.tasks-check-high {
+	background-image: url(../images/checkbox-red.png);
+}
+
+.tasks-check.tasks-check-low {
+	background-image: url(../images/checkbox-gray.png);
+}
+
+.tasks-check.tasks-checked {
+	background-position: bottom left;
+}
+
+.tasks-subject,
+.tasks-subject-label {
+	font-size: 18px;
+	min-width: 0;
+	color: #222;
+}
+
+.tasks-subject input {
+	width: 100%;
+	font-size: 18px;
+	border: none;
+	background: transparent;
+	color: inherit;
+	padding: 12px 0;
+	outline: none;
+}
+
+.tasks-subject-label {
+	padding: 12px 0;
+}
+
+.tasks-priority-high .tasks-subject,
+.tasks-priority-high .tasks-subject-label {
+	color: #c70000;
+}
+
+.tasks-priority-low .tasks-subject,
+.tasks-priority-low .tasks-subject-label {
+	color: #9d937f;
+}
+
+.tasks-completed .tasks-subject input,
+.tasks-completed .tasks-subject-label {
+	text-decoration: line-through;
+	color: #9d937f;
+}
+
+.tasks-row-due {
+	margin-left: 8px;
+	padding: 4px 8px;
+	border-radius: 4px;
+	font-size: 14px;
+	color: #5d5747;
+	background: #eee9da;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+.tasks-row-due.tasks-due-today {
+	color: #cb6f23;
+	font-weight: bold;
+}
+
+.tasks-row-due.tasks-overdue,
+.tasks-details-due.tasks-overdue {
+	color: #c70000;
+	font-weight: bold;
+}
+
+.tasks-row-info {
+	width: 32px;
+	height: 40px;
+	margin-left: 4px;
+	position: relative;
+	cursor: pointer;
+}
+
+.tasks-row-info:after {
+	content: "";
+	position: absolute;
+	left: 8px;
+	top: 14px;
+	width: 9px;
+	height: 9px;
+	border-top: 2px solid #9d937f;
+	border-right: 2px solid #9d937f;
+	-webkit-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+
+.tasks-list-end {
+	min-height: 120px;
+}
+
+/* ---------------------------------------------------------------- toolbar */
+
+.tasks-new-task-button .enyo-button-icon,
+.tasks-new-list-button .enyo-button-icon {
+	background-size: 32px 64px;
+}
+
+/* ---------------------------------------------------------------- details */
+
+.tasks-details {
+	padding-bottom: 20px;
+}
+
+.tasks-details-subject-row {
+	padding: 10px 12px 6px 6px;
+	border-bottom: 1px solid #e2dccb;
+}
+
+.tasks-details-subject {
+	font-size: 20px;
+	padding-top: 8px;
+	min-height: 32px;
+	outline: none;
+}
+
+.tasks-details-group {
+	margin: 12px 10px;
+}
+
+.tasks-details-label {
+	width: 80px;
+	color: #8a8474;
+	font-size: 15px;
+}
+
+.tasks-details-due {
+	font-size: 18px;
+	padding: 8px 0;
+	cursor: pointer;
+}
+
+.tasks-details-notes-box {
+	margin: 12px 10px;
+	padding: 10px;
+	min-height: 160px;
+	background: white;
+	border: 1px solid #e2dccb;
+	border-radius: 6px;
+}
+
+.tasks-details-notes {
+	min-height: 140px;
+	font-size: 17px;
+	outline: none;
+}
+
+/* ---------------------------------------------------------------- dialogs */
+
+.tasks-dialog .enyo-button {
+	margin-top: 8px;
+}
+
+.tasks-dialog-message {
+	padding: 4px 0 8px;
+}
+
+.tasks-date-picker {
+	margin: 0 auto 8px;
+}
