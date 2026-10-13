@@ -1,0 +1,99 @@
+{
+    "id": "com.palm.task:1",
+    "owner": "com.palm.app.tasks",
+    "sync": true,
+    "indexes": [
+        {
+            "name": "position",
+            "props": [
+                {
+                    "name": "position",
+                    "default": 0
+                }
+            ]
+        },
+        {
+            "name": "dueDate",
+            "props": [
+                {
+                    "name": "dueDate",
+                    "default": null
+                }
+            ]
+        },
+        {
+            "name": "priority",
+            "props": [
+                {
+                    "name": "priority",
+                    "default": 2
+                }
+            ]
+        },
+        {
+            "name": "listPosition",
+            "props": [
+                {
+                    "name": "taskListId",
+                    "default": null
+                },
+                {
+                    "name": "position",
+                    "default": 0
+                }
+            ]
+        },
+        {
+            "name": "listDueDate",
+            "props": [
+                {
+                    "name": "taskListId",
+                    "default": null
+                },
+                {
+                    "name": "dueDate",
+                    "default": null
+                }
+            ]
+        },
+        {
+            "name": "listPriority",
+            "props": [
+                {
+                    "name": "taskListId",
+                    "default": null
+                },
+                {
+                    "name": "priority",
+                    "default": 2
+                }
+            ]
+        },
+        {
+            "name": "listCompleted",
+            "props": [
+                {
+                    "name": "taskListId",
+                    "default": null
+                },
+                {
+                    "name": "completed",
+                    "default": false
+                }
+            ]
+        },
+        {
+            "name": "due",
+            "props": [
+                {
+                    "name": "completed",
+                    "default": false
+                },
+                {
+                    "name": "dueDate",
+                    "default": null
+                }
+            ]
+        }
+    ]
+}

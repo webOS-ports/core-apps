@@ -1,0 +1,13 @@
+[
+    {
+        "type": "db.kind",
+        "object": "com.palm.tasklist.alltasks:1",
+        "caller": "com.palm.app.tasks",
+        "operations": {
+            "create": "allow",
+            "read": "allow",
+            "update": "allow",
+            "delete": "allow"
+        }
+    }
+]

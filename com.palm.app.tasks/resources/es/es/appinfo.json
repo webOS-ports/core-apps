@@ -1,0 +1,16 @@
+{
+    "id": "com.palm.app.tasks",
+    "title": "Tareas",
+    "keywords": [
+        "Tarea",
+        "Tareas",
+        "Lista de verificación"
+    ],
+    "universalSearch": {
+        "action": {
+            "displayName": "Nueva tarea",
+            "launchParam": "taskSubject",
+            "url": "com.palm.app.tasks"
+        }
+    }
+}

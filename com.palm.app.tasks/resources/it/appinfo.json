@@ -1,0 +1,16 @@
+{
+    "id": "com.palm.app.tasks",
+    "title": "Attività",
+    "keywords": [
+        "Attività",
+        "Attività",
+        "Elenco di spunta"
+    ],
+    "universalSearch": {
+        "action": {
+            "displayName": "Nuova attività",
+            "launchParam": "taskSubject",
+            "url": "com.palm.app.tasks"
+        }
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "id": "com.palm.app.tasks",
+    "title": "Tasks",
+    "keywords": [
+        "To Do",
+        "Todos",
+        "Checklist"
+    ],
+    "universalSearch": {
+        "action": {
+            "displayName": "New Task",
+            "launchParam": "taskSubject",
+            "url": "com.palm.app.tasks"
+        }
+    }
+}

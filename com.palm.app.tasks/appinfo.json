@@ -1,0 +1,24 @@
+{
+    "id": "com.palm.app.tasks",
+    "title": "Tasks",
+    "version": "3.0.0",
+    "vendor": "LuneOS",
+    "type": "web",
+    "main": "index.html",
+    "icon": "icon.png",
+    "splashicon": "icon-256x256.png",
+    "miniicon": "images/notification-small.png",
+    "noWindow": true,
+    "uiRevision": 2,
+    "removable": false,
+    "trustLevel": "trusted",
+    "keywords": ["To Do", "Todos", "Checklist"],
+    "universalSearch": {
+        "action": {
+            "displayName": "New Task",
+            "url": "com.palm.app.tasks",
+            "launchParam": "taskSubject"
+        }
+    },
+    "requiredPermissions": ["accountsservice.management", "accountsservice.operation", "activity.operation", "application.launcher", "database.operation", "time.query"]
+}

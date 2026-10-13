@@ -1,0 +1,29 @@
+{
+    "id": "com.palm.tasklist:1",
+    "owner": "com.palm.app.tasks",
+    "sync": true,
+    "indexes": [
+        {
+            "name": "visiblePosition",
+            "props": [
+                {
+                    "name": "visible",
+                    "default": true
+                },
+                {
+                    "name": "position",
+                    "default": 0
+                }
+            ]
+        },
+        {
+            "name": "accountId",
+            "props": [
+                {
+                    "name": "accountId",
+                    "default": null
+                }
+            ]
+        }
+    ]
+}

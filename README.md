@@ -9,6 +9,7 @@ Core-apps includes the following Enyo 1.0 applications:
 * contacts
 * email
 * memos
+* tasks
 
 Note: This release is provided for informational purposes only.
 

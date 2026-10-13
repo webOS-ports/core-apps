@@ -1,0 +1,8 @@
+{
+    "id": "com.palm.tasklist.unfiled:1",
+    "owner": "com.palm.app.tasks",
+    "extends": [
+        "com.palm.tasklist:1"
+    ],
+    "sync": false
+}
