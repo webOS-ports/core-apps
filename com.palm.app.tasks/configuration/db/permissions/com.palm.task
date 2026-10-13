@@ -2,14 +2,6 @@
     {
         "type": "db.kind",
         "object": "com.palm.task:1",
-        "caller": "*",
-        "operations": {
-            "extend": "allow"
-        }
-    },
-    {
-        "type": "db.kind",
-        "object": "com.palm.task:1",
         "caller": "com.palm.app.tasks",
         "operations": {
             "create": "allow",
@@ -22,19 +14,23 @@
     {
         "type": "db.kind",
         "object": "com.palm.task:1",
-        "caller": "com.palm.eas",
+        "caller": "com.palm.activitymanager",
         "operations": {
-            "create": "allow",
-            "read": "allow",
-            "update": "allow",
-            "delete": "allow",
+            "read": "allow"
+        }
+    },
+    {
+        "type": "db.kind",
+        "object": "com.palm.task:1",
+        "caller": "*",
+        "operations": {
             "extend": "allow"
         }
     },
     {
         "type": "db.kind",
         "object": "com.palm.task:1",
-        "caller": "com.palm.service.tasks.*",
+        "caller": "com.palm.eas",
         "operations": {
             "create": "allow",
             "read": "allow",

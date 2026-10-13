@@ -1,0 +1,17 @@
+{
+    "id": "com.palm.tasklist.eas:1",
+    "owner": "com.palm.eas",
+    "extends": [
+        "com.palm.tasklist:1"
+    ],
+    "indexes": [
+        {
+            "name": "ExistingItems",
+            "props": [
+                {
+                    "name": "accountId"
+                }
+            ]
+        }
+    ]
+}

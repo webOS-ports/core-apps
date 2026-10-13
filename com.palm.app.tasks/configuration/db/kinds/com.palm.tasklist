@@ -1,10 +1,68 @@
 {
     "id": "com.palm.tasklist:1",
     "owner": "com.palm.app.tasks",
-    "sync": true,
+    "schema": {
+        "type": "object",
+        "properties": {
+            "name": {
+                "type": "string",
+                "optional": false,
+                "description": "List name. User-viewable."
+            },
+            "position": {
+                "type": "integer",
+                "optional": true,
+                "description": "Time stamp of list creation - UTC"
+            },
+            "accountId": {
+                "type": "string",
+                "optional": true,
+                "description": "Links an Exchange Account with its Exchange tasks list"
+            },
+            "order": {
+                "type": "string",
+                "enum": [
+                    "position",
+                    "duedate",
+                    "priority"
+                ],
+                "optional": true,
+                "description": "Order of tasks in task list. See enum for possible values."
+            },
+            "show": {
+                "type": "string",
+                "optional": true,
+                "description": "Items to show in current task list. Possible values: all, remaining"
+            },
+            "dueItemCount": {
+                "type": "integer",
+                "optional": true,
+                "description": "The number of items due today. This value is maintained by Tasks service"
+            },
+            "visible": {
+                "type": "boolean",
+                "optional": true,
+                "description": "Visibility flag - false if Tasks capability disabled for account"
+            },
+            "incompleteTaskCount": {
+                "type": "integer",
+                "optional": true,
+                "description": "the number of incomplete tasks belonging to this list. All tasks is a special case"
+            }
+        }
+    },
     "indexes": [
         {
-            "name": "visiblePosition",
+            "name": "byPosition",
+            "props": [
+                {
+                    "name": "position",
+                    "default": 0
+                }
+            ]
+        },
+        {
+            "name": "byVisibilityPosition",
             "props": [
                 {
                     "name": "visible",
@@ -17,13 +75,19 @@
             ]
         },
         {
-            "name": "accountId",
+            "name": "filterSearchByName",
             "props": [
                 {
-                    "name": "accountId",
-                    "default": null
+                    "name": "visible",
+                    "default": true
+                },
+                {
+                    "name": "name",
+                    "collate": "primary",
+                    "tokenize": "default"
                 }
             ]
         }
-    ]
+    ],
+    "sync": true
 }

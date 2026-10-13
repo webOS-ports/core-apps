@@ -1,19 +1,77 @@
 {
     "id": "com.palm.task:1",
     "owner": "com.palm.app.tasks",
-    "sync": true,
+    "schema": {
+        "type": "object",
+        "properties": {
+            "subject": {
+                "type": "string",
+                "optional": false,
+                "description": "Task subject line"
+            },
+            "notes": {
+                "type": "string",
+                "optional": true,
+                "description": "Task notes body"
+            },
+            "completed": {
+                "type": "boolean",
+                "optional": false,
+                "description": "Whether or not a task is marked completed"
+            },
+            "completedDate": {
+                "type": [
+                    "null",
+                    "integer"
+                ],
+                "optional": true,
+                "description": "Time stamp when checked off (UTC)"
+            },
+            "priority": {
+                "type": "integer",
+                "enum": [
+                    1,
+                    2,
+                    3
+                ],
+                "optional": false,
+                "description": "Task priority. 1 = High, 2 = Normal, 3 = Low"
+            },
+            "dueDate": {
+                "type": [
+                    "null",
+                    "integer"
+                ],
+                "optional": true,
+                "description": "Due time stamp (UTC)"
+            },
+            "position": {
+                "type": "integer",
+                "optional": true,
+                "description": "Relative position in parent task list AND all tasks"
+            },
+            "taskListId": {
+                "type": [
+                    "null",
+                    "string"
+                ],
+                "optional": false,
+                "description": "FOREIGN KEY : ID of parent task list"
+            }
+        }
+    },
     "indexes": [
         {
-            "name": "position",
+            "name": "byTaskList",
             "props": [
                 {
-                    "name": "position",
-                    "default": 0
+                    "name": "taskListId",
+                    "default": ""
                 }
             ]
         },
         {
-            "name": "dueDate",
+            "name": "byDueDate",
             "props": [
                 {
                     "name": "dueDate",
@@ -22,7 +80,20 @@
             ]
         },
         {
-            "name": "priority",
+            "name": "isDue",
+            "props": [
+                {
+                    "name": "completed",
+                    "default": true
+                },
+                {
+                    "name": "dueDate",
+                    "default": null
+                }
+            ]
+        },
+        {
+            "name": "byPriority",
             "props": [
                 {
                     "name": "priority",
@@ -31,24 +102,23 @@
             ]
         },
         {
-            "name": "listPosition",
+            "name": "byPosition",
             "props": [
-                {
-                    "name": "taskListId",
-                    "default": null
-                },
                 {
                     "name": "position",
                     "default": 0
+                },
+                {
+                    "name": "_kind"
                 }
             ]
         },
         {
-            "name": "listDueDate",
+            "name": "inTaskList_byDueDate",
             "props": [
                 {
                     "name": "taskListId",
-                    "default": null
+                    "default": ""
                 },
                 {
                     "name": "dueDate",
@@ -57,11 +127,24 @@
             ]
         },
         {
-            "name": "listPriority",
+            "name": "inTaskList_byCompleted",
             "props": [
                 {
                     "name": "taskListId",
-                    "default": null
+                    "default": ""
+                },
+                {
+                    "name": "completed",
+                    "default": false
+                }
+            ]
+        },
+        {
+            "name": "inTaskList_byPriority",
+            "props": [
+                {
+                    "name": "taskListId",
+                    "default": ""
                 },
                 {
                     "name": "priority",
@@ -70,30 +153,26 @@
             ]
         },
         {
-            "name": "listCompleted",
+            "name": "inTaskList_byPosition",
             "props": [
                 {
                     "name": "taskListId",
-                    "default": null
+                    "default": ""
                 },
                 {
-                    "name": "completed",
-                    "default": false
+                    "name": "position",
+                    "default": 0
                 }
             ]
         },
         {
-            "name": "due",
+            "name": "byKind",
             "props": [
                 {
-                    "name": "completed",
-                    "default": false
-                },
-                {
-                    "name": "dueDate",
-                    "default": null
+                    "name": "_kind"
                 }
             ]
         }
-    ]
+    ],
+    "sync": true
 }
