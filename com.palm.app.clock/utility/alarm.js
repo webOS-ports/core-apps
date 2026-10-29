@@ -207,8 +207,22 @@ enyo.kind(
 	playRingtone: function ()
 	{
 		this.log();
-//		this.$.audioManager.playAudio(this.objAlarmRecord.alarmSoundFile);
-		this.$.audioManager.playAudio(this.kAlarmSoundDefaultFile);
+		// The sound chosen for this alarm. One that will not play (a ringtone
+		// since deleted, or Flurry.mp3, which older alarms name but no image
+		// ships) falls back to the default in onAudioError.
+		var strFile = this.objAlarmRecord && this.objAlarmRecord.alarmSoundFile;
+		this.boolPlayingDefaultSound = !strFile || strFile === this.kAlarmSoundDefaultFile;
+		this.$.audioManager.playAudio(this.boolPlayingDefaultSound ? this.kAlarmSoundDefaultFile : strFile);
+	},
+	
+	onAudioError: function (inSender, inEvent)
+	{
+		this.log();
+		if (!this.boolPlayingDefaultSound)
+		{
+			this.boolPlayingDefaultSound = true;
+			this.$.audioManager.playAudio(this.kAlarmSoundDefaultFile);
+		}
 	},
 	
 	stopRingtone: function ()
@@ -339,6 +353,6 @@ enyo.kind(
 	kCookieAlarmSoundTitle: "alarmsoundtitle",
 	// TODO ALWAYS MAKE SURE THIS IS VALID
 	kAlarmSoundDefaultFile: "/usr/palm/sounds/alert.wav",
-	kAlarmSoundDefaultTitle: "Flurry",
+	kAlarmSoundDefaultTitle: "Alert",
 
 });
