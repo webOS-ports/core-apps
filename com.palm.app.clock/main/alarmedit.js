@@ -45,7 +45,7 @@ enyo.kind({
 			]},
 		   {name: "itemSound", kind: "Item", tapHighlight: false, layoutKind: "HFlexLayout", onclick: "onclick_itemSound", components: [
 				{flex:1, content:$L("Sound")},
-				{name: "lblSound", content:"Flurry", style: "min-width: 3em; max-width: 7em;", className: "enyo-text-ellipsis"}
+				{name: "lblSound", content:"Alert", style: "min-width: 3em; max-width: 7em;", className: "enyo-text-ellipsis"}
 				
 			]}
 		]},

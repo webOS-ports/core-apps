@@ -97,8 +97,8 @@ enyo.kind(
 		niceTime: "8:00 AM",
 		niceDay: "--",
 		enabled: true,
-		alarmSoundFile: "/media/internal/ringtones/Flurry.mp3", 
-		alarmSoundTitle: "Flurry",
+		alarmSoundFile: "/usr/palm/sounds/alert.wav",
+		alarmSoundTitle: "Alert",
 		snoozed: false,
 		hideSnoozeTime: false
 	},
