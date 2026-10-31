@@ -1,0 +1,107 @@
+/* @@@LICENSE
+*
+*      Copyright (c) 2026 LuneOS
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*
+* LICENSE@@@ */
+
+/*
+ * The phone dashboard layout, as the legacy Clock's alarmdash scene had it
+ * and as com.palm.systemui's dashboards (stylesheets/dashboard.css, which
+ * these rules follow) still draw it: a 48px icon square at the left with the
+ * count badge at its top right corner, then the title and one line of text
+ * across the rest of the width.
+ */
+
+body {
+	color: #FFF;
+	font-family: Prelude, 'Prelude Medium', 'Segoe UI', Arial, Helvetica, sans-serif;
+	margin: 0;
+	background: transparent;
+}
+
+.dashboard-notification-module {
+	height: 50px;
+	display: -webkit-box;
+}
+
+.palm-dashboard-icon-container {
+	margin-top: 1px;
+	width: 54px;
+	height: 48px;
+	position: relative;
+	margin-right: 4px;
+}
+
+.palm-dashboard-text-container {
+	-webkit-box-flex: 1;
+	height: 48px;
+	overflow: hidden;
+	font-size: 16px;
+}
+
+.palm-dashboard-icon {
+	width: 48px;
+	height: 48px;
+	margin-left: -6px;
+}
+
+.palm-dashboard-icon.alarm {
+	background: url(../images/notification-alarm-small.png) center center no-repeat;
+}
+
+.dashboard-newitem {
+	position: absolute;
+	top: -3px;
+	left: 25px;
+	line-height: 30px;
+	font-weight: bold;
+	height: 28px;
+	min-width: 24px;
+	text-align: center;
+	-webkit-border-image: url(../images/dashboard-newitem-badge.png) 0 12 0 12 repeat stretch;
+	-webkit-box-sizing: border-box;
+	/* Without a style the border, and so the border image, is not drawn. */
+	border-style: solid;
+	border-width: 0px 12px 0px 12px;
+	font-size: 16px;
+}
+
+.dashboard-newitem span {
+	position: relative;
+	top: -3px;
+	margin: 0 -6px;
+	font-size: 16px;
+}
+
+.dashboard-title,
+.palm-dashboard-text {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.dashboard-title {
+	margin-top: 6px;
+	font-weight: bold;
+}
+
+.palm-dashboard-text {
+	font-size: 14px;
+	margin-top: -2px;
+}
+
+.single .dashboard-newitem {
+	display: none;
+}

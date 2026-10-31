@@ -188,7 +188,14 @@ enyo.kind({
 		
 		if(enyo.windowParams.action)
 		{
-			if(enyo.windowParams.action === "edit")
+			if(enyo.windowParams.action === "alarms")
+			{
+				this.$.radSelectView.setValue(1);
+				this.$.paneMainView.selectViewByName("alarmList");
+				this.$.alarmList.getAlarms();
+				enyo.windowParams = {};
+			}
+			else if(enyo.windowParams.action === "edit")
 			{
 				this.$.radSelectView.setValue(1);
 				this.$.paneMainView.selectViewByName("alarmList");

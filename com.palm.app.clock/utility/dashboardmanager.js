@@ -16,144 +16,198 @@
 //
 // LICENSE@@@
 
+/*
+ * The alarm dashboard: one item in the notification area while the Clock is
+ * not in front, as the legacy Clock's alarmdash stage was. What it says comes
+ * from AlarmDashState; the item itself is alarmDashboard/alarmDashboard.html,
+ * a page of the Clock's own, in the phone dashboard style the other
+ * dashboards (e.g. com.palm.systemui's USB one) use.
+ *
+ * It used to be an enyo.Dashboard with one layer per enabled alarm. That page
+ * is the TouchPad's (enyo's dashboard-window: a 270px text column, a 320px
+ * wide layout with a swipe shadow from 320px on), it showed the alarm that
+ * rings LAST on top, and every deactivation of the main window pushed the
+ * alarms again without taking the old layers off - the "2" on a single alarm.
+ */
 enyo.kind(
 {
 	name: "DashboardManager",
 	kind: "Component",
 	events: {},
 	components: [
-
-		{kind: "AlarmDbManager", onGotAlarms: "gotAlarms"},
-		{kind:"Dashboard", onMessageTap: "messageTap", onTap: "onTap_Dashboard", onLayerSwipe: "layerSwiped"}
-		
+		{kind: "AlarmDbManager", onGotAlarms: "gotAlarms"}
 	],
-	
-	
+
+	kWindowName: "com.palm.app.clock.dashboard",
+	kPagePath: "alarmDashboard/alarmDashboard.html",
+
 	create: function ()
 	{
-		
 		this.inherited(arguments);
+		this.boolMainActive = false;
+		this.boolDismissed = false;
+		this.boolWanted = false;
 		this.getAlarms();
-		
 	},
-	
-	
+
+	destroy: function ()
+	{
+		this.clearRefreshTimer();
+		this.inherited(arguments);
+	},
+
 	getAlarms: function ()
 	{
 		this.log();
 		this.$.alarmDbManager.getAlarms({where: [{"prop": "enabled", "op": "=", "val": true}]});
 	},
-	
-	
+
 	gotAlarms: function (sender, results)
 	{
 		this.log(results);
 		enyo.application.arAlarms = results;
-		
+		if (this.boolWanted)
+		{
+			this.boolWanted = false;
+			this.render();
+		}
 	},
-	
+
+	/*
+	 * true when the main window goes to the background, false when it comes
+	 * to the front. The Clock in front shows no dashboard, as legacy's didn't.
+	 */
 	showDashboards: function (boolShowDashboards)
 	{
 		this.log(boolShowDashboards);
-		
-		if(boolShowDashboards)
+		this.boolMainActive = !boolShowDashboards;
+		if (boolShowDashboards)
 		{
-			this.addDashboards();
+			// Having been in the app brings a swiped away dashboard back.
+			this.boolDismissed = false;
+			this.refresh();
 		}
 		else
 		{
 			this.clearDashboards();
 		}
-		
-	},	
-	
-	
-	addDashboards: function ()
+	},
+
+	/*
+	 * Something about the alarms changed (snoozed, dismissed, rang, edited):
+	 * read them again and show what is current.
+	 */
+	refresh: function ()
 	{
 		this.log();
-		
-		var dateAlarm;
-		
-		if(enyo.application.arAlarms && enyo.application.arAlarms.length > 0)
+		if (this.boolMainActive)
 		{
-			enyo.application.utilities.sortAlarmsByNextDate(enyo.application.arAlarms);
-			
-			for (var intAlarmIndex = 0; intAlarmIndex < enyo.application.arAlarms.length; intAlarmIndex++)
-			{
-				if(enyo.application.arAlarms[intAlarmIndex].enabled)
-				{
-					//this.log(enyo.application.arAlarms[intAlarmIndex]);
-					//this.log("Next date: ", enyo.application.utilities.dateGetNext(enyo.application.arAlarms[intAlarmIndex].hour, enyo.application.arAlarms[intAlarmIndex].minute,enyo.application.arAlarms[intAlarmIndex].occurs));
-					
-					dateAlarm = new Date();
-					dateAlarm.setHours(enyo.application.arAlarms[intAlarmIndex].hour);
-					dateAlarm.setMinutes(enyo.application.arAlarms[intAlarmIndex].minute);
-					
-					enyo.application.arAlarms[intAlarmIndex].niceDay = enyo.application.utilities.nextAlarmDayText(dateAlarm,enyo.application.arAlarms[intAlarmIndex].occurs);
-					
-					this.pushDashboard(enyo.application.arAlarms[intAlarmIndex]);
-				}
-			}
+			return;
 		}
+		this.boolWanted = true;
+		this.getAlarms();
 	},
-	
-	
-	pushDashboard: function(objAlarmRecord)
-	{
 
-		this.log(objAlarmRecord.niceTime + " " + objAlarmRecord.niceDay);
-		if(this.$.dashboard)
+	render: function ()
+	{
+		this.clearRefreshTimer();
+		if (this.boolMainActive || this.boolDismissed)
 		{
-			this.$.dashboard.push({icon:"images/notification-alarm-small.png", title: objAlarmRecord.title, text: objAlarmRecord.niceTime + " " + objAlarmRecord.niceDay, alarmkey: objAlarmRecord.key});
+			this.clearDashboards();
+			return;
+		}
+
+		var utilities = enyo.application.utilities;
+		var state = AlarmDashState.describe(enyo.application.arAlarms || [],
+			enyo.application.snoozedAlarms || {}, new Date(), {
+				L: $L,
+				nextDate: function (alarm) {
+					return utilities.dateGetNext(alarm.hour, alarm.minute, alarm.occurs);
+				},
+				dayText: function (alarm, dateNext) {
+					return dateNext ? utilities.nextAlarmDayText(dateNext, alarm.occurs) : "";
+				}
+			});
+		this.log(state);
+
+		if (!state)
+		{
+			this.clearDashboards();
+			return;
+		}
+
+		if (this.window && this.window.closed === false)
+		{
+			enyo.windows.setWindowParams(this.window, state);
+		}
+		else
+		{
+			var icon = enyo.fetchAppRootPath().replace(/^file:\/\//, "") + "images/notification-alarm-small.png";
+			this.window = enyo.windows.openDashboard(this.kPagePath, this.kWindowName, state, {icon: icon});
+		}
+
+		if (state.refreshIn > 0)
+		{
+			this.refreshTimer = setTimeout(enyo.bind(this, "render"), state.refreshIn + 50);
 		}
 	},
-	
-	
+
+	clearRefreshTimer: function ()
+	{
+		if (this.refreshTimer)
+		{
+			clearTimeout(this.refreshTimer);
+			this.refreshTimer = undefined;
+		}
+	},
+
 	clearDashboards: function ()
 	{
 		this.log();
-		this.$.dashboard.setLayers([]);
-		
+		this.clearRefreshTimer();
+		var win = this.window;
+		// Dropped first: the page's unload reports the close, and a close of
+		// ours is not the user swiping the dashboard away.
+		this.window = undefined;
+		if (win && win.closed === false)
+		{
+			win.close();
+		}
 	},
-	
-	
-	popDashboard: function()
+
+	/*
+	 * The page went away. Unless we closed it, the user swiped it off: it
+	 * stays off until they have been back in the app, or an alarm changes.
+	 */
+	dashboardClosed: function ()
 	{
-		this.$.dashboard.pop();
+		this.log();
+		if (this.window)
+		{
+			this.window = undefined;
+			this.clearRefreshTimer();
+			this.boolDismissed = true;
+		}
 	},
-	
-	
+
+	// An alarm was snoozed, rang or was dismissed: show it even if swiped off.
+	alarmChanged: function ()
+	{
+		this.boolDismissed = false;
+		this.refresh();
+	},
+
 	sendCommand: function (cmdType, strKey)
 	{
 		this.log();
 		var winRoot = enyo.windows.getRootWindow();
-		//var winRoot = enyo.windows.fetchWindow("com.palm.app.clock");
 		if(winRoot)
 		{
-			this.log("setting windows params");
 			enyo.windows.setWindowParams(winRoot, {action: cmdType, key:  strKey });
 		}
 		else
 		{
 			this.log("root window not found");
-			
 		}
-	},
-	
-	onTap_Dashboard: function (sender, event)
-	{
-		
-		this.log(event);
-		
-		this.sendCommand("edit", event.alarmkey)
-	},
-	
-	
-	layerSwiped: function(inSender, layer)
-	{
-		//this.$.status.setContent("Swiped layer: "+layer.text);
-	}	
-	
-	
-	
+	}
 });
