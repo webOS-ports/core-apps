@@ -61,12 +61,19 @@ enyo.kind(
 	windowParamsChangeHandler: function ()
 	{
 		this.log(enyo.windowParams);
-		
-		if(enyo.windowParams.action) {
+
+		// The root window's params are shared: every Alarm hears every
+		// change, so only the ones naming this alarm are for it.
+		//
+		// "ring" is not handled here. It comes as the root window's params
+		// when the app is relaunched to ring an alarm (enyo's handleRelaunch
+		// posts them), and ClockApp creates an Alarm for that relaunch, which
+		// rings once its record has been read (gotAlarm). Ringing here too
+		// rang before the record was there: showAlarmDash() threw on
+		// this.objAlarmRecord.key, and the sound was started twice.
+		if(enyo.windowParams.action && enyo.windowParams.key === this.strKey) {
+			this.alarmAction = null;
 			switch (enyo.windowParams.action) {
-				case "ring":
-					this.alarmAction = enyo.bind(this, "ringAlarm");
-					break;
 				case "dismiss":
 					this.alarmAction = enyo.bind(this, "dismissAlarm");
 					break;
@@ -74,7 +81,7 @@ enyo.kind(
 					this.alarmAction = enyo.bind(this, "snoozeAlarm");
 					break;
 			}
-			
+
 			if(enyo.application.prefs && this.alarmAction) {
 				this.alarmAction();
 			} else {
