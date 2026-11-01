@@ -27,6 +27,7 @@ enyo.depends(
 	"utility/audiomanager.js",
 	"utility/activitymanager.js",
 	"utility/dashboardmanager.js",
+	"utility/alarmdashstate.js",
 	"utility/displaymanager.js",
 	"utility/keymanager.js",
 	"utility/powerdmanager.js",

@@ -167,6 +167,9 @@ enyo.kind(
 				
 				this.log("enyo.application.prefs.RingerSwitchOff: ", enyo.application.prefs.RingerSwitchOff);
 				
+				// Ringing ends a snooze: the dashboard no longer counts it down.
+				this.setSnoozed(false);
+
 				if(this.boolRingerSwitch || enyo.application.prefs.RingerSwitchOff === "play")
 				{
 					this.playRingtone();
@@ -244,6 +247,7 @@ enyo.kind(
 		this.log();
 		
 		this.stopRingtone();
+		this.setSnoozed(false);
 		this.setNextAlarm();
 	},
 	
@@ -295,6 +299,13 @@ enyo.kind(
 		this.log();
 		this.closeAlarmDash();
 		
+		// Snoozed or dismissed: the dashboard says so now, not only the next
+		// time the main window goes to the background.
+		if (enyo.application.alarmChangedMethod)
+		{
+			enyo.application.alarmChangedMethod();
+		}
+		
 		this.log("Goodbye cruel world");
 		this.destroy();
 	},
@@ -331,7 +342,31 @@ enyo.kind(
 		
 		this.log(now);
 		
+		this.setSnoozed(now.getTime());
 		this.$.activityManager.setAlarmTimeout(this.objAlarmRecord, now);
+	},
+	
+	/*
+	 * Which alarms are snoozed and until when, for the dashboard to say so
+	 * ("Snoozed for 9 more minutes"), as legacy's did. Kept on
+	 * enyo.application, which every Alarm shares with the dashboard; the
+	 * record in db8 is not touched. false ends this alarm's snooze.
+	 */
+	setSnoozed: function (msUntil)
+	{
+		if (!this.objAlarmRecord)
+		{
+			return;
+		}
+		var snoozes = enyo.application.snoozedAlarms = enyo.application.snoozedAlarms || {};
+		if (msUntil)
+		{
+			snoozes[this.objAlarmRecord.key] = msUntil;
+		}
+		else
+		{
+			delete snoozes[this.objAlarmRecord.key];
+		}
 	},
 	
 	
