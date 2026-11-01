@@ -54,6 +54,7 @@ enyo.kind({
 	{
 		this.log("3.0.2100");
 		enyo.application.showDashboardMethod = enyo.bind(this, "showDashboards");
+		enyo.application.alarmChangedMethod = enyo.bind(this.$.dashboardManager, "alarmChanged");
 		
 		if(!enyo.application.utilities)
 		{
@@ -138,7 +139,15 @@ enyo.kind({
 		this.log(enyo.windowParams);
 		if(enyo.windowParams.action)
 		{
-			if(enyo.windowParams.action === "edit")
+			// The dashboard page reports that it went away.
+			if(enyo.windowParams.action === "alarmDashboardClosed")
+			{
+				this.$.dashboardManager.dashboardClosed();
+				return;
+			}
+			// "edit" opens one alarm (a tap on the dashboard's text), "alarms"
+			// the list of them (a tap on its icon), as legacy's dashboard did.
+			if(enyo.windowParams.action === "edit" || enyo.windowParams.action === "alarms")
 			{
 				
 				this.startParams = enyo.windowParams;
