@@ -32,6 +32,11 @@ describe("pseudoDetailsInApp", function () {
         PseudoDetailsInApp.setPersonId("++HLXsjI6hw0gHm7");
         PseudoDetailsInApp.personIdChanged();
 
+        // The Contacts library loads the person asynchronously.
+        waitsFor(function () {
+            return PseudoDetailsInApp.currentPersonLoadedId;
+        }, "the person to load", 2000);
+        runs(function () {
         expect(PseudoDetailsInApp.getPersonId()).toEqual("++HLXsjI6hw0gHm7");
         expect(PseudoDetailsInApp.$.addToContactButton.getShowing()).toBeFalsy();
         expect(PseudoDetailsInApp.$.editButton.getShowing()).toBeTruthy();
@@ -42,6 +47,7 @@ describe("pseudoDetailsInApp", function () {
         expect(PseudoDetailsInApp.person).toBeDefined();
         expect(PseudoDetailsInApp.currentPersonLoadedId).toEqual("++HLXsjI6hw0gHm7");
         expect(PseudoDetailsInApp.personWatch).toBeTruthy();
+        });
     });
 
     it("showDetails", function () {
