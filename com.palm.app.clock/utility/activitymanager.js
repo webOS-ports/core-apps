@@ -25,7 +25,11 @@ enyo.kind(
 		
 		{name: "psAlarmSet", kind: "PalmService", service: "palm://com.palm.activitymanager/", method: "create", onSuccess: "onSuccess_AlarmSet", onFailure: "onFailure_AlarmSet"},
 		
-		{name: "psAlarmClear", kind: "PalmService", service: "palm://com.palm.activitymanager/", method: "complete", onSuccess: "onSuccess_AlarmClear", onFailure: "onFailure_AlarmClear"},
+		// "cancel", not "complete": activitymanager refuses to complete an
+		// activity still waiting for its time ("Invalid transition:
+		// unsatisfied -> complete"), so a switched-off alarm stayed
+		// scheduled and rang anyway.
+		{name: "psAlarmClear", kind: "PalmService", service: "palm://com.palm.activitymanager/", method: "cancel", onSuccess: "onSuccess_AlarmClear", onFailure: "onFailure_AlarmClear"},
 	],
 		
 	create: function ()
@@ -120,8 +124,10 @@ enyo.kind(
 	
 	onFailure_AlarmClear: function (sender, response)
 	{
+		// Fails when there is no such activity (already gone), which
+		// leaves the alarm unscheduled all the same.
 		this.log(response);
-		
+		this.doClearAlarmTimeout();
 	},
 
 
