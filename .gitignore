@@ -1,3 +1,5 @@
 BuildResults
 .project
 .settings
+node_modules/
+coverage/

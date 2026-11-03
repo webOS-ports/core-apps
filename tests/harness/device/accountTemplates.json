@@ -1,0 +1,2009 @@
+[
+ {
+  "templateId": "org.webosports.app.music.apple",
+  "loc_name": "Apple Music",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/org.webosports.app.music.apple/images/apple-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/org.webosports.app.music.apple/images/apple-48x48.png"
+  },
+  "validator": {
+   "customUI": {
+    "appId": "org.webosports.app.musicauth",
+    "name": "validator.html"
+   }
+  },
+  "loc_usernameLabel": "APPLE MUSIC",
+  "readPermissions": [
+   "org.webosports.app.music.service",
+   "org.webosports.app.music",
+   "org.webosports.app.musicauth"
+  ],
+  "writePermissions": [
+   "org.webosports.app.music.service",
+   "org.webosports.app.music",
+   "org.webosports.app.musicauth"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "Music",
+    "capabilitySubtype": "STREAMING",
+    "id": "org.webosports.app.music.apple.streaming",
+    "alwaysOn": true,
+    "loc_shortName": "Apple Music",
+    "icon": {
+     "loc_32x32": "/usr/palm/public/accounts/org.webosports.app.music.apple/images/apple-32x32.png",
+     "loc_48x48": "/usr/palm/public/accounts/org.webosports.app.music.apple/images/apple-48x48.png",
+     "splitter": "/usr/palm/public/accounts/org.webosports.app.music.apple/images/apple-32x32.png"
+    }
+   }
+  ]
+ },
+ {
+  "templateId": "com.palm.boxnet",
+  "loc_name": "Box",
+  "loc_usernameLabel": "EMAIL ADDRESS",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/com.palm.boxnet/images/box_net_32.png",
+   "loc_48x48": "/usr/palm/public/accounts/com.palm.boxnet/images/box_net_48.png",
+   "loc_64x64": "/usr/palm/public/accounts/com.palm.boxnet/images/box_net_64.png"
+  },
+  "__comment": "OAuth2 replaces the dead username/password validator. customUI hosts the consent webview (like com.palm.eas / com.palm.skype); it loads OAuth2.buildAuthorizeUrl(), captures ?code= from the redirect to Config.REDIRECT_URI, then calls exchangeCode which returns the stored token credentials.",
+  "validator": {
+   "customUI": {
+    "appId": "com.palm.app.cloud-auth",
+    "name": "oauth.html"
+   },
+   "address": "palm://com.palm.service.boxnet/exchangeCode"
+  },
+  "onCredentialsChanged": "palm://com.palm.service.boxnet/checkCredentials",
+  "__comment2": "com.palm.app.cloud-auth MUST be in write/readPermissions: createAccount runs under the customUI auth app's identity and is permission-checked against these lists (accounts/handlers/create.js -> Utils.hasPermission). Working templates (teams/telegram/skype) list their own auth app, not com.palm.app.accounts.",
+  "__comment3": "com.palm.service.boxnet is in read+writePermissions so the service itself can readCredentials(accountId) for file ops and writeCredentials back after a token refresh - Box ROTATES the refresh token on every use, so the write path is exercised on nearly every call (accounts/handlers/credentials.js checks these lists).",
+  "readPermissions": [
+   "com.palm.app.cloud-auth",
+   "com.palm.service.boxnet",
+   "org.webosports.app.documents",
+   "org.webosports.app.documents-*",
+   "org.webosports.app.photos",
+   "org.webosports.app.photos-*",
+   "com.palm.service.photos"
+  ],
+  "writePermissions": [
+   "com.palm.app.cloud-auth",
+   "com.palm.service.boxnet",
+   "com.palm.service.photos"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "DOCUMENTS",
+    "id": "com.palm.boxnet.documents",
+    "implementation": "palm://com.palm.service.boxnet/",
+    "__comment": "No longer bound to QuickOffice (closed/dead). A new file-picker app consumes listFolder/downloadFile."
+   },
+   {
+    "capability": "PHOTO.UPLOAD",
+    "id": "com.palm.boxnet.photos",
+    "implementation": "palm://com.palm.service.photos",
+    "onEnabled": "palm://com.palm.service.photos/onEnabled",
+    "onDelete": "palm://com.palm.service.photos/onDelete",
+    "onCredentialsChanged": "palm://com.palm.service.photos/onCredentialsChanged",
+    "__comment": "Makes the Box account a photo source. implementation/hooks point at the stock Photos AGGREGATOR (com.palm.service.photos), which discovers PHOTO.UPLOAD accounts and (via templateId->serviceName in its Utils.js) calls com.palm.service.boxnet/listAlbums+listPhotos, then downloads bytes with the curl-patched Sync-Manager. Box photo URLs carry ?access_token= (Box has no unauthenticated pre-signed links), so the curl -L fetch needs no auth header."
+   }
+  ]
+ },
+ {
+  "templateId": "org.webosports.cdav.account",
+  "loc_name": "C+DAV Connector",
+  "readPermissions": [
+   "org.webosports.service.cdav",
+   "org.webosports.app.contacts",
+   "org.webosports.app.messaging",
+   "com.palm.service.contacts",
+   "com.palm.service.contacts.linker",
+   "com.palm.imlibpurple",
+   "com.palm.app.contacts",
+   "com.palm.app.messaging",
+   "com.palm.app.calendar",
+   "com.palm.app.email"
+  ],
+  "writePermissions": [
+   "org.webosports.service.cdav",
+   "org.webosports.app.contacts",
+   "org.webosports.app.messaging",
+   "com.palm.app.accounts",
+   "com.palm.app.contacts",
+   "com.palm.app.messaging",
+   "com.palm.app.calendar",
+   "com.palm.app.email"
+  ],
+  "validator": {
+   "address": "palm://org.webosports.service.cdav/checkCredentials",
+   "customUI": {
+    "appId": "org.webosports.app.cdav",
+    "name": "CrossAppTarget/index.html"
+   }
+  },
+  "onCredentialsChanged": "palm://org.webosports.service.cdav/onCredentialsChanged",
+  "loc_usernameLabel": "Username",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/org.webosports.cdav/images/caldav-32.png",
+   "loc_48x48": "/usr/palm/public/accounts/org.webosports.cdav/images/caldav-48.png",
+   "loc_1024x1024": "/usr/palm/public/accounts/org.webosports.cdav/images/caldav-1024.png"
+  },
+  "capabilityProviders": [
+   {
+    "capability": "CONTACTS",
+    "id": "org.webosports.cdav.contact",
+    "onCreate": "palm://org.webosports.service.cdav/onContactsCreate",
+    "onEnabled": "palm://org.webosports.service.cdav/onContactsEnabled",
+    "onDelete": "palm://org.webosports.service.cdav/onContactsDelete",
+    "sync": "palm://org.webosports.service.cdav/sync",
+    "loc_name": "CardDAV Contacts",
+    "dbkinds": {
+     "contactset": "org.webosports.cdav.contactset:1",
+     "contact": "org.webosports.cdav.contact:1"
+    }
+   },
+   {
+    "capability": "CALENDAR",
+    "id": "org.webosports.cdav.calendar",
+    "onCreate": "palm://org.webosports.service.cdav/onCalendarCreate",
+    "onDelete": "palm://org.webosports.service.cdav/onCalendarDelete",
+    "onEnabled": "palm://org.webosports.service.cdav/onCalendarEnabled",
+    "sync": "palm://org.webosports.service.cdav/sync",
+    "loc_name": "CalDav Calendar",
+    "dbkinds": {
+     "calendar": "org.webosports.cdav.calendar:1",
+     "calendarevent": "org.webosports.cdav.calendarevent:1"
+    }
+   }
+  ]
+ },
+ {
+  "templateId": "org.webosports.app.music.deezer",
+  "loc_name": "Deezer",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/org.webosports.app.music.deezer/images/deezer-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/org.webosports.app.music.deezer/images/deezer-48x48.png"
+  },
+  "validator": {
+   "customUI": {
+    "appId": "org.webosports.app.musicauth",
+    "name": "validator.html"
+   }
+  },
+  "loc_usernameLabel": "DEEZER ACCOUNT",
+  "readPermissions": [
+   "org.webosports.app.music.service",
+   "org.webosports.app.music",
+   "org.webosports.app.musicauth"
+  ],
+  "writePermissions": [
+   "org.webosports.app.music.service",
+   "org.webosports.app.music",
+   "org.webosports.app.musicauth"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "Music",
+    "capabilitySubtype": "STREAMING",
+    "id": "org.webosports.app.music.deezer.streaming",
+    "alwaysOn": true,
+    "loc_shortName": "Deezer",
+    "icon": {
+     "loc_32x32": "/usr/palm/public/accounts/org.webosports.app.music.deezer/images/deezer-32x32.png",
+     "loc_48x48": "/usr/palm/public/accounts/org.webosports.app.music.deezer/images/deezer-48x48.png",
+     "splitter": "/usr/palm/public/accounts/org.webosports.app.music.deezer/images/deezer-32x32.png"
+    }
+   }
+  ]
+ },
+ {
+  "templateId": "com.palm.discord",
+  "loc_name": "Discord",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/com.palm.discord/images/discord-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/com.palm.discord/images/discord-48x48.png"
+  },
+  "validator": {
+   "customUI": {
+    "appId": "com.palm.app.discord",
+    "name": "validator.html"
+   }
+  },
+  "loc_usernameLabel": "USERNAME",
+  "readPermissions": [
+   "com.palm.imlibpurple",
+   "com.palm.app.messaging",
+   "org.webosports.app.messaging",
+   "com.palm.app.contacts",
+   "com.palm.service.contacts",
+   "com.palm.service.contacts.linker"
+  ],
+  "writePermissions": [
+   "com.palm.app.contacts",
+   "com.palm.service.contacts",
+   "com.palm.service.contacts.linker",
+   "com.palm.app.messaging",
+   "org.webosports.app.messaging"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "MESSAGING",
+    "capabilitySubtype": "IM",
+    "id": "com.palm.discord.im",
+    "alwaysOn": true,
+    "loc_shortName": "Discord",
+    "icon": {
+     "loc_32x32": "/usr/palm/public/accounts/com.palm.discord/images/discord-32x32.png",
+     "loc_48x48": "/usr/palm/public/accounts/com.palm.discord/images/discord-48x48.png",
+     "splitter": "/usr/palm/public/accounts/com.palm.discord/images/discord-32x32.png"
+    },
+    "implementation": "palm://com.palm.imlibpurple/",
+    "onEnabled": "palm://com.palm.imlibpurple/onEnabled",
+    "onDelete": "palm://com.palm.imlibpurple/onDelete",
+    "serviceName": "type_discord",
+    "dbkinds": {
+     "immessage": "com.palm.immessage.libpurple:1",
+     "imcommand": "com.palm.imcommand.libpurple:1"
+    },
+    "invites": {
+     "supportsCustomMessage": false
+    },
+    "groupChat": {
+     "supported": true,
+     "topicsSupported": true,
+     "invitesSupportMessages": false
+    },
+    "chatWithNonBuddies": true
+   },
+   {
+    "capability": "CONTACTS",
+    "id": "com.palm.discord.contacts",
+    "alwaysOn": true,
+    "implementation": "palm://com.palm.imlibpurple/",
+    "sync": "palm://com.palm.imlibpurple/sync",
+    "readOnlyData": true,
+    "db_kinds": {
+     "contact": "com.palm.contact.libpurple:1"
+    }
+   }
+  ]
+ },
+ {
+  "templateId": "com.palm.dropbox",
+  "loc_name": "Dropbox",
+  "loc_usernameLabel": "EMAIL ADDRESS",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/com.palm.dropbox/images/dropbox-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/com.palm.dropbox/images/dropbox-48x48.png"
+  },
+  "disallowed_locales": [
+   "en_cn",
+   "zh_cn",
+   "zh_hk"
+  ],
+  "__comment": "OAuth2 replaces the dead username/password validator. customUI hosts the consent webview (like com.palm.eas / com.palm.skype); it loads OAuth2.buildAuthorizeUrl(), captures ?code= from the redirect to Config.REDIRECT_URI, then calls exchangeCode which returns the stored token credentials.",
+  "validator": {
+   "customUI": {
+    "appId": "com.palm.app.cloud-auth",
+    "name": "oauth.html"
+   },
+   "address": "palm://com.palm.service.dropbox/exchangeCode"
+  },
+  "onCredentialsChanged": "palm://com.palm.service.dropbox/checkCredentials",
+  "__comment2": "com.palm.app.cloud-auth MUST be in write/readPermissions: createAccount runs under the customUI auth app's identity and is permission-checked against these lists (accounts/handlers/create.js -> Utils.hasPermission). Working templates (teams/telegram/skype) list their own auth app, not com.palm.app.accounts.",
+  "__comment3": "com.palm.service.dropbox is in read+writePermissions so the service itself can readCredentials(accountId) for file ops and writeCredentials back after a token refresh (accounts/handlers/credentials.js checks these lists).",
+  "readPermissions": [
+   "com.palm.app.cloud-auth",
+   "com.palm.service.dropbox",
+   "org.webosports.app.documents",
+   "org.webosports.app.documents-*",
+   "org.webosports.app.photos",
+   "org.webosports.app.photos-*",
+   "com.palm.service.photos"
+  ],
+  "writePermissions": [
+   "com.palm.app.cloud-auth",
+   "com.palm.service.dropbox",
+   "com.palm.service.photos"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "DOCUMENTS",
+    "id": "com.palm.dropbox.documents",
+    "implementation": "palm://com.palm.service.dropbox/",
+    "__comment": "No longer bound to QuickOffice (closed/dead). A new file-picker app consumes listFolder/downloadFile."
+   },
+   {
+    "capability": "PHOTO.UPLOAD",
+    "id": "com.palm.dropbox.photos",
+    "implementation": "palm://com.palm.service.photos",
+    "onEnabled": "palm://com.palm.service.photos/onEnabled",
+    "onDelete": "palm://com.palm.service.photos/onDelete",
+    "onCredentialsChanged": "palm://com.palm.service.photos/onCredentialsChanged",
+    "__comment": "Makes the Dropbox account a photo source. implementation/hooks point at the stock Photos AGGREGATOR (com.palm.service.photos), which discovers PHOTO.UPLOAD accounts and (via templateId->serviceName in its Utils.js) calls com.palm.service.dropbox/listAlbums+listPhotos, then downloads bytes with the curl-patched Sync-Manager."
+   }
+  ]
+ },
+ {
+  "templateId": "com.palm.othermail",
+  "loc_name": "Email Account",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/com.palm.othermail/images/othermail32.png",
+   "loc_48x48": "/usr/palm/public/accounts/com.palm.othermail/images/othermail48.png"
+  },
+  "hidden": false,
+  "validator": {
+   "customUI": {
+    "appId": "com.palm.app.email",
+    "name": "accounts/wizard.html"
+   },
+   "address": "palm://com.palm.dummy/dummy"
+  },
+  "readPermissions": [],
+  "writePermissions": [],
+  "capabilityProviders": [
+   {
+    "capability": "MAIL",
+    "id": "com.palm.other.mail",
+    "icon": {
+     "loc_32x32": "/usr/palm/public/accounts/com.palm.othermail/images/othermail32.png",
+     "loc_48x48": "/usr/palm/public/accounts/com.palm.othermail/images/othermail48.png"
+    }
+   }
+  ]
+ },
+ {
+  "templateId": "com.palm.gometa",
+  "loc_name": "Facebook (E2EE)",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/com.palm.gometa/images/facebook-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/com.palm.gometa/images/facebook-48x48.png"
+  },
+  "validator": {
+   "customUI": {
+    "appId": "com.palm.app.gometa",
+    "name": "validator.html"
+   }
+  },
+  "loc_usernameLabel": "EMAIL ADDRESS",
+  "readPermissions": [
+   "com.palm.imlibpurple",
+   "com.palm.app.messaging",
+   "org.webosports.app.messaging",
+   "com.palm.app.contacts",
+   "com.palm.service.contacts",
+   "com.palm.service.contacts.linker",
+   "com.palm.app.gometa"
+  ],
+  "writePermissions": [
+   "com.palm.app.contacts",
+   "com.palm.service.contacts",
+   "com.palm.service.contacts.linker",
+   "com.palm.app.messaging",
+   "org.webosports.app.messaging",
+   "com.palm.app.gometa"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "MESSAGING",
+    "capabilitySubtype": "IM",
+    "id": "com.palm.gometa.im",
+    "alwaysOn": true,
+    "loc_shortName": "Facebook (E2EE)",
+    "icon": {
+     "loc_32x32": "/usr/palm/public/accounts/com.palm.gometa/images/facebook-32x32.png",
+     "loc_48x48": "/usr/palm/public/accounts/com.palm.gometa/images/facebook-48x48.png",
+     "splitter": "/usr/palm/public/accounts/com.palm.gometa/images/facebook-32x32.png"
+    },
+    "implementation": "palm://com.palm.imlibpurple/",
+    "onEnabled": "palm://com.palm.imlibpurple/onEnabled",
+    "onDelete": "palm://com.palm.imlibpurple/onDelete",
+    "serviceName": "type_gometa",
+    "dbkinds": {
+     "immessage": "com.palm.immessage.libpurple:1",
+     "imcommand": "com.palm.imcommand.libpurple:1"
+    },
+    "invites": {
+     "supportsCustomMessage": false
+    },
+    "groupChat": {
+     "supported": true,
+     "topicsSupported": true,
+     "invitesSupportMessages": false
+    },
+    "chatWithNonBuddies": true,
+    "authContacts": [
+     "Facebook"
+    ]
+   },
+   {
+    "capability": "CONTACTS",
+    "id": "com.palm.gometa.contacts",
+    "alwaysOn": true,
+    "implementation": "palm://com.palm.imlibpurple/",
+    "sync": "palm://com.palm.imlibpurple/sync",
+    "readOnlyData": true,
+    "db_kinds": {
+     "contact": "com.palm.contact.libpurple:1"
+    }
+   }
+  ]
+ },
+ {
+  "templateId": "com.palm.flickr",
+  "loc_name": "Flickr",
+  "loc_usernameLabel": "USERNAME",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/com.palm.flickr/images/flickr-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/com.palm.flickr/images/flickr-48x48.png"
+  },
+  "__comment": "OAuth 1.0a (HMAC-SHA1) replaces any username/password validator. customUI hosts the consent webview (like com.palm.eas / com.palm.skype); getAuthorizeUrl runs OAuth leg 1 (request_token) and returns the authorize URL + request token/secret, Atlas captures oauth_verifier from the redirect to Config.CALLBACK_URL, then exchangeCode runs leg 3 (access_token) and returns the stored token credentials. Flickr is a PHOTO source only - no DOCUMENTS capability, no files app.",
+  "validator": {
+   "customUI": {
+    "appId": "com.palm.app.flickr-auth",
+    "name": "oauth.html"
+   },
+   "address": "palm://com.palm.service.flickr/exchangeCode"
+  },
+  "onCredentialsChanged": "palm://com.palm.service.flickr/checkCredentials",
+  "__comment2": "com.palm.app.flickr-auth MUST be in write/readPermissions: createAccount runs under the customUI auth app's identity and is permission-checked against these lists (accounts/handlers/create.js -> Utils.hasPermission). Working templates (teams/telegram/skype/dropbox) list their own auth app, not com.palm.app.accounts.",
+  "__comment3": "com.palm.service.flickr is in read+writePermissions so the service itself can readCredentials(accountId) to sign photo-provider calls. Flickr OAuth 1.0a tokens do NOT expire/rotate, so writeCredentials is effectively unused after create (kept for symmetry).",
+  "readPermissions": [
+   "com.palm.app.flickr-auth",
+   "com.palm.service.flickr",
+   "org.webosports.app.photos",
+   "org.webosports.app.photos-*",
+   "com.palm.service.photos"
+  ],
+  "writePermissions": [
+   "com.palm.app.flickr-auth",
+   "com.palm.service.flickr",
+   "com.palm.service.photos"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "PHOTO.UPLOAD",
+    "id": "com.palm.flickr.photos",
+    "implementation": "palm://com.palm.service.photos",
+    "onEnabled": "palm://com.palm.service.photos/onEnabled",
+    "onDelete": "palm://com.palm.service.photos/onDelete",
+    "onCredentialsChanged": "palm://com.palm.service.photos/onCredentialsChanged",
+    "__comment": "Makes the Flickr account a photo source. implementation/hooks point at the stock Photos AGGREGATOR (com.palm.service.photos), which discovers PHOTO.UPLOAD accounts and (via a templateId->serviceName case in its Utils.js - added by photos-integration) calls com.palm.service.flickr/listAlbums+listPhotos, then downloads bytes with the curl-patched Sync-Manager. src_big is a live.staticflickr.com static URL (the id_secret pair is the capability; the curl -L fetch needs no auth header)."
+   }
+  ]
+ },
+ {
+  "templateId": "org.webosports.cdav.account.google",
+  "loc_name": "Google C+DAV",
+  "readPermissions": [
+   "org.webosports.service.cdav",
+   "org.webosports.app.contacts",
+   "org.webosports.app.messaging",
+   "com.palm.service.contacts",
+   "com.palm.service.contacts.linker",
+   "com.palm.imlibpurple",
+   "com.palm.app.contacts",
+   "com.palm.app.messaging",
+   "com.palm.app.calendar",
+   "com.palm.app.email"
+  ],
+  "writePermissions": [
+   "org.webosports.service.cdav",
+   "org.webosports.app.contacts",
+   "org.webosports.app.messaging",
+   "com.palm.app.accounts",
+   "com.palm.app.contacts",
+   "com.palm.app.messaging",
+   "com.palm.app.calendar",
+   "com.palm.app.email"
+  ],
+  "validator": {
+   "address": "palm://org.webosports.service.cdav/checkCredentials",
+   "customUI": {
+    "appId": "org.webosports.app.cdav",
+    "name": "GoogleOauth/index.html"
+   }
+  },
+  "onCredentialsChanged": "palm://org.webosports.service.cdav/onCredentialsChanged",
+  "loc_usernameLabel": "Google-Mail",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/org.webosports.cdav.account.google/images/google_32.png",
+   "loc_64x64": "/usr/palm/public/accounts/org.webosports.cdav.account.google/images/google_64.png",
+   "loc_128x128": "/usr/palm/public/accounts/org.webosports.cdav.account.google/images/google_128x128.png",
+   "loc_256x256": "/usr/palm/public/accounts/org.webosports.cdav.account.google/images/google_256x256.png"
+  },
+  "config": {
+   "name": "Google C+DAV",
+   "urlScheme": "google",
+   "url": "https://www.googleapis.com/caldav/v2"
+  },
+  "capabilityProviders": [
+   {
+    "capability": "CONTACTS",
+    "id": "org.webosports.cdav.contact",
+    "onCreate": "palm://org.webosports.service.cdav/onContactsCreate",
+    "onEnabled": "palm://org.webosports.service.cdav/onContactsEnabled",
+    "onDelete": "palm://org.webosports.service.cdav/onContactsDelete",
+    "sync": "palm://org.webosports.service.cdav/sync",
+    "loc_name": "Google Contacts",
+    "dbkinds": {
+     "contactset": "org.webosports.cdav.contactset:1",
+     "contact": "org.webosports.cdav.contact:1"
+    }
+   },
+   {
+    "capability": "CALENDAR",
+    "id": "org.webosports.cdav.calendar",
+    "onCreate": "palm://org.webosports.service.cdav/onCalendarCreate",
+    "onDelete": "palm://org.webosports.service.cdav/onCalendarDelete",
+    "onEnabled": "palm://org.webosports.service.cdav/onCalendarEnabled",
+    "sync": "palm://org.webosports.service.cdav/sync",
+    "loc_name": "Google Calendar",
+    "dbkinds": {
+     "calendar": "org.webosports.cdav.calendar:1",
+     "calendarevent": "org.webosports.cdav.calendarevent:1"
+    }
+   }
+  ]
+ },
+ {
+  "templateId": "com.palm.googlechat",
+  "loc_name": "Google Chat",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/com.palm.googlechat/images/googlechat-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/com.palm.googlechat/images/googlechat-48x48.png"
+  },
+  "validator": {
+   "customUI": {
+    "appId": "com.palm.app.googlechat",
+    "name": "validator.html"
+   }
+  },
+  "loc_usernameLabel": "EMAIL ADDRESS",
+  "readPermissions": [
+   "com.palm.imlibpurple",
+   "com.palm.app.messaging",
+   "org.webosports.app.messaging",
+   "com.palm.app.contacts",
+   "com.palm.service.contacts",
+   "com.palm.service.contacts.linker",
+   "com.palm.app.googlechat"
+  ],
+  "writePermissions": [
+   "com.palm.app.contacts",
+   "com.palm.service.contacts",
+   "com.palm.service.contacts.linker",
+   "com.palm.app.messaging",
+   "org.webosports.app.messaging",
+   "com.palm.app.googlechat"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "MESSAGING",
+    "capabilitySubtype": "IM",
+    "id": "com.palm.googlechat.im",
+    "alwaysOn": true,
+    "loc_shortName": "Google Chat",
+    "icon": {
+     "loc_32x32": "/usr/palm/public/accounts/com.palm.googlechat/images/googlechat-32x32.png",
+     "loc_48x48": "/usr/palm/public/accounts/com.palm.googlechat/images/googlechat-48x48.png",
+     "splitter": "/usr/palm/public/accounts/com.palm.googlechat/images/googlechat-32x32.png"
+    },
+    "implementation": "palm://com.palm.imlibpurple/",
+    "onEnabled": "palm://com.palm.imlibpurple/onEnabled",
+    "onDelete": "palm://com.palm.imlibpurple/onDelete",
+    "serviceName": "type_googlechat",
+    "dbkinds": {
+     "immessage": "com.palm.immessage.libpurple:1",
+     "imcommand": "com.palm.imcommand.libpurple:1"
+    },
+    "invites": {
+     "supportsCustomMessage": false
+    },
+    "groupChat": {
+     "supported": true,
+     "topicsSupported": true,
+     "invitesSupportMessages": false
+    },
+    "chatWithNonBuddies": true
+   },
+   {
+    "capability": "CONTACTS",
+    "id": "com.palm.googlechat.contacts",
+    "alwaysOn": true,
+    "implementation": "palm://com.palm.imlibpurple/",
+    "sync": "palm://com.palm.imlibpurple/sync",
+    "readOnlyData": true,
+    "db_kinds": {
+     "contact": "com.palm.contact.libpurple:1"
+    }
+   }
+  ]
+ },
+ {
+  "templateId": "com.palm.gdrive",
+  "loc_name": "Google Drive",
+  "loc_usernameLabel": "EMAIL ADDRESS",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/com.palm.gdrive/images/gdrive-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/com.palm.gdrive/images/gdrive-48x48.png"
+  },
+  "__comment": "OAuth2 replaces the dead username/password validator. customUI hosts the consent webview (like com.palm.eas / com.palm.skype); it loads OAuth2.buildAuthorizeUrl(), captures ?code= from the redirect to Config.REDIRECT_URI, then calls exchangeCode which returns the stored token credentials. DOCUMENTS-only: Google Photos is not reachable headlessly, so there is no PHOTO.UPLOAD provider.",
+  "validator": {
+   "customUI": {
+    "appId": "com.palm.app.cloud-auth",
+    "name": "oauth.html"
+   },
+   "address": "palm://com.palm.service.gdrive/exchangeCode"
+  },
+  "onCredentialsChanged": "palm://com.palm.service.gdrive/checkCredentials",
+  "__comment2": "com.palm.app.cloud-auth MUST be in write/readPermissions: createAccount runs under the customUI auth app's identity and is permission-checked against these lists (accounts/handlers/create.js -> Utils.hasPermission). Working templates (teams/telegram/skype) list their own auth app, not com.palm.app.accounts.",
+  "__comment3": "com.palm.service.gdrive is in read+writePermissions so the service itself can readCredentials(accountId) for file ops and writeCredentials back after a token refresh (accounts/handlers/credentials.js checks these lists). Google does NOT rotate the refresh token, but the write path still runs when an access token is renewed.",
+  "readPermissions": [
+   "com.palm.app.cloud-auth",
+   "com.palm.service.gdrive",
+   "org.webosports.app.documents",
+   "org.webosports.app.documents-*"
+  ],
+  "writePermissions": [
+   "com.palm.app.cloud-auth",
+   "com.palm.service.gdrive"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "DOCUMENTS",
+    "id": "com.palm.gdrive.documents",
+    "implementation": "palm://com.palm.service.gdrive/",
+    "__comment": "The file-picker app consumes listFolder/downloadFile/uploadFile. Google-native docs (Docs/Sheets/Slides) are exported to Office/PDF on download; plain files transfer as-is. Not bound to the dead QuickOffice/Google-Docs proxy."
+   }
+  ]
+ },
+ {
+  "templateId": "com.palm.hidrive",
+  "loc_name": "HiDrive",
+  "loc_usernameLabel": "EMAIL ADDRESS",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/com.palm.hidrive/images/hidrive-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/com.palm.hidrive/images/hidrive-48x48.png"
+  },
+  "__comment": "OAuth2 replaces the dead username/password validator. The shared customUI app com.palm.app.cloud-auth hosts the HiDrive consent webview; it loads OAuth2.buildAuthorizeUrl(), captures ?code= from the redirect to Config.REDIRECT_URI, then calls exchangeCode which returns the stored token credentials. HiDrive provides BOTH DOCUMENTS and PHOTO.UPLOAD.",
+  "validator": {
+   "customUI": {
+    "appId": "com.palm.app.cloud-auth",
+    "name": "oauth.html"
+   },
+   "address": "palm://com.palm.service.hidrive/exchangeCode"
+  },
+  "onCredentialsChanged": "palm://com.palm.service.hidrive/checkCredentials",
+  "__comment2": "com.palm.app.cloud-auth MUST be in write/readPermissions: createAccount runs under the customUI auth app's identity and is permission-checked against these lists.",
+  "__comment3": "com.palm.service.hidrive is in read+writePermissions so the service can readCredentials(accountId) for file ops and writeCredentials back after a token refresh (HiDrive access tokens expire hourly; the refresh token renews them).",
+  "readPermissions": [
+   "com.palm.app.cloud-auth",
+   "com.palm.service.hidrive",
+   "org.webosports.app.documents",
+   "org.webosports.app.documents-*",
+   "org.webosports.app.photos",
+   "org.webosports.app.photos-*",
+   "com.palm.service.photos"
+  ],
+  "writePermissions": [
+   "com.palm.app.cloud-auth",
+   "com.palm.service.hidrive",
+   "com.palm.service.photos"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "DOCUMENTS",
+    "id": "com.palm.hidrive.documents",
+    "implementation": "palm://com.palm.service.hidrive/",
+    "__comment": "The file-picker app and the account-derived QuickOffice reroute consume listFolder/downloadFile/uploadFile. Locators are absolute HiDrive paths under the account home; the root sentinel 'home' maps to /users/<user>."
+   },
+   {
+    "capability": "PHOTO.UPLOAD",
+    "id": "com.palm.hidrive.photos",
+    "implementation": "palm://com.palm.service.photos",
+    "onEnabled": "palm://com.palm.service.photos/onEnabled",
+    "onDelete": "palm://com.palm.service.photos/onDelete",
+    "onCredentialsChanged": "palm://com.palm.service.photos/onCredentialsChanged",
+    "__comment": "Makes the HiDrive account a photo source. The Photos aggregator calls com.palm.service.hidrive/listAlbums+listPhotos; one folder ('Camera Uploads' under home) is surfaced as one album. src_big is a '/file?path=..&access_token=..' URL fetched by the aggregator's curl (see adapter.getTemporaryLink)."
+   }
+  ]
+ },
+ {
+  "templateId": "com.palm.palmprofile",
+  "loc_name": "HP webOS Account",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/com.palm.palmprofile/images/mypalm-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/com.palm.palmprofile/images/mypalm-48x48.png"
+  },
+  "readPermissions": [
+   "com.palm.service.contacts",
+   "com.palm.app.contacts"
+  ],
+  "writePermissions": [
+   "com.palm.accountservices",
+   "com.palm.app.firstuse",
+   "org.webosports.app.firstuse"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "CONTACTS",
+    "id": "com.palm.palmprofile.contacts",
+    "refetchPhoto": "palm://com.palm.service.contacts/refetchPhoto",
+    "dbkinds": {
+     "contact": "com.palm.contact.palmprofile:1"
+    }
+   },
+   {
+    "capability": "CALENDAR",
+    "id": "com.palm.palmprofile.calendar"
+   },
+   {
+    "capability": "TASKS",
+    "id": "com.palm.palmprofile.tasks"
+   },
+   {
+    "capability": "MEMOS",
+    "id": "com.palm.palmprofile.memos"
+   },
+   {
+    "capability": "PHONE",
+    "id": "com.palm.palmprofile.voice",
+    "loc_name": "Carrier",
+    "loc_shortName": "Carrier",
+    "alwaysOn": true,
+    "icon": {
+     "loc_32x32": "/usr/palm/public/accounts/com.palm.palmprofile/images/mypalm-32x32.png",
+     "loc_48x48": "/usr/palm/public/accounts/com.palm.palmprofile/images/mypalm-48x48.png"
+    }
+   },
+   {
+    "capability": "MESSAGING",
+    "capabilitySubtype": "SMS",
+    "id": "com.palm.palmprofile.sms",
+    "loc_name": "SMS Account",
+    "loc_shortName": "Text",
+    "icon": {
+     "loc_32x32": "/usr/palm/public/accounts/com.palm.palmprofile/images/sms-32x32.png",
+     "loc_48x48": "/usr/palm/public/accounts/com.palm.palmprofile/images/sms-48x48.png",
+     "splitter": "/usr/palm/public/accounts/com.palm.palmprofile/images/sms-32x32.png"
+    }
+   },
+   {
+    "capability": "LOCAL.FILESTORAGE",
+    "id": "com.palm.palmprofile.localfilestore",
+    "icon": {
+     "loc_32x32": "/usr/palm/public/accounts/com.palm.palmprofile/images/touchpad-32x32.png"
+    }
+   }
+  ]
+ },
+ {
+  "templateId": "org.webosports.cdav.account.icloud",
+  "loc_name": "iCloud C+DAV",
+  "readPermissions": [
+   "org.webosports.service.cdav",
+   "org.webosports.app.contacts",
+   "org.webosports.app.messaging",
+   "com.palm.service.contacts",
+   "com.palm.service.contacts.linker",
+   "com.palm.imlibpurple",
+   "com.palm.app.contacts",
+   "com.palm.app.messaging",
+   "com.palm.app.calendar",
+   "com.palm.app.email"
+  ],
+  "writePermissions": [
+   "org.webosports.service.cdav",
+   "org.webosports.app.contacts",
+   "org.webosports.app.messaging",
+   "com.palm.app.accounts",
+   "com.palm.app.contacts",
+   "com.palm.app.messaging",
+   "com.palm.app.calendar",
+   "com.palm.app.email"
+  ],
+  "validator": "palm://org.webosports.service.cdav/checkCredentials",
+  "onCredentialsChanged": "palm://org.webosports.service.cdav/onCredentialsChanged",
+  "loc_usernameLabel": "AppleId",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/org.webosports.cdav.account.icloud/images/icloud_32.png",
+   "loc_64x64": "/usr/palm/public/accounts/org.webosports.cdav.account.icloud/images/icloud_64.png",
+   "loc_128x128": "/usr/palm/public/accounts/org.webosports.cdav.account.icloud/images/icloud_128x128.png",
+   "loc_256x256": "/usr/palm/public/accounts/org.webosports.cdav.account.icloud/images/icloud_256x256.png"
+  },
+  "config": {
+   "name": "iCloud",
+   "urlScheme": "icloud",
+   "url": "https://p02-contacts.icloud.com"
+  },
+  "capabilityProviders": [
+   {
+    "capability": "CONTACTS",
+    "id": "org.webosports.cdav.contact",
+    "onCreate": "palm://org.webosports.service.cdav/onContactsCreate",
+    "onEnabled": "palm://org.webosports.service.cdav/onContactsEnabled",
+    "onDelete": "palm://org.webosports.service.cdav/onContactsDelete",
+    "sync": "palm://org.webosports.service.cdav/sync",
+    "loc_name": "iCloud Contacts",
+    "dbkinds": {
+     "contactset": "org.webosports.cdav.contactset:1",
+     "contact": "org.webosports.cdav.contact:1"
+    }
+   },
+   {
+    "capability": "CALENDAR",
+    "id": "org.webosports.cdav.calendar",
+    "onCreate": "palm://org.webosports.service.cdav/onCalendarCreate",
+    "onDelete": "palm://org.webosports.service.cdav/onCalendarDelete",
+    "onEnabled": "palm://org.webosports.service.cdav/onCalendarEnabled",
+    "sync": "palm://org.webosports.service.cdav/sync",
+    "loc_name": "iCloud Calendar",
+    "dbkinds": {
+     "calendar": "org.webosports.cdav.calendar:1",
+     "calendarevent": "org.webosports.cdav.calendarevent:1"
+    }
+   }
+  ]
+ },
+ {
+  "templateId": "com.palm.imap",
+  "loc_name": "IMAP",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/com.palm.imap/images/imapmail32.png",
+   "loc_48x48": "/usr/palm/public/accounts/com.palm.imap/images/imapmail48.png"
+  },
+  "hidden": true,
+  "validator": {
+   "customUI": {
+    "appId": "com.palm.app.email",
+    "name": "accounts/wizard.html"
+   },
+   "address": "palm://com.palm.imap/validateAccount"
+  },
+  "readPermissions": [
+   "com.palm.app.email",
+   "com.palm.imap",
+   "com.palm.smtp"
+  ],
+  "writePermissions": [
+   "com.palm.app.email"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "MAIL",
+    "id": "com.palm.imap.mail",
+    "icon": {
+     "loc_32x32": "/usr/palm/public/accounts/com.palm.imap/images/imapmail32.png",
+     "loc_48x48": "/usr/palm/public/accounts/com.palm.imap/images/imapmail48.png"
+    },
+    "implementation": "palm://com.palm.imap/",
+    "onCreate": "palm://com.palm.imap/accountCreated",
+    "onDelete": "palm://com.palm.imap/accountDeleted",
+    "onEnabled": "palm://com.palm.imap/accountEnabled",
+    "onCredentialsChanged": "palm://com.palm.imap/credentialsChanged",
+    "subKind": "com.palm.imap.email:1"
+   }
+  ]
+ },
+ {
+  "templateId": "org.webosports.app.music.archive",
+  "loc_name": "Internet Archive",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/org.webosports.app.music.archive/images/archive-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/org.webosports.app.music.archive/images/archive-48x48.png"
+  },
+  "validator": {
+   "customUI": {
+    "appId": "org.webosports.app.musicauth",
+    "name": "validator.html"
+   }
+  },
+  "loc_usernameLabel": "INTERNET ARCHIVE",
+  "readPermissions": [
+   "org.webosports.app.music.service",
+   "org.webosports.app.music",
+   "org.webosports.app.musicauth"
+  ],
+  "writePermissions": [
+   "org.webosports.app.music.service",
+   "org.webosports.app.music",
+   "org.webosports.app.musicauth"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "Music",
+    "capabilitySubtype": "STREAMING",
+    "id": "org.webosports.app.music.archive.streaming",
+    "alwaysOn": true,
+    "loc_shortName": "Internet Archive",
+    "icon": {
+     "loc_32x32": "/usr/palm/public/accounts/org.webosports.app.music.archive/images/archive-32x32.png",
+     "loc_48x48": "/usr/palm/public/accounts/org.webosports.app.music.archive/images/archive-48x48.png",
+     "splitter": "/usr/palm/public/accounts/org.webosports.app.music.archive/images/archive-32x32.png"
+    }
+   }
+  ]
+ },
+ {
+  "capabilityProviders": [
+   {
+    "capability": "MESSAGING",
+    "capabilitySubtype": "IM",
+    "dbkinds": {
+     "imcommand": "com.palm.imcommand.libpurple:1",
+     "immessage": "com.palm.immessage.libpurple:1"
+    },
+    "icon": {
+     "splitter": "/usr/palm/public/accounts/org.webosports.messaging.jabber/images/jabber-32x32.png"
+    },
+    "id": "org.webosports.messaging.jabber",
+    "implementation": "palm://com.palm.imlibpurple/",
+    "onEnabled": "palm://com.palm.imlibpurple/onEnabled",
+    "onCreate": "palm://com.palm.imlibpurple/onCreate",
+    "onDelete": "palm://com.palm.imlibpurple/onDelete",
+    "readOnlyData": true,
+    "serviceName": "type_jabber"
+   }
+  ],
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/org.webosports.messaging.jabber/images/jabber-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/org.webosports.messaging.jabber/images/jabber-48x48.png"
+  },
+  "loc_explainUsernameLabel": "username",
+  "loc_name": "Jabber",
+  "loc_usernameLabel": "Jabber ID",
+  "prpl": "prpl-jabber",
+  "readPermissions": [
+   "com.palm.app.messaging",
+   "com.palm.app.contacts",
+   "com.palm.service.contacts",
+   "com.palm.service.contacts.linker",
+   "org.webosports.app.contacts",
+   "org.webosports.app.messaging",
+   "com.palm.imlibpurple"
+  ],
+  "templateId": "org.webosports.messaging.jabber",
+  "validator": {
+   "address": "palm://com.palm.imaccountvalidator/checkCredentials",
+   "customUI": {
+    "appId": "org.webosports.app.imvalidator",
+    "name": "validator.html"
+   }
+  },
+  "writePermissions": [
+   "com.palm.app.contacts",
+   "com.palm.app.messaging",
+   "org.webosports.app.contacts",
+   "org.webosports.app.messaging"
+  ]
+ },
+ {
+  "templateId": "org.webosports.app.music.jamendo",
+  "loc_name": "Jamendo",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/org.webosports.app.music.jamendo/images/jamendo-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/org.webosports.app.music.jamendo/images/jamendo-48x48.png"
+  },
+  "validator": {
+   "customUI": {
+    "appId": "org.webosports.app.musicauth",
+    "name": "validator.html"
+   }
+  },
+  "loc_usernameLabel": "JAMENDO",
+  "readPermissions": [
+   "org.webosports.app.music.service",
+   "org.webosports.app.music",
+   "org.webosports.app.musicauth"
+  ],
+  "writePermissions": [
+   "org.webosports.app.music.service",
+   "org.webosports.app.music",
+   "org.webosports.app.musicauth"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "Music",
+    "capabilitySubtype": "STREAMING",
+    "id": "org.webosports.app.music.jamendo.streaming",
+    "alwaysOn": true,
+    "loc_shortName": "Jamendo",
+    "icon": {
+     "loc_32x32": "/usr/palm/public/accounts/org.webosports.app.music.jamendo/images/jamendo-32x32.png",
+     "loc_48x48": "/usr/palm/public/accounts/org.webosports.app.music.jamendo/images/jamendo-48x48.png",
+     "splitter": "/usr/palm/public/accounts/org.webosports.app.music.jamendo/images/jamendo-32x32.png"
+    }
+   }
+  ]
+ },
+ {
+  "templateId": "com.palm.kdrive",
+  "loc_name": "kDrive",
+  "loc_usernameLabel": "EMAIL ADDRESS",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/com.palm.kdrive/images/kdrive-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/com.palm.kdrive/images/kdrive-48x48.png"
+  },
+  "__comment": "kDrive (Infomaniak) is TOKEN-based: the customUI app com.palm.app.kdrive-auth takes a personal API token (Drive scope) and calls verifyToken, which validates it and auto-discovers account_id + drive_id, returning credentials.common = {accessToken, accountId, driveId}. OAuth was ruled out - Infomaniak OAuth/OIDC only grants identity scopes and rejects `drive` (invalid_scope). validator.address points at verifyToken; the app derives the service URI from it. DOCUMENTS-only (no PHOTO.UPLOAD provider).",
+  "validator": {
+   "customUI": {
+    "appId": "com.palm.app.kdrive-auth",
+    "name": "oauth.html"
+   },
+   "address": "palm://com.palm.service.kdrive/verifyToken"
+  },
+  "onCredentialsChanged": "palm://com.palm.service.kdrive/checkCredentials",
+  "__comment2": "com.palm.app.kdrive-auth MUST be in write/readPermissions: createAccount runs under the customUI auth app's identity and is permission-checked against these lists (accounts/handlers/create.js -> Utils.hasPermission).",
+  "__comment3": "com.palm.service.kdrive is in read+writePermissions so the service can readCredentials(accountId) for file ops and writeCredentials back after an OAuth token refresh. Token-mode credentials are long-lived (no refresh).",
+  "readPermissions": [
+   "com.palm.app.kdrive-auth",
+   "com.palm.service.kdrive",
+   "org.webosports.app.documents",
+   "org.webosports.app.documents-*",
+   "org.webosports.app.photos",
+   "org.webosports.app.photos-*",
+   "com.palm.service.photos"
+  ],
+  "writePermissions": [
+   "com.palm.app.kdrive-auth",
+   "com.palm.service.kdrive",
+   "com.palm.service.photos"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "DOCUMENTS",
+    "id": "com.palm.kdrive.documents",
+    "implementation": "palm://com.palm.service.kdrive/",
+    "__comment": "The file-picker app (and the QuickOffice reroute) consume listFolder/downloadFile/uploadFile. kDrive is numeric-ID based (adapter stringifies ids for consumers); the drive-root id is 1 but is non-writable - the adapter resolves it to the private-space folder."
+   },
+   {
+    "capability": "PHOTO.UPLOAD",
+    "id": "com.palm.kdrive.photos",
+    "implementation": "palm://com.palm.service.photos",
+    "onEnabled": "palm://com.palm.service.photos/onEnabled",
+    "onDelete": "palm://com.palm.service.photos/onDelete",
+    "onCredentialsChanged": "palm://com.palm.service.photos/onCredentialsChanged",
+    "__comment": "Makes the kDrive account a photo source. implementation/hooks point at the stock Photos AGGREGATOR (com.palm.service.photos), which discovers PHOTO.UPLOAD accounts and (via the templateId->serviceName switch in its Utils.js - see ../photos-integration/) calls com.palm.service.kdrive/listAlbums+listPhotos, then downloads bytes with the curl-patched Sync-Manager. One kDrive folder (Config.PHOTO_ALBUM_NAME, default 'Pictures', under the private-space root) is surfaced as one album; src_big/src_small carry ?access_token= (kDrive has no unauthenticated pre-signed links), so the curl -L fetch needs no auth header."
+   }
+  ]
+ },
+ {
+  "templateId": "com.palm.koofr",
+  "loc_name": "Koofr",
+  "loc_usernameLabel": "EMAIL ADDRESS",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/com.palm.koofr/images/koofr-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/com.palm.koofr/images/koofr-48x48.png"
+  },
+  "__comment": "OAuth2 (Ory Hydra). The shared customUI app com.palm.app.cloud-auth hosts the Koofr consent webview; it loads OAuth2.buildAuthorizeUrl(), captures ?code= from the redirect to Config.REDIRECT_URI, then calls exchangeCode which returns the stored token credentials. The primary mount is resolved lazily by the adapter (GET /mounts). Koofr provides BOTH DOCUMENTS and PHOTO.UPLOAD.",
+  "validator": {
+   "customUI": {
+    "appId": "com.palm.app.cloud-auth",
+    "name": "oauth.html"
+   },
+   "address": "palm://com.palm.service.koofr/exchangeCode"
+  },
+  "onCredentialsChanged": "palm://com.palm.service.koofr/checkCredentials",
+  "__comment2": "com.palm.app.cloud-auth MUST be in write/readPermissions: createAccount runs under the customUI auth app's identity and is permission-checked against these lists.",
+  "__comment3": "com.palm.service.koofr is in read+writePermissions so the service can readCredentials(accountId) for file ops and writeCredentials back after a token refresh (Koofr access tokens expire; the refresh token renews them).",
+  "readPermissions": [
+   "com.palm.app.cloud-auth",
+   "com.palm.service.koofr",
+   "org.webosports.app.documents",
+   "org.webosports.app.documents-*",
+   "org.webosports.app.photos",
+   "org.webosports.app.photos-*",
+   "com.palm.service.photos"
+  ],
+  "writePermissions": [
+   "com.palm.app.cloud-auth",
+   "com.palm.service.koofr",
+   "com.palm.service.photos"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "DOCUMENTS",
+    "id": "com.palm.koofr.documents",
+    "implementation": "palm://com.palm.service.koofr/",
+    "__comment": "The file-picker app and the account-derived QuickOffice reroute consume listFolder/downloadFile/uploadFile. Locators are absolute paths within the primary mount; the root sentinel maps to the mount root '/'."
+   },
+   {
+    "capability": "PHOTO.UPLOAD",
+    "id": "com.palm.koofr.photos",
+    "implementation": "palm://com.palm.service.photos",
+    "onEnabled": "palm://com.palm.service.photos/onEnabled",
+    "onDelete": "palm://com.palm.service.photos/onDelete",
+    "onCredentialsChanged": "palm://com.palm.service.photos/onCredentialsChanged",
+    "__comment": "Makes the Koofr account a photo source. The Photos aggregator calls com.palm.service.koofr/listAlbums+listPhotos; one folder ('Camera Uploads' at the mount root) is surfaced as one album. src_big is Koofr's files/download link, fetched by the aggregator's curl."
+   }
+  ]
+ },
+ {
+  "capabilityProviders": [
+   {
+    "capability": "MESSAGING",
+    "capabilitySubtype": "IM",
+    "dbkinds": {
+     "imcommand": "com.palm.imcommand.libpurple:1",
+     "immessage": "com.palm.immessage.libpurple:1"
+    },
+    "icon": {
+     "splitter": "/usr/palm/public/accounts/org.webosports.messaging.matrix/images/matrix-32x32.png"
+    },
+    "id": "org.webosports.messaging.matrix",
+    "implementation": "palm://com.palm.imlibpurple/",
+    "onEnabled": "palm://com.palm.imlibpurple/onEnabled",
+    "onCreate": "palm://com.palm.imlibpurple/onCreate",
+    "onDelete": "palm://com.palm.imlibpurple/onDelete",
+    "readOnlyData": true,
+    "serviceName": "type_matrix"
+   }
+  ],
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/org.webosports.messaging.matrix/images/matrix-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/org.webosports.messaging.matrix/images/matrix-48x48.png"
+  },
+  "loc_explainUsernameLabel": "@id:myserver.org",
+  "loc_name": "Matrix",
+  "loc_usernameLabel": "Matrix username",
+  "prpl": "prpl-matrix",
+  "readPermissions": [
+   "com.palm.app.messaging",
+   "com.palm.app.contacts",
+   "com.palm.service.contacts",
+   "com.palm.service.contacts.linker",
+   "org.webosports.app.contacts",
+   "org.webosports.app.messaging",
+   "com.palm.imlibpurple"
+  ],
+  "templateId": "org.webosports.messaging.matrix",
+  "validator": {
+   "address": "palm://com.palm.imaccountvalidator/checkCredentials",
+   "customUI": {
+    "appId": "org.webosports.app.imvalidator",
+    "name": "validator.html"
+   }
+  },
+  "writePermissions": [
+   "com.palm.app.contacts",
+   "com.palm.app.messaging",
+   "org.webosports.app.contacts",
+   "org.webosports.app.messaging"
+  ]
+ },
+ {
+  "templateId": "com.palm.mega",
+  "loc_name": "MEGA",
+  "loc_usernameLabel": "EMAIL ADDRESS",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/com.palm.mega/images/mega-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/com.palm.mega/images/mega-48x48.png"
+  },
+  "__comment": "Mega has NO OAuth: sign-in is the account EMAIL + PASSWORD. The customUI app com.palm.app.mega-auth renders a two-field form and calls com.palm.service.mega/login, which runs the us0/us handshake and returns the stored session credentials. Unlike the OAuth connectors (shared com.palm.app.cloud-auth), Mega ships its own auth app. MEGA provides BOTH DOCUMENTS and PHOTO.UPLOAD (photo source + device->cloud upload).",
+  "validator": {
+   "customUI": {
+    "appId": "com.palm.app.mega-auth",
+    "name": "login.html"
+   },
+   "address": "palm://com.palm.service.mega/login"
+  },
+  "onCredentialsChanged": "palm://com.palm.service.mega/checkCredentials",
+  "__comment2": "com.palm.app.mega-auth MUST be in write/readPermissions: createAccount runs under the customUI auth app's identity and is permission-checked against these lists (accounts/handlers/create.js -> Utils.hasPermission).",
+  "__comment3": "com.palm.service.mega is in read+writePermissions so the service can readCredentials(accountId) for file ops and writeCredentials back (accounts/handlers/credentials.js checks these lists).",
+  "readPermissions": [
+   "com.palm.app.mega-auth",
+   "com.palm.service.mega",
+   "org.webosports.app.documents",
+   "org.webosports.app.documents-*",
+   "org.webosports.app.photos",
+   "org.webosports.app.photos-*",
+   "com.palm.service.photos"
+  ],
+  "writePermissions": [
+   "com.palm.app.mega-auth",
+   "com.palm.service.mega",
+   "com.palm.service.photos"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "DOCUMENTS",
+    "id": "com.palm.mega.documents",
+    "implementation": "palm://com.palm.service.mega/",
+    "__comment": "The file-picker app and the QuickOffice reroute consume listFolder/downloadFile/uploadFile. The reroute is account-derived (FileStore routes ANY DOCUMENTS capability implemented by a palm://com.palm.service.* URI via the generic 'modern' path, keyed on account _id), so this needs NO per-provider mxId or QuickOffice change. Locators are opaque Mega node handles; the root sentinel 'root' maps to the Cloud Drive root."
+   },
+   {
+    "capability": "PHOTO.UPLOAD",
+    "id": "com.palm.mega.photos",
+    "implementation": "palm://com.palm.service.photos",
+    "onEnabled": "palm://com.palm.service.photos/onEnabled",
+    "onDelete": "palm://com.palm.service.photos/onDelete",
+    "onCredentialsChanged": "palm://com.palm.service.photos/onCredentialsChanged",
+    "__comment": "Makes the MEGA account a photo source (and device->cloud upload target). The stock Photos aggregator (com.palm.service.photos) discovers PHOTO.UPLOAD accounts and - via the templateId->serviceName fall-through in its Utils.js (see ../photos-integration/) - calls com.palm.service.mega/listAlbums+listPhotos. One folder is surfaced as one album: 'Camera Uploads' under the Cloud Drive root. NOTE: Mega is end-to-end encrypted, so listPhotos DOWNLOADS+DECRYPTS each image to a local file and returns a file:// src_big (the aggregator's curl cannot decrypt Mega's ciphertext URLs)."
+   }
+  ]
+ },
+ {
+  "templateId": "com.palm.onedrive",
+  "loc_name": "OneDrive",
+  "loc_usernameLabel": "EMAIL ADDRESS",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/com.palm.onedrive/images/onedrive-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/com.palm.onedrive/images/onedrive-48x48.png"
+  },
+  "__comment": "OAuth2 replaces the dead username/password validator. customUI hosts the consent webview (like com.palm.eas / com.palm.skype); it loads OAuth2.buildAuthorizeUrl(), captures ?code= from the redirect to Config.REDIRECT_URI, then calls exchangeCode which returns the stored token credentials.",
+  "validator": {
+   "customUI": {
+    "appId": "com.palm.app.cloud-auth",
+    "name": "oauth.html"
+   },
+   "address": "palm://com.palm.service.onedrive/exchangeCode"
+  },
+  "onCredentialsChanged": "palm://com.palm.service.onedrive/checkCredentials",
+  "__comment2": "com.palm.app.cloud-auth MUST be in write/readPermissions: createAccount runs under the customUI auth app's identity and is permission-checked against these lists (accounts/handlers/create.js -> Utils.hasPermission). Working templates (teams/telegram/skype) list their own auth app, not com.palm.app.accounts.",
+  "__comment3": "com.palm.service.onedrive is in read+writePermissions so the service itself can readCredentials(accountId) for file ops and writeCredentials back after a token refresh - Microsoft ROTATES the refresh token on every use, so the write path runs on nearly every call (accounts/handlers/credentials.js checks these lists).",
+  "readPermissions": [
+   "com.palm.app.cloud-auth",
+   "com.palm.service.onedrive",
+   "org.webosports.app.documents",
+   "org.webosports.app.documents-*",
+   "org.webosports.app.photos",
+   "org.webosports.app.photos-*",
+   "com.palm.service.photos"
+  ],
+  "writePermissions": [
+   "com.palm.app.cloud-auth",
+   "com.palm.service.onedrive",
+   "com.palm.service.photos"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "DOCUMENTS",
+    "id": "com.palm.onedrive.documents",
+    "implementation": "palm://com.palm.service.onedrive/",
+    "__comment": "No longer bound to QuickOffice (closed/dead). The file-picker app and the QuickOffice reroute consume listFolder/downloadFile."
+   },
+   {
+    "capability": "PHOTO.UPLOAD",
+    "id": "com.palm.onedrive.photos",
+    "implementation": "palm://com.palm.service.photos",
+    "onEnabled": "palm://com.palm.service.photos/onEnabled",
+    "onDelete": "palm://com.palm.service.photos/onDelete",
+    "onCredentialsChanged": "palm://com.palm.service.photos/onCredentialsChanged",
+    "__comment": "Makes the OneDrive account a photo source. implementation/hooks point at the stock Photos AGGREGATOR (com.palm.service.photos), which discovers PHOTO.UPLOAD accounts and (via templateId->serviceName in its Utils.js) calls com.palm.service.onedrive/listAlbums+listPhotos, then downloads bytes with the curl-patched Sync-Manager. src_big is each item's @microsoft.graph.downloadUrl (pre-signed; the curl -L fetch needs no auth header)."
+   }
+  ]
+ },
+ {
+  "templateId": "com.palm.pcloud",
+  "loc_name": "pCloud",
+  "loc_usernameLabel": "EMAIL ADDRESS",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/com.palm.pcloud/images/pcloud-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/com.palm.pcloud/images/pcloud-48x48.png"
+  },
+  "__comment": "OAuth2 replaces any username/password validator. customUI hosts the consent webview (like com.palm.eas / com.palm.skype); it loads OAuth2.buildAuthorizeUrl(), captures ?code= (plus the account's data-region hostname/locationid) from the redirect to Config.REDIRECT_URI, then calls exchangeCode which does the code->token exchange ON THE REGION HOST and returns the stored token credentials (including common.apiHost).",
+  "validator": {
+   "customUI": {
+    "appId": "com.palm.app.cloud-auth",
+    "name": "oauth.html"
+   },
+   "address": "palm://com.palm.service.pcloud/exchangeCode"
+  },
+  "onCredentialsChanged": "palm://com.palm.service.pcloud/checkCredentials",
+  "__comment2": "com.palm.app.cloud-auth MUST be in write/readPermissions: createAccount runs under the customUI auth app's identity and is permission-checked against these lists (accounts/handlers/create.js -> Utils.hasPermission). Working templates (teams/telegram/skype) list their own auth app, not com.palm.app.accounts.",
+  "__comment3": "com.palm.service.pcloud is in read+writePermissions so the service itself can readCredentials(accountId) for file ops. pCloud tokens are long-lived (no refresh, no rotation), so the service does not normally write credentials back - but the write permission is kept for symmetry and future use (accounts/handlers/credentials.js checks these lists).",
+  "readPermissions": [
+   "com.palm.app.cloud-auth",
+   "com.palm.service.pcloud",
+   "org.webosports.app.documents",
+   "org.webosports.app.documents-*",
+   "org.webosports.app.photos",
+   "org.webosports.app.photos-*",
+   "com.palm.service.photos"
+  ],
+  "writePermissions": [
+   "com.palm.app.cloud-auth",
+   "com.palm.service.pcloud",
+   "com.palm.service.photos"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "DOCUMENTS",
+    "id": "com.palm.pcloud.documents",
+    "implementation": "palm://com.palm.service.pcloud/",
+    "__comment": "No longer bound to QuickOffice (closed/dead). The file-picker app and the QuickOffice reroute consume listFolder/downloadFile/uploadFile."
+   },
+   {
+    "capability": "PHOTO.UPLOAD",
+    "id": "com.palm.pcloud.photos",
+    "implementation": "palm://com.palm.service.photos",
+    "onEnabled": "palm://com.palm.service.photos/onEnabled",
+    "onDelete": "palm://com.palm.service.photos/onDelete",
+    "onCredentialsChanged": "palm://com.palm.service.photos/onCredentialsChanged",
+    "__comment": "Makes the pCloud account a photo source. implementation/hooks point at the stock Photos AGGREGATOR (com.palm.service.photos), which discovers PHOTO.UPLOAD accounts and (via templateId->serviceName in its Utils.js) calls com.palm.service.pcloud/listAlbums+listPhotos, then downloads bytes with the curl-patched Sync-Manager. src_big is each image's pCloud getfilelink temp URL (the curl fetch needs no auth header). pCloud has no album API, so one folder (folderid 0 = root by default) is surfaced as one album."
+   }
+  ]
+ },
+ {
+  "templateId": "com.palm.pop",
+  "loc_name": "POP",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/com.palm.pop/images/popmail32.png",
+   "loc_48x48": "/usr/palm/public/accounts/com.palm.pop/images/popmail48.png"
+  },
+  "hidden": true,
+  "validator": {
+   "customUI": {
+    "appId": "com.palm.app.email",
+    "name": "accounts/wizard.html"
+   },
+   "address": "palm://com.palm.pop/validateAccount"
+  },
+  "readPermissions": [
+   "com.palm.app.email",
+   "com.palm.pop",
+   "com.palm.smtp"
+  ],
+  "writePermissions": [
+   "com.palm.app.email"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "MAIL",
+    "id": "com.palm.pop.mail",
+    "implementation": "palm://com.palm.pop/",
+    "onCreate": "palm://com.palm.pop/accountCreated",
+    "onDelete": "palm://com.palm.pop/accountDeleted",
+    "onEnabled": "palm://com.palm.pop/accountEnabled",
+    "onCredentialsChanged": "palm://com.palm.pop/credentialsChanged",
+    "subKind": "com.palm.email.pop:1"
+   }
+  ]
+ },
+ {
+  "templateId": "org.webosports.app.music.qobuz",
+  "loc_name": "Qobuz",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/org.webosports.app.music.qobuz/images/qobuz-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/org.webosports.app.music.qobuz/images/qobuz-48x48.png"
+  },
+  "validator": {
+   "customUI": {
+    "appId": "org.webosports.app.musicauth",
+    "name": "validator.html"
+   }
+  },
+  "loc_usernameLabel": "QOBUZ ACCOUNT",
+  "readPermissions": [
+   "org.webosports.app.music.service",
+   "org.webosports.app.music",
+   "org.webosports.app.musicauth"
+  ],
+  "writePermissions": [
+   "org.webosports.app.music.service",
+   "org.webosports.app.music",
+   "org.webosports.app.musicauth"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "Music",
+    "capabilitySubtype": "STREAMING",
+    "id": "org.webosports.app.music.qobuz.streaming",
+    "alwaysOn": true,
+    "loc_shortName": "Qobuz",
+    "icon": {
+     "loc_32x32": "/usr/palm/public/accounts/org.webosports.app.music.qobuz/images/qobuz-32x32.png",
+     "loc_48x48": "/usr/palm/public/accounts/org.webosports.app.music.qobuz/images/qobuz-48x48.png",
+     "splitter": "/usr/palm/public/accounts/org.webosports.app.music.qobuz/images/qobuz-32x32.png"
+    }
+   }
+  ]
+ },
+ {
+  "templateId": "com.palm.s3",
+  "loc_name": "S3 Storage",
+  "loc_usernameLabel": "BUCKET",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/com.palm.s3/images/s3-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/com.palm.s3/images/s3-48x48.png"
+  },
+  "__comment": "Generic S3-compatible storage (AWS S3, IDrive e2, Backblaze B2, Wasabi, MinIO, ...). No OAuth: the customUI app com.palm.app.s3-auth collects endpoint/region/bucket/access-key/secret and calls com.palm.service.s3/login, which validates them (SigV4-signed ListObjectsV2) and returns the stored credentials. Provides BOTH DOCUMENTS and PHOTO.UPLOAD.",
+  "validator": {
+   "customUI": {
+    "appId": "com.palm.app.s3-auth",
+    "name": "login.html"
+   },
+   "address": "palm://com.palm.service.s3/login"
+  },
+  "onCredentialsChanged": "palm://com.palm.service.s3/checkCredentials",
+  "__comment2": "com.palm.app.s3-auth MUST be in write/readPermissions: createAccount runs under the customUI auth app's identity and is permission-checked against these lists.",
+  "__comment3": "com.palm.service.s3 is in read+writePermissions so the service can readCredentials(accountId) for file ops. S3 keys are static (no refresh), so the service does not normally write back, but the permission is kept for symmetry.",
+  "readPermissions": [
+   "com.palm.app.s3-auth",
+   "com.palm.service.s3",
+   "org.webosports.app.documents",
+   "org.webosports.app.documents-*",
+   "org.webosports.app.photos",
+   "org.webosports.app.photos-*",
+   "com.palm.service.photos"
+  ],
+  "writePermissions": [
+   "com.palm.app.s3-auth",
+   "com.palm.service.s3",
+   "com.palm.service.photos"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "DOCUMENTS",
+    "id": "com.palm.s3.documents",
+    "implementation": "palm://com.palm.service.s3/",
+    "__comment": "The file-picker app and the account-derived QuickOffice reroute consume listFolder/downloadFile/uploadFile. Locators are S3 keys/prefixes; the root sentinel maps to the empty prefix (bucket root)."
+   },
+   {
+    "capability": "PHOTO.UPLOAD",
+    "id": "com.palm.s3.photos",
+    "implementation": "palm://com.palm.service.photos",
+    "onEnabled": "palm://com.palm.service.photos/onEnabled",
+    "onDelete": "palm://com.palm.service.photos/onDelete",
+    "onCredentialsChanged": "palm://com.palm.service.photos/onCredentialsChanged",
+    "__comment": "Makes the S3 bucket a photo source. The Photos aggregator calls com.palm.service.s3/listAlbums+listPhotos; one prefix ('Camera Uploads/') is surfaced as one album. src_big is a short-lived PRESIGNED GET URL (SigV4 query signature), which the aggregator's curl fetches with no auth header."
+   }
+  ]
+ },
+ {
+  "templateId": "com.palm.sim",
+  "loc_name": "SIM",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/com.palm.sim/images/sim-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/com.palm.sim/images/sim-48x48.png"
+  },
+  "disableRemove": true,
+  "readPermissions": [
+   "com.palm.service.contacts",
+   "com.palm.service.contacts.linker",
+   "com.palm.service.contacts.sim",
+   "com.palm.app.contacts"
+  ],
+  "writePermissions": [
+   "com.palm.service.contacts.sim"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "CONTACTS",
+    "id": "com.palm.sim.contacts",
+    "implementation": "palm://com.palm.service.contacts.sim/",
+    "onCreate": "palm://com.palm.service.contacts.sim/onCreate",
+    "onEnabled": "palm://com.palm.service.contacts.sim/onEnabled",
+    "onDelete": "palm://com.palm.service.contacts.sim/onDelete",
+    "sync": "palm://com.palm.service.contacts.sim/sync",
+    "readOnlyData": false,
+    "db_kinds": {
+     "contact": "com.palm.contact.sim:1"
+    }
+   }
+  ]
+ },
+ {
+  "templateId": "org.webosports.app.music.soundcloud",
+  "loc_name": "SoundCloud",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/org.webosports.app.music.soundcloud/images/soundcloud-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/org.webosports.app.music.soundcloud/images/soundcloud-48x48.png"
+  },
+  "validator": {
+   "customUI": {
+    "appId": "org.webosports.app.musicauth",
+    "name": "validator.html"
+   }
+  },
+  "loc_usernameLabel": "SOUNDCLOUD",
+  "readPermissions": [
+   "org.webosports.app.music.service",
+   "org.webosports.app.music",
+   "org.webosports.app.musicauth"
+  ],
+  "writePermissions": [
+   "org.webosports.app.music.service",
+   "org.webosports.app.music",
+   "org.webosports.app.musicauth"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "Music",
+    "capabilitySubtype": "STREAMING",
+    "id": "org.webosports.app.music.soundcloud.streaming",
+    "alwaysOn": true,
+    "loc_shortName": "SoundCloud",
+    "icon": {
+     "loc_32x32": "/usr/palm/public/accounts/org.webosports.app.music.soundcloud/images/soundcloud-32x32.png",
+     "loc_48x48": "/usr/palm/public/accounts/org.webosports.app.music.soundcloud/images/soundcloud-48x48.png",
+     "splitter": "/usr/palm/public/accounts/org.webosports.app.music.soundcloud/images/soundcloud-32x32.png"
+    }
+   }
+  ]
+ },
+ {
+  "templateId": "org.webosports.app.music.spotify",
+  "loc_name": "Spotify",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/org.webosports.app.music.spotify/images/spotify-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/org.webosports.app.music.spotify/images/spotify-48x48.png"
+  },
+  "validator": {
+   "customUI": {
+    "appId": "org.webosports.app.musicauth",
+    "name": "validator.html"
+   }
+  },
+  "loc_usernameLabel": "SPOTIFY ACCOUNT",
+  "readPermissions": [
+   "org.webosports.app.music.service",
+   "org.webosports.app.music",
+   "org.webosports.app.musicauth"
+  ],
+  "writePermissions": [
+   "org.webosports.app.music.service",
+   "org.webosports.app.music",
+   "org.webosports.app.musicauth"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "Music",
+    "capabilitySubtype": "STREAMING",
+    "id": "org.webosports.app.music.spotify.streaming",
+    "alwaysOn": true,
+    "loc_shortName": "Spotify",
+    "icon": {
+     "loc_32x32": "/usr/palm/public/accounts/org.webosports.app.music.spotify/images/spotify-32x32.png",
+     "loc_48x48": "/usr/palm/public/accounts/org.webosports.app.music.spotify/images/spotify-48x48.png",
+     "splitter": "/usr/palm/public/accounts/org.webosports.app.music.spotify/images/spotify-32x32.png"
+    }
+   }
+  ]
+ },
+ {
+  "templateId": "com.palm.teams",
+  "loc_name": "Teams",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/com.palm.teams/images/teams-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/com.palm.teams/images/teams-48x48.png"
+  },
+  "validator": {
+   "customUI": {
+    "appId": "com.palm.app.teams",
+    "name": "validator.html"
+   }
+  },
+  "loc_usernameLabel": "EMAIL ADDRESS",
+  "readPermissions": [
+   "com.palm.imlibpurple",
+   "com.palm.app.messaging",
+   "org.webosports.app.messaging",
+   "com.palm.app.contacts",
+   "com.palm.service.contacts",
+   "com.palm.service.contacts.linker",
+   "com.palm.app.teams"
+  ],
+  "writePermissions": [
+   "com.palm.app.contacts",
+   "com.palm.app.messaging",
+   "org.webosports.app.messaging",
+   "com.palm.app.teams"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "MESSAGING",
+    "capabilitySubtype": "IM",
+    "id": "com.palm.teams.im",
+    "alwaysOn": true,
+    "loc_shortName": "Teams",
+    "icon": {
+     "loc_32x32": "/usr/palm/public/accounts/com.palm.teams/images/teams-32x32.png",
+     "loc_48x48": "/usr/palm/public/accounts/com.palm.teams/images/teams-48x48.png",
+     "splitter": "/usr/palm/public/accounts/com.palm.teams/images/teams-32x32.png"
+    },
+    "implementation": "palm://com.palm.imlibpurple/",
+    "onEnabled": "palm://com.palm.imlibpurple/onEnabled",
+    "onDelete": "palm://com.palm.imlibpurple/onDelete",
+    "serviceName": "type_teams",
+    "dbkinds": {
+     "immessage": "com.palm.immessage.libpurple:1",
+     "imcommand": "com.palm.imcommand.libpurple:1"
+    },
+    "invites": {
+     "supportsCustomMessage": false
+    },
+    "groupChat": {
+     "supported": true,
+     "topicsSupported": true,
+     "invitesSupportMessages": false
+    },
+    "chatWithNonBuddies": true,
+    "reactions": {
+     "supported": true,
+     "map": {
+      "&#128591;": ""
+     }
+    }
+   },
+   {
+    "capability": "CONTACTS",
+    "id": "com.palm.teams.contacts",
+    "alwaysOn": true,
+    "implementation": "palm://com.palm.imlibpurple/",
+    "sync": "palm://com.palm.imlibpurple/sync",
+    "readOnlyData": true,
+    "db_kinds": {
+     "contact": "com.palm.contact.libpurple:1"
+    }
+   },
+   {
+    "capability": "PHONE",
+    "id": "com.palm.teams.call",
+    "loc_shortName": "Teams",
+    "alwaysOn": true,
+    "implementation": "palm://com.palm.teams.call/",
+    "serviceName": "type_teams",
+    "wanAllowed": true,
+    "wifiAllowed": true,
+    "pausePrompt": false,
+    "pauseCode": [],
+    "waitCode": [],
+    "keyHoldMappings": [],
+    "videoFormat": "none"
+   }
+  ]
+ },
+ {
+  "templateId": "com.palm.telegram",
+  "loc_name": "Telegram",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/com.palm.telegram/images/telegram-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/com.palm.telegram/images/telegram-48x48.png"
+  },
+  "validator": {
+   "customUI": {
+    "appId": "com.palm.app.telegram",
+    "name": "validator.html"
+   }
+  },
+  "loc_usernameLabel": "PHONE NUMBER",
+  "readPermissions": [
+   "com.palm.imlibpurple",
+   "com.palm.app.messaging",
+   "org.webosports.app.messaging",
+   "com.palm.app.contacts",
+   "com.palm.service.contacts",
+   "com.palm.service.contacts.linker",
+   "com.palm.app.telegram"
+  ],
+  "writePermissions": [
+   "com.palm.app.contacts",
+   "com.palm.service.contacts",
+   "com.palm.service.contacts.linker",
+   "com.palm.app.messaging",
+   "org.webosports.app.messaging",
+   "com.palm.app.telegram"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "MESSAGING",
+    "capabilitySubtype": "IM",
+    "id": "com.palm.telegram.im",
+    "alwaysOn": true,
+    "loc_shortName": "Telegram",
+    "icon": {
+     "loc_32x32": "/usr/palm/public/accounts/com.palm.telegram/images/telegram-32x32.png",
+     "loc_48x48": "/usr/palm/public/accounts/com.palm.telegram/images/telegram-48x48.png",
+     "splitter": "/usr/palm/public/accounts/com.palm.telegram/images/telegram-32x32.png"
+    },
+    "implementation": "palm://com.palm.imlibpurple/",
+    "onEnabled": "palm://com.palm.imlibpurple/onEnabled",
+    "onDelete": "palm://com.palm.imlibpurple/onDelete",
+    "serviceName": "type_telegram",
+    "dbkinds": {
+     "immessage": "com.palm.immessage.libpurple:1",
+     "imcommand": "com.palm.imcommand.libpurple:1"
+    },
+    "invites": {
+     "supportsCustomMessage": false
+    },
+    "groupChat": {
+     "supported": true,
+     "topicsSupported": true,
+     "invitesSupportMessages": false
+    },
+    "chatWithNonBuddies": true,
+    "reactions": {
+     "supported": true,
+     "map": {
+      "&#128518;": "&#128513;",
+      "&#128558;": "&#128561;"
+     }
+    },
+    "authContacts": [
+     "Telegram"
+    ]
+   },
+   {
+    "capability": "CONTACTS",
+    "id": "com.palm.telegram.contacts",
+    "alwaysOn": true,
+    "implementation": "palm://com.palm.imlibpurple/",
+    "sync": "palm://com.palm.imlibpurple/sync",
+    "readOnlyData": true,
+    "db_kinds": {
+     "contact": "com.palm.contact.libpurple:1"
+    }
+   },
+   {
+    "capability": "PHONE",
+    "id": "com.palm.telegram.call",
+    "loc_shortName": "Telegram",
+    "alwaysOn": true,
+    "implementation": "palm://com.palm.telegram.call/",
+    "serviceName": "type_telegram",
+    "wanAllowed": true,
+    "wifiAllowed": true,
+    "pausePrompt": false,
+    "pauseCode": [],
+    "waitCode": [],
+    "keyHoldMappings": [],
+    "videoFormat": "none"
+   }
+  ]
+ },
+ {
+  "templateId": "org.webosports.app.music.tidal",
+  "loc_name": "Tidal",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/org.webosports.app.music.tidal/images/tidal-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/org.webosports.app.music.tidal/images/tidal-48x48.png"
+  },
+  "validator": {
+   "customUI": {
+    "appId": "org.webosports.app.musicauth",
+    "name": "validator.html"
+   }
+  },
+  "loc_usernameLabel": "TIDAL ACCOUNT",
+  "readPermissions": [
+   "org.webosports.app.music.service",
+   "org.webosports.app.music",
+   "org.webosports.app.musicauth"
+  ],
+  "writePermissions": [
+   "org.webosports.app.music.service",
+   "org.webosports.app.music",
+   "org.webosports.app.musicauth"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "Music",
+    "capabilitySubtype": "STREAMING",
+    "id": "org.webosports.app.music.tidal.streaming",
+    "alwaysOn": true,
+    "loc_shortName": "Tidal",
+    "icon": {
+     "loc_32x32": "/usr/palm/public/accounts/org.webosports.app.music.tidal/images/tidal-32x32.png",
+     "loc_48x48": "/usr/palm/public/accounts/org.webosports.app.music.tidal/images/tidal-48x48.png",
+     "splitter": "/usr/palm/public/accounts/org.webosports.app.music.tidal/images/tidal-32x32.png"
+    }
+   }
+  ]
+ },
+ {
+  "templateId": "com.palm.whatsapp",
+  "loc_name": "WhatsApp",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/com.palm.whatsapp/images/whatsapp-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/com.palm.whatsapp/images/whatsapp-48x48.png"
+  },
+  "validator": {
+   "customUI": {
+    "appId": "com.palm.app.whatsapp",
+    "name": "validator.html"
+   }
+  },
+  "loc_usernameLabel": "PHONE NUMBER",
+  "readPermissions": [
+   "com.palm.imlibpurple",
+   "com.palm.app.messaging",
+   "org.webosports.app.messaging",
+   "com.palm.app.contacts",
+   "com.palm.service.contacts",
+   "com.palm.service.contacts.linker",
+   "com.palm.app.whatsapp",
+   "com.palm.whatsapp",
+   "com.palm.app.phone"
+  ],
+  "writePermissions": [
+   "com.palm.app.contacts",
+   "com.palm.service.contacts",
+   "com.palm.service.contacts.linker",
+   "com.palm.app.messaging",
+   "org.webosports.app.messaging",
+   "com.palm.app.whatsapp",
+   "com.palm.whatsapp",
+   "com.palm.app.phone"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "MESSAGING",
+    "capabilitySubtype": "IM",
+    "id": "com.palm.whatsapp.im",
+    "alwaysOn": true,
+    "loc_shortName": "WhatsApp",
+    "icon": {
+     "loc_32x32": "/usr/palm/public/accounts/com.palm.whatsapp/images/whatsapp-32x32.png",
+     "loc_48x48": "/usr/palm/public/accounts/com.palm.whatsapp/images/whatsapp-48x48.png",
+     "splitter": "/usr/palm/public/accounts/com.palm.whatsapp/images/whatsapp-32x32.png"
+    },
+    "implementation": "palm://com.palm.imlibpurple/",
+    "onEnabled": "palm://com.palm.imlibpurple/onEnabled",
+    "onDelete": "palm://com.palm.imlibpurple/onDelete",
+    "serviceName": "type_whatsapp",
+    "dbkinds": {
+     "immessage": "com.palm.immessage.libpurple:1",
+     "imcommand": "com.palm.imcommand.libpurple:1"
+    },
+    "invites": {
+     "supportsCustomMessage": false
+    },
+    "groupChat": {
+     "supported": true,
+     "topicsSupported": true,
+     "invitesSupportMessages": false
+    },
+    "chatWithNonBuddies": true
+   },
+   {
+    "capability": "CONTACTS",
+    "id": "com.palm.whatsapp.contacts",
+    "alwaysOn": true,
+    "implementation": "palm://com.palm.imlibpurple/",
+    "sync": "palm://com.palm.imlibpurple/sync",
+    "readOnlyData": true,
+    "db_kinds": {
+     "contact": "com.palm.contact.libpurple:1"
+    }
+   },
+   {
+    "capability": "PHONE",
+    "id": "com.palm.whatsapp.call",
+    "alwaysOn": true,
+    "implementation": "palm://com.palm.whatsapp.call/",
+    "serviceName": "type_whatsapp",
+    "wanAllowed": true,
+    "wifiAllowed": true,
+    "pausePrompt": false,
+    "pauseCode": [],
+    "waitCode": [],
+    "keyHoldMappings": [],
+    "launchCode": "*#",
+    "videoFormat": "both"
+   }
+  ]
+ },
+ {
+  "templateId": "org.webosports.cdav.account.yahoo",
+  "loc_name": "Yahoo C+DAV",
+  "readPermissions": [
+   "org.webosports.service.cdav",
+   "org.webosports.app.contacts",
+   "org.webosports.app.messaging",
+   "com.palm.service.contacts",
+   "com.palm.service.contacts.linker",
+   "com.palm.imlibpurple",
+   "com.palm.app.contacts",
+   "com.palm.app.messaging",
+   "com.palm.app.calendar",
+   "com.palm.app.email"
+  ],
+  "writePermissions": [
+   "org.webosports.service.cdav",
+   "org.webosports.app.contacts",
+   "org.webosports.app.messaging",
+   "com.palm.app.accounts",
+   "com.palm.app.contacts",
+   "com.palm.app.messaging",
+   "com.palm.app.calendar",
+   "com.palm.app.email"
+  ],
+  "validator": "palm://org.webosports.service.cdav/checkCredentials",
+  "onCredentialsChanged": "palm://org.webosports.service.cdav/onCredentialsChanged",
+  "loc_usernameLabel": "Yahoo ID",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/org.webosports.cdav.account.yahoo/images/yahoo_32.png",
+   "loc_64x64": "/usr/palm/public/accounts/org.webosports.cdav.account.yahoo/images/yahoo_64.png",
+   "loc_128x128": "/usr/palm/public/accounts/org.webosports.cdav.account.yahoo/images/yahoo_128x128.png",
+   "loc_256x256": "/usr/palm/public/accounts/org.webosports.cdav.account.yahoo/images/yahoo_256x256.png"
+  },
+  "config": {
+   "name": "Yahoo",
+   "urlScheme": "yahoo",
+   "url": "https://carddav.address.yahoo.com"
+  },
+  "capabilityProviders": [
+   {
+    "capability": "CONTACTS",
+    "id": "org.webosports.cdav.contact",
+    "onCreate": "palm://org.webosports.service.cdav/onContactsCreate",
+    "onEnabled": "palm://org.webosports.service.cdav/onContactsEnabled",
+    "onDelete": "palm://org.webosports.service.cdav/onContactsDelete",
+    "sync": "palm://org.webosports.service.cdav/sync",
+    "loc_name": "Yahoo Contacts",
+    "dbkinds": {
+     "contactset": "org.webosports.cdav.contactset:1",
+     "contact": "org.webosports.cdav.contact:1"
+    }
+   },
+   {
+    "capability": "CALENDAR",
+    "id": "org.webosports.cdav.calendar",
+    "onCreate": "palm://org.webosports.service.cdav/onCalendarCreate",
+    "onDelete": "palm://org.webosports.service.cdav/onCalendarDelete",
+    "onEnabled": "palm://org.webosports.service.cdav/onCalendarEnabled",
+    "sync": "palm://org.webosports.service.cdav/sync",
+    "loc_name": "Yahoo Calendar",
+    "dbkinds": {
+     "calendar": "org.webosports.cdav.calendar:1",
+     "calendarevent": "org.webosports.cdav.calendarevent:1"
+    }
+   }
+  ]
+ },
+ {
+  "templateId": "com.palm.yandexdisk",
+  "loc_name": "Yandex Disk",
+  "loc_usernameLabel": "EMAIL ADDRESS",
+  "icon": {
+   "loc_32x32": "/usr/palm/public/accounts/com.palm.yandexdisk/images/yandexdisk-32x32.png",
+   "loc_48x48": "/usr/palm/public/accounts/com.palm.yandexdisk/images/yandexdisk-48x48.png"
+  },
+  "__comment": "OAuth2 replaces the dead username/password validator. customUI hosts the consent webview (like com.palm.eas / com.palm.skype); it loads OAuth2.buildAuthorizeUrl(), captures ?code= from the redirect to Config.REDIRECT_URI, then calls exchangeCode which returns the stored token credentials. Yandex Disk provides BOTH DOCUMENTS and PHOTO.UPLOAD (photo source + device->cloud upload).",
+  "validator": {
+   "customUI": {
+    "appId": "com.palm.app.cloud-auth",
+    "name": "oauth.html"
+   },
+   "address": "palm://com.palm.service.yandexdisk/exchangeCode"
+  },
+  "onCredentialsChanged": "palm://com.palm.service.yandexdisk/checkCredentials",
+  "__comment2": "com.palm.app.cloud-auth MUST be in write/readPermissions: createAccount runs under the customUI auth app's identity and is permission-checked against these lists (accounts/handlers/create.js -> Utils.hasPermission). Working templates (teams/telegram/skype) list their own auth app, not com.palm.app.accounts.",
+  "__comment3": "com.palm.service.yandexdisk is in read+writePermissions so the service itself can readCredentials(accountId) for file ops and writeCredentials back after a token refresh (accounts/handlers/credentials.js checks these lists).",
+  "readPermissions": [
+   "com.palm.app.cloud-auth",
+   "com.palm.service.yandexdisk",
+   "org.webosports.app.documents",
+   "org.webosports.app.documents-*",
+   "org.webosports.app.photos",
+   "org.webosports.app.photos-*",
+   "com.palm.service.photos"
+  ],
+  "writePermissions": [
+   "com.palm.app.cloud-auth",
+   "com.palm.service.yandexdisk",
+   "com.palm.service.photos"
+  ],
+  "capabilityProviders": [
+   {
+    "capability": "DOCUMENTS",
+    "id": "com.palm.yandexdisk.documents",
+    "implementation": "palm://com.palm.service.yandexdisk/",
+    "__comment": "No longer bound to QuickOffice (closed/dead). The file-picker app and the QuickOffice reroute (mxId 'yandex') consume listFolder/downloadFile/uploadFile."
+   },
+   {
+    "capability": "PHOTO.UPLOAD",
+    "id": "com.palm.yandexdisk.photos",
+    "implementation": "palm://com.palm.service.photos",
+    "onEnabled": "palm://com.palm.service.photos/onEnabled",
+    "onDelete": "palm://com.palm.service.photos/onDelete",
+    "onCredentialsChanged": "palm://com.palm.service.photos/onCredentialsChanged",
+    "__comment": "Makes the Yandex Disk account a photo source (and device->cloud upload target). implementation/hooks point at the stock Photos AGGREGATOR (com.palm.service.photos), which discovers PHOTO.UPLOAD accounts and - via the templateId->serviceName fall-through in its Utils.js (see ../photos-integration/) - calls com.palm.service.yandexdisk/listAlbums+listPhotos, then downloads bytes with the curl-patched Sync-Manager. One folder is surfaced as one album: Yandex's own camera-uploads folder (system_folders.photostream) when it exists, else Config.PHOTO_ALBUM_NAME ('Pictures'). Like Dropbox, src_big/src_small are short-lived signed /resources/download hrefs (self-authenticating, so the curl -L fetch needs no auth header)."
+   }
+  ]
+ }
+]
