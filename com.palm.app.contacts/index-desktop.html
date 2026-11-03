@@ -23,34 +23,8 @@ limitations under the License.
 </head>
 <body>
 <script type="text/javascript">
-    if (window.PalmSystem && enyo.windowParams.runTests === true) {
-        // luna-send -n 1 palm://com.palm.applicationManager/launch '{"id":"com.palm.app.contacts","params":{"runTests":true}}'
-
-        /*
-         loadjscssfile("../../frameworks/jasmine/jasmine.css", "css");
-         loadjscssfile("../../frameworks/jasmine/jasmine.js",	"js");
-         loadjscssfile("../../frameworks/jasmine/jasmine-html.js", "js");
-
-         var i;
-         for (i = 0; i < specsToTest.length; i++) {
-         //console.log("Loading specs file: " + specsToTest[i]);
-         loadjscssfile(specsToTest[i], "js");
-         }
-         */
-
-        var testsPathsToImport = [
-            "tests/TestUtils.js"
-        ];
-        enyo.depends.apply(this, testsPathsToImport);
-
-        ContactsApplication = new ContactsApp();
-        ContactsApplication.renderInto(document.body);
-
-        setTimeout("execTests()", 100);
-    } else {
-        appLaunch = new AppLaunch();
-        appLaunch.checkFirstLaunch();
-    }
+    appLaunch = new AppLaunch();
+    appLaunch.checkFirstLaunch();
 
     function startTheApp() {
         ContactsApplication = new ContactsApp();
@@ -69,41 +43,6 @@ limitations under the License.
         contactsFirstUse = new contactsFirstUse();
         contactsFirstUse.renderInto(document.body);
     }
-
-    function execTests() {
-        /*
-         jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
-         jasmine.getEnv().execute();
-         */
-
-        var winParams = {
-            window              : "card",
-            splashbackgroundname: "./splash.png"
-        };
-        enyo.windows.openWindow("jasminerunner.html", "ContactsApp - Test", {contactsApp: ContactsApplication}, winParams);
-    }
-
-    /*
-     function loadjscssfile(filename, filetype) {
-     var fileref;
-     if (filetype === "js") { //if filename is a external JavaScript file
-     fileref = document.createElement("script");
-     fileref.setAttribute("type", "text/javascript");
-     fileref.setAttribute("src", filename);
-     }
-     else if (filetype === "css") { //if filename is an external CSS file
-     fileref = document.createElement("link");
-     fileref.setAttribute("rel", "stylesheet");
-     fileref.setAttribute("type", "text/css");
-     fileref.setAttribute("href", filename);
-     }
-
-     if (typeof fileref !== undefined) {
-     document.getElementsByTagName("head")[0].appendChild(fileref)
-     }
-     }
-     */
-
 </script>
 </body>
 </html>
