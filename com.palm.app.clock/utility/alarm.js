@@ -137,6 +137,16 @@ enyo.kind(
 				
 				case "ring":
 					
+					// An alarm switched off whose activity was still
+					// left scheduled (clearing it used to fail) is
+					// dropped instead of rung.
+					if(!this.objAlarmRecord.enabled)
+					{
+						this.log("alarm is switched off, not ringing");
+						this.$.activityManager.clearAlarmTimeout(this.objAlarmRecord);
+						break;
+					}
+					
 					this.getRingerSwitch(enyo.bind(this, "ringAlarm"));
 					break;
 				
