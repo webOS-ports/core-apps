@@ -1,0 +1,16 @@
+{
+  "name": "core-apps-tests",
+  "private": true,
+  "description": "Tests for the core-apps: each app's real pages and the real Enyo 1 framework in jsdom, with a fake luna bus",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test --test-reporter=spec \"tests/harness/*.test.js\" \"com.palm.app.*/tests/**/*.test.js\"",
+    "coverage": "node --test --experimental-test-coverage --test-coverage-include=\"com.palm.app.*/**/*.js\" --test-coverage-exclude=\"**/tests/**\" \"com.palm.app.*/tests/**/*.test.js\""
+  },
+  "devDependencies": {
+    "jsdom": "29.1.1"
+  }
+}

@@ -21,6 +21,11 @@ Core-apps have the following dependencies:
 
 * app-services https://github.com/openwebos/app-services are the services for the core applications contained in Open webOS 1.0. Services include both NodeJS services and C++ services.
 
+## Tests
+
+The apps are tested in Node with jsdom, against Enyo 1.0 and a fake luna bus:
+`npm install && npm test`. See [tests/README.md](tests/README.md).
+
 ## Limitations
 
 Note: The following limitations apply to this July 2012 Beta release. Additional functionality will be supported in the future.
