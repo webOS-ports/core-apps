@@ -24,6 +24,10 @@ enyo.kind({
 	flex:1,
 	capability: undefined,
 	components: [
+		// A relaunch of the running app (another app's "Add account" button, the credentials
+		// dashboard) is only delivered as an event: enyo does not call a component's
+		// applicationRelaunchHandler by name, only enyo's and enyo.application's.
+		{kind: "ApplicationEvents", onApplicationRelaunch: "applicationRelaunchHandler"},
 		// The first view shows "Loading Accounts ..."
 		{kind: "VFlexBox", name: "loadingAccounts", className:"enyo-bg", components: [
 		{kind:"Toolbar", className:"enyo-toolbar-light accounts-header", pack:"center", components: [
@@ -112,7 +116,10 @@ enyo.kind({
 		// launch params directly here; onAccountsAvailable() acts on them once the account list loads.
 		try {
 			var lp = (window.PalmSystem && PalmSystem.launchParams) ? enyo.json.parse(PalmSystem.launchParams) : null;
-			if (lp && lp.accountId) {
+			if (lp && lp.launchType === "add") {
+				this.addOnLaunch = true;
+			}
+			else if (lp && lp.accountId) {
 				if (lp.launchType === "modifyAccount") {
 					console.log("Accounts app: deep-link modify account " + lp.accountId);
 					this.modifyAccountId = lp.accountId;
@@ -158,7 +165,13 @@ enyo.kind({
 		// enyo may invoke this as (params) [enyo.call convention, params is the first arg] or as
 		// (inSender, {params}) [ApplicationEvents convention]. Read whichever form arrived.
 		var p = (inEvent && inEvent.params) || (inSender && inSender.params) || inSender || {};
-		if (p && p.launchType === "changelogin" && p.accountId) {
+		if (p && p.launchType === "add") {
+			if (this.templates)
+				this.AddAccount();
+			else
+				this.addOnLaunch = true;
+		}
+		else if (p && p.launchType === "changelogin" && p.accountId) {
 			console.log("Accounts app: Change credentials for " + p.accountId);
 			
 			// Are the accounts available?
@@ -265,6 +278,15 @@ enyo.kind({
 				}
 			}
 		}
+		else if (this.addOnLaunch) {
+			// Launched to add an account: straight to the Add Account list. Once that is done or
+			// cancelled, accountsDone() comes back to the accounts list as for the button. The
+			// caller's capability is not passed on: the list shows every template either way, and
+			// AccountsUI would keep it for later taps of "Add an Account" too.
+			delete this.addOnLaunch;
+			this.AddAccount();
+			setTimeout(enyo.bind(this, "PrepareViews"), 500);
+		}
 		else {
 			// Go to the Accounts view, if the current view is "Loading Accounts"
 			if (this.getViewName() === "loadingAccounts") {
@@ -283,7 +305,7 @@ enyo.kind({
 		this.validateView("AccountsModify");
 	},
 
-	// "Add Account" button was tapped
+	// "Add Account" button was tapped, or the app was launched with launchType "add"
 	AddAccount: function(button) {
 		this.selectViewByName("AccountsView");
 		this.$.AccountsView.AddAccount(this.templates);
