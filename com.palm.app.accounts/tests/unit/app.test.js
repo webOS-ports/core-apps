@@ -77,6 +77,49 @@ describe("Accounts", () => {
 		assert.doesNotMatch(text(manager().$.accountsList), /SIM/);
 	});
 
+	// Messaging (and other apps) open Accounts with {capability, launchType: "add"} from their
+	// "Add account" buttons, expecting the Add Account list rather than the accounts list.
+	it("opens the Add Account list when launched to add an account", async () => {
+		page.env.luna.db.seed([PROFILE]);
+		page.env.launch({capability: "MESSAGING", launchType: "add"});
+		await page.env.settle();
+
+		assert.equal(manager().getViewName(), "AccountsView");
+		assert.match(text(manager().$.AccountsView), /Telegram/);
+	});
+
+	it("opens the Add Account list when it is already running", async () => {
+		await launch();
+		assert.equal(manager().getViewName(), "prefsAndAccounts");
+
+		page.env.launch({capability: "MESSAGING", launchType: "add"});
+		await page.env.settle();
+
+		assert.equal(manager().getViewName(), "AccountsView");
+		assert.match(text(manager().$.AccountsView), /Telegram/);
+	});
+
+	it("comes back to the accounts list from an Add Account launch", async () => {
+		page.env.luna.db.seed([PROFILE]);
+		page.env.launch({launchType: "add"});
+		await page.env.settle();
+
+		manager().accountsDone();
+		await page.env.settle();
+
+		assert.equal(manager().getViewName(), "prefsAndAccounts");
+		assert.equal(manager().$.getAccountsSpinner.getShowing(), false);
+	});
+
+	it("opens an account's settings when it is already running and asked to modify one", async () => {
+		await launch(account("mail", "com.palm.imap", "me@example.org"));
+
+		page.env.launch({launchType: "modifyAccount", accountId: "mail"});
+		await page.env.settle();
+
+		assert.equal(manager().getViewName(), "AccountsModify");
+	});
+
 	it("leaves out accounts that are being deleted", async () => {
 		await launch(account("gone", "com.palm.imap", "gone@example.org", {beingDeleted: true}));
 
@@ -85,7 +128,7 @@ describe("Accounts", () => {
 });
 
 describe("Accounts without a profile account", () => {
-	it("launches", {todo: "onAccountsAvailable reads palmProfileAccount.username without checking there is one (source/AccountManager.js:225); every device has one"}, async () => {
+	it("launches", {todo: "onAccountsAvailable reads palmProfileAccount.username without checking there is one (source/AccountManager.js:238); every device has one"}, async () => {
 		const env = boot({app: "com.palm.app.accounts"});
 		env.launch({});
 		await env.settle();
