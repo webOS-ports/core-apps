@@ -161,12 +161,12 @@ enyo.kind({
     launchHelp: function launchHelp() {
         this.$.startApp.call({
             id    : "com.palm.app.help",
-            params: { target: "http://help.palm.com/calendar/index.html" }
+            params: { target: "https://help.luneos.org/calendar/index.html" }
         });
         // Try this if the help app doesn't work:
         // this.$.startApp.call (
         // {	id		: "com.palm.app.browser"
-        // ,	params	: { scene: "page", url: "http://help.palm.com/calendar/index.html" }
+        // ,	params	: { scene: "page", url: "https://help.luneos.org/calendar/index.html" }
         // });
     },
 

@@ -46,7 +46,7 @@ enyo.kind({
                                    // {caption: $L("Toggle Size"), onclick: "toggleSize"}, 
                                    {caption: $L("Copy"), onclick: "copyFromDisplay"},
                                    {caption: $L("Paste"), onclick: "pasteToDisplay"},
-                                   {kind: "HelpMenu", target: "http://help.palm.com/calculator/index.html"}
+                                   {kind: "HelpMenu", target: "https://help.luneos.org/calculator/index.html"}
                                   ]}
                      ],
         statics: {

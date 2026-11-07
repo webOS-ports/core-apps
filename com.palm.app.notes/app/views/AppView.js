@@ -52,7 +52,7 @@ enyo.kind({
       components: [
         {
           kind: "HelpMenu",
-          target: "http://help.palm.com/notes/index.html"
+          target: "https://help.luneos.org/memos/index.html"
         }
       ]
     }
