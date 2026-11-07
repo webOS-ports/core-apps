@@ -51,7 +51,7 @@ enyo.kind({
         ]},
         {name: "appMenu", kind: "AppMenu", components: [
             {caption: $L("Preferences & Accounts"), onclick: "preferencesClick"},
-            {kind: enyo.HelpMenu, target: 'http://help.palm.com/contacts/index.json'}
+            {kind: enyo.HelpMenu, target: 'https://help.luneos.org/contacts/index.html'}
         ]},
         {kind: "ApplicationEvents", onUnload: "unloadHandler"},
         {name: "AddToContactsDialog", kind: "AddToContactsDialog"},

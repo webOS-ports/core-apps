@@ -597,7 +597,7 @@ enyo.kind({
         this.selectViewByName("masterSettings");
     },
     showHelp: function () {
-        var url = "http://help.palm.com/email/index.html";
+        var url = "https://help.luneos.org/email/index.html";
         EmailApp.Util.callService("palm://com.palm.applicationManager/open",
             {id: "com.palm.app.help", params: {target: url}});
     },

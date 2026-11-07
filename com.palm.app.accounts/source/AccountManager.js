@@ -86,7 +86,7 @@ enyo.kind({
 		{kind:"VFlexBox", components: [
 			{name: "appMenu", kind: "AppMenu", components: [
 				{name: "deleteDataMenuItem", caption: $L("Delete Account Data"), onclick: "showRetainedData", showing: false},
-				{kind: "HelpMenu", target: "http://help.palm.com/accountsmgr/index.html"}
+				{kind: "HelpMenu", target: "https://help.luneos.org/accounts/index.html"}
 			]},
 		]},
 		

@@ -47,7 +47,7 @@ enyo.kind({
 		]},
 		{kind: "AppMenu", components: [
 			{caption: $L("Preferences"), onclick: "onclick_prefs"},
-			{kind: "HelpMenu", target: "http://help.palm.com/clock/index.html"}
+			{kind: "HelpMenu", target: "https://help.luneos.org/clock/index.html"}
 		]}
 	],
 	
