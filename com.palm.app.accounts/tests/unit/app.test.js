@@ -53,11 +53,65 @@ describe("Accounts", () => {
 		assert.match(manager().$.profileIcon.src, /\/usr\/palm\/public\/accounts\/com\.palm\.palmprofile\/images\//);
 	});
 
-	it("keeps the profile editor disabled, as LuneOS has no profile service", async () => {
+	it("keeps the profile editor disabled, and calls it the Local Account, with no profile service", async () => {
 		await launch();
 
 		assert.equal(page.env.luna.callsTo("luna://com.palm.accountservices/getAccountToken").length, 1);
 		assert.equal(manager().$.palmProfileItem.getDisabled(), true);
+		assert.equal(manager().$.palmProfileGroup.getCaption(), "Local Account");
+	});
+
+	// org.webosports.service.communityaccount answers as com.palm.accountservices.
+	it("calls it the Community Account, and lets it be edited, once one is signed in", async () => {
+		page.env.luna.on("luna://com.palm.accountservices/getAccountToken", () => ({returnValue: true,
+			accountAlias: "user@example.org", accountUsername: "user@example.org", token: "TK", accountState: "ACTIVE"}));
+		await launch();
+
+		assert.equal(manager().$.palmProfileGroup.getCaption(), "Community Account");
+		assert.equal(manager().$.palmProfileItem.getDisabled(), false);
+	});
+
+	it("calls it the Local Account when the service is there but nobody is signed in", async () => {
+		page.env.luna.on("luna://com.palm.accountservices/getAccountToken", () => ({returnValue: false,
+			errorCode: "NO_TOKEN", errorText: "not signed in to a Community Account"}));
+		await launch();
+
+		assert.equal(manager().$.palmProfileGroup.getCaption(), "Local Account");
+		assert.equal(manager().$.palmProfileItem.getDisabled(), true);
+	});
+
+	it("calls it the Local Account on an answer with no token", async () => {
+		page.env.luna.on("luna://com.palm.accountservices/getAccountToken", () => ({returnValue: true}));
+		await launch();
+
+		assert.equal(manager().$.palmProfileGroup.getCaption(), "Local Account");
+		assert.equal(manager().$.palmProfileItem.getDisabled(), true);
+	});
+
+	// The bus refused the call when the app lacked the service's group, and the app said
+	// "Local Account" with a Community Account signed in.
+	// The groups are the service's (com.palm.accountservices.api.json): getAccountToken is in
+	// accountservices.query; signOut, updateUsername and the other profile calls are in
+	// accountservices.operation; getDeviceProfile, the profile editor's first call, is in
+	// deviceprofile.query (refused, the editor showed only its network error).
+	it("asks for the permission groups the profile service's methods are in", () => {
+		const appinfo = JSON.parse(require("node:fs").readFileSync(require("node:path").join(__dirname, "../../appinfo.json"), "utf8"));
+		assert.ok(appinfo.requiredPermissions.includes("accountservices.query"));
+		assert.ok(appinfo.requiredPermissions.includes("accountservices.operation"));
+		assert.ok(appinfo.requiredPermissions.includes("deviceprofile.query"));
+	});
+
+	// Nothing on LuneOS uses any of the profile account's capabilities, so the profile shows
+	// no "USE ACCOUNT WITH" group: its one switch (App data storage) could not be changed and
+	// did nothing, and read as broken.
+	it("shows no USE ACCOUNT WITH group in the Community Account profile", async () => {
+		await launch();
+		const profile = page.env.enyo.create({kind: "MyApps.PalmID.Profile"});
+		profile.populateAppList(PROFILE.capabilityProviders);
+		assert.ok(PROFILE.capabilityProviders.some((c) => c.capability === "LOCAL.FILESTORAGE"));
+		assert.equal(profile.$.appList.getShowing(), false);
+		assert.equal(profile.$.appList.getControls().length, 0);
+		profile.destroy();
 	});
 
 	it("lists the other accounts, and hides the SIM group when there is no SIM account", async () => {

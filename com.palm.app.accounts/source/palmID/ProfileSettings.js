@@ -351,9 +351,13 @@ enyo.kind({
 		
 	// Which of the account's capabilityProviders to actually show. The local
 	// account still declares all seven (see palm_profile_util's createLocalAccount),
-	// but only app data storage is backed by anything today — listing the rest
-	// promised syncing we do not do. Uncomment a line to bring one back once it
-	// has a real implementation behind it.
+	// but nothing syncs any of them — listing them promised syncing we do not do.
+	// With none listed the USE ACCOUNT WITH group is hidden (populateAppList).
+	// Uncomment a line to bring one back once it has a real implementation behind it.
+	//
+	// LuneOS: app data storage is gone as well. It is HP's LOCAL.FILESTORAGE, the
+	// device as a place for files (HP's Photos listed it beside upload accounts);
+	// nothing on LuneOS reads it, and its switch, locked on, read as broken.
 	SHOWN_CAPABILITIES: [
 		// "CONTACTS",
 		// "CALENDAR",
@@ -361,7 +365,7 @@ enyo.kind({
 		// "MEMOS",
 		// "MESSAGING",          // shows as "SMS Account"
 		// "PHONE",              // shows as "Carrier"
-		"LOCAL.FILESTORAGE"
+		// "LOCAL.FILESTORAGE"   // shows as "App data storage"
 	],
 
 	// Labels we override rather than take from AccountsUtil's framework map.

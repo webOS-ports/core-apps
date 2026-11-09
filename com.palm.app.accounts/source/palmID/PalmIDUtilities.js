@@ -41,9 +41,9 @@
 
 	"PAMS9998": $L("The United States Government prohibits HP from allowing you to use this email address to set up a webOS account."),
 	"ACCCOUNT_EXPANDED_INVALIDEMAIL": $L("The United States Government restricts exports to certain countries, including the country where your email address domain is issued. You can visit www.palm.com/us/company/legal for additional information."),
-	"ACCOUNT_NOT_DEFINED_ERROR" : $L("We were unable to locate your account information. Visit http://hpwebos.com/support for more information."),
+	"ACCOUNT_NOT_DEFINED_ERROR" : $L("We were unable to locate your account information. Sign in to your Community Account again."),
 
-	"-9999": $L("Must be connected to a network to communicate with HP's Cloud Services. Check your network connection, or try again."),
+	"-9999": $L("Must be connected to a network to reach the Community Account server. Check your network connection, or try again."),
 
 	"USERNAME_TAKEN": $L("That username is already taken."),
 	"USERNAME_INVALID": $L("Usernames are 3-32 characters: letters, numbers, and . _ - only, starting with a letter or number."),
