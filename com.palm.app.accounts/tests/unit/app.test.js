@@ -92,11 +92,13 @@ describe("Accounts", () => {
 	// "Local Account" with a Community Account signed in.
 	// The groups are the service's (com.palm.accountservices.api.json): getAccountToken is in
 	// accountservices.query; signOut, updateUsername and the other profile calls are in
-	// accountservices.operation.
+	// accountservices.operation; getDeviceProfile, the profile editor's first call, is in
+	// deviceprofile.query (refused, the editor showed only its network error).
 	it("asks for the permission groups the profile service's methods are in", () => {
 		const appinfo = JSON.parse(require("node:fs").readFileSync(require("node:path").join(__dirname, "../../appinfo.json"), "utf8"));
 		assert.ok(appinfo.requiredPermissions.includes("accountservices.query"));
 		assert.ok(appinfo.requiredPermissions.includes("accountservices.operation"));
+		assert.ok(appinfo.requiredPermissions.includes("deviceprofile.query"));
 	});
 
 	it("lists the other accounts, and hides the SIM group when there is no SIM account", async () => {

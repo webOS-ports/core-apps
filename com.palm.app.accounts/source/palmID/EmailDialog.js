@@ -71,7 +71,7 @@ enyo.kind({
     {
         kind: "ModalDialog", lazy: false, 
         name: "verifyEmailDialog",
-		caption: $L("Verify Email"),
+		caption: $L("Email Changed"),
         dismissWithClick: false,
         modal: true,
         components: [{
@@ -180,7 +180,7 @@ enyo.kind({
         
 		this.sentCallback();
 
-        var template = new enyo.g11n.Template($L("Please respond to the verification email sent to #{email} from Palm_Inc@email.palmnewsletters.com. The new email address will not be updated until it has been verified."));
+        var template = new enyo.g11n.Template($L("Your Community Account now uses #{email}. Sign in with it from now on."));
         this.$.verifyText.setContent(template.evaluate({
             email: enyo.string.escapeHtml(this.email)
         }));
