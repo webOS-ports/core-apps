@@ -90,8 +90,12 @@ describe("Accounts", () => {
 
 	// The bus refused the call when the app lacked the service's group, and the app said
 	// "Local Account" with a Community Account signed in.
-	it("asks for the permission group the profile service's methods are in", () => {
+	// The groups are the service's (com.palm.accountservices.api.json): getAccountToken is in
+	// accountservices.query; signOut, updateUsername and the other profile calls are in
+	// accountservices.operation.
+	it("asks for the permission groups the profile service's methods are in", () => {
 		const appinfo = JSON.parse(require("node:fs").readFileSync(require("node:path").join(__dirname, "../../appinfo.json"), "utf8"));
+		assert.ok(appinfo.requiredPermissions.includes("accountservices.query"));
 		assert.ok(appinfo.requiredPermissions.includes("accountservices.operation"));
 	});
 
