@@ -101,6 +101,19 @@ describe("Accounts", () => {
 		assert.ok(appinfo.requiredPermissions.includes("deviceprofile.query"));
 	});
 
+	// Nothing on LuneOS uses any of the profile account's capabilities, so the profile shows
+	// no "USE ACCOUNT WITH" group: its one switch (App data storage) could not be changed and
+	// did nothing, and read as broken.
+	it("shows no USE ACCOUNT WITH group in the Community Account profile", async () => {
+		await launch();
+		const profile = page.env.enyo.create({kind: "MyApps.PalmID.Profile"});
+		profile.populateAppList(PROFILE.capabilityProviders);
+		assert.ok(PROFILE.capabilityProviders.some((c) => c.capability === "LOCAL.FILESTORAGE"));
+		assert.equal(profile.$.appList.getShowing(), false);
+		assert.equal(profile.$.appList.getControls().length, 0);
+		profile.destroy();
+	});
+
 	it("lists the other accounts, and hides the SIM group when there is no SIM account", async () => {
 		await launch(account("mail", "com.palm.imap", "me@example.org"));
 
