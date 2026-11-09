@@ -53,11 +53,46 @@ describe("Accounts", () => {
 		assert.match(manager().$.profileIcon.src, /\/usr\/palm\/public\/accounts\/com\.palm\.palmprofile\/images\//);
 	});
 
-	it("keeps the profile editor disabled, as LuneOS has no profile service", async () => {
+	it("keeps the profile editor disabled, and calls it the Local Account, with no profile service", async () => {
 		await launch();
 
 		assert.equal(page.env.luna.callsTo("luna://com.palm.accountservices/getAccountToken").length, 1);
 		assert.equal(manager().$.palmProfileItem.getDisabled(), true);
+		assert.equal(manager().$.palmProfileGroup.getCaption(), "Local Account");
+	});
+
+	// org.webosports.service.communityaccount answers as com.palm.accountservices.
+	it("calls it the Community Account, and lets it be edited, once one is signed in", async () => {
+		page.env.luna.on("luna://com.palm.accountservices/getAccountToken", () => ({returnValue: true,
+			accountAlias: "user@example.org", accountUsername: "user@example.org", token: "TK", accountState: "ACTIVE"}));
+		await launch();
+
+		assert.equal(manager().$.palmProfileGroup.getCaption(), "Community Account");
+		assert.equal(manager().$.palmProfileItem.getDisabled(), false);
+	});
+
+	it("calls it the Local Account when the service is there but nobody is signed in", async () => {
+		page.env.luna.on("luna://com.palm.accountservices/getAccountToken", () => ({returnValue: false,
+			errorCode: "NO_TOKEN", errorText: "not signed in to a Community Account"}));
+		await launch();
+
+		assert.equal(manager().$.palmProfileGroup.getCaption(), "Local Account");
+		assert.equal(manager().$.palmProfileItem.getDisabled(), true);
+	});
+
+	it("calls it the Local Account on an answer with no token", async () => {
+		page.env.luna.on("luna://com.palm.accountservices/getAccountToken", () => ({returnValue: true}));
+		await launch();
+
+		assert.equal(manager().$.palmProfileGroup.getCaption(), "Local Account");
+		assert.equal(manager().$.palmProfileItem.getDisabled(), true);
+	});
+
+	// The bus refused the call when the app lacked the service's group, and the app said
+	// "Local Account" with a Community Account signed in.
+	it("asks for the permission group the profile service's methods are in", () => {
+		const appinfo = JSON.parse(require("node:fs").readFileSync(require("node:path").join(__dirname, "../../appinfo.json"), "utf8"));
+		assert.ok(appinfo.requiredPermissions.includes("accountservices.operation"));
 	});
 
 	it("lists the other accounts, and hides the SIM group when there is no SIM account", async () => {

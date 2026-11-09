@@ -311,15 +311,17 @@ enyo.kind({
 		this.$.AccountsView.AddAccount(this.templates);
 	},
 	
-	// A profile service answered with a token: this device has a real, signed-in account, so
-	// the profile editor behind the row has something to edit. Enable it and drop the
-	// "Local Account" wording, which is only accurate when there is no backing service.
+	// A profile service answered with a token: this device is signed in to a Community
+	// Account (org.webosports.service.communityaccount, as com.palm.accountservices), so the
+	// profile editor behind the row has something to edit. Enable it, and call the group what
+	// it now is: "Local Account" is only right while nothing is signed in.
 	profileServiceAvailable: function(inSender, inResponse) {
 		if (!inResponse || !inResponse.token) {
+			this.profileServiceUnavailable(inSender, inResponse);
 			return;
 		}
 		this.$.palmProfileItem.setDisabled(false);
-		this.$.palmProfileGroup.setCaption($L("ACCOUNT"));
+		this.$.palmProfileGroup.setCaption($L("Community Account"));
 	},
 
 	profileServiceUnavailable: function(inSender, inResponse) {
