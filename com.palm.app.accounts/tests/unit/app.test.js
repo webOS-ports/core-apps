@@ -71,13 +71,14 @@ describe("Accounts", () => {
 		assert.equal(manager().$.palmProfileItem.getDisabled(), false);
 	});
 
+	// The row then offers to sign in (tests/unit/signin.test.js).
 	it("calls it the Local Account when the service is there but nobody is signed in", async () => {
 		page.env.luna.on("luna://com.palm.accountservices/getAccountToken", () => ({returnValue: false,
 			errorCode: "NO_TOKEN", errorText: "not signed in to a Community Account"}));
 		await launch();
 
 		assert.equal(manager().$.palmProfileGroup.getCaption(), "Local Account");
-		assert.equal(manager().$.palmProfileItem.getDisabled(), true);
+		assert.equal(manager().$.palmProfileItem.getDisabled(), false);
 	});
 
 	it("calls it the Local Account on an answer with no token", async () => {

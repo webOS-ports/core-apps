@@ -61,3 +61,39 @@
 .accounts-btn-danger:active {
 	background: #940007;
 }
+
+/* Signing in, or making a Community Account, after setup (SignIn.js). */
+.accounts-link {
+	color: #1a6fb5;
+	text-decoration: underline;
+	text-align: center;
+}
+.accounts-note {
+	font-size: 14px;
+	color: #6e6e6e;
+}
+.accounts-status-code {
+	font-size: 13px;
+	color: #6e6e6e;
+	padding-top: 4px;
+}
+.accounts-agree {
+	padding: 8px 10px;
+}
+.accounts-agree .enyo-checkbox {
+	margin-right: 10px;
+}
+.accounts-terms {
+	height: 50vh;
+	max-height: 360px;
+}
+.accounts-terms-text {
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	padding: 4px 2px;
+	font-size: 15px;
+}
+.accounts-profile-hint {
+	color: #1a6fb5;
+	padding-left: 8px;
+}
