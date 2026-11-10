@@ -31,6 +31,7 @@ enyo.depends(
 	"source/palmID/DeviceInfoDialog.js",
 	"source/palmID/DeviceEraseConfirmDialog.js",
 	"source/palmID/UsernameDialog.js",
+	"source/palmID/SignIn.js",
 	"source/palmID/CommErrorDialog.js",
 	"source/palmID/SpinnerOverlay.js",
 	"$enyo/g11n/name/"

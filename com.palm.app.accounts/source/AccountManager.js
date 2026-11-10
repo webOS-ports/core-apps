@@ -50,12 +50,14 @@ enyo.kind({
 			{kind: "Scroller", flex: 1, components: [
 				{kind:"Control", className:"box-center", components: [
 					{kind: "RowGroup", name: "palmProfileGroup", className:"accounts-group", caption:$L("Local Account"), components: [
-						// Stays disabled unless a profile service actually answers - see
-						// probeProfileService(). On a device with no Palm Profile replacement this
-						// is exactly the previous behaviour: a non-tappable label.
-						{kind: "Item", name: "palmProfileItem", layoutKind: "HFlexLayout", tapHighlight: true, disabled:true, className:"enyo-single" , onclick: "editPalmidProfile", align:"center", components:[
+						// Stays disabled unless the Community Account service answers - see
+						// profileServiceAvailable/Unavailable. On a device without it this is
+						// exactly the previous behaviour: a non-tappable label. With it, a tap
+						// opens the profile when signed in, and signing in when not.
+						{kind: "Item", name: "palmProfileItem", layoutKind: "HFlexLayout", tapHighlight: true, disabled:true, className:"enyo-single" , onclick: "profileTapped", align:"center", components:[
 							{kind: "Image", name: "profileIcon", className:"icon-image"},
-							{name:"palmProfileName", className:"enyo-text-ellipsis", flex:1}
+							{name:"palmProfileName", className:"enyo-text-ellipsis", flex:1},
+							{name:"palmProfileHint", className:"accounts-profile-hint", content: $L("Sign In"), showing: false}
 						]}
 					]},                                        
 					{kind: "Control", name: "synergyAccounts", components: [
@@ -81,6 +83,7 @@ enyo.kind({
 		{kind: "AccountsModify", name: "AccountsModify", lazy:true, capability: this.capability, onAccountsModify_Done: "accountsDone"},
 
 		{kind: "MyApps.PalmID",  name: "palmprofile", lazy:true, capability: this.capability, onAccountsModify_Done: "accountsDone"},
+		{kind: "MyApps.PalmID.SignIn", name: "signIn", lazy:true, onSignIn_Done: "signInDone"},
 		{kind: "Accounts.RetainedDataView", name: "retainedDataView", lazy:true, onRetainedData_Done: "accountsDone"},
 		{kind: "Accounts.getAccounts", name: "accounts", onGetAccounts_AccountsAvailable: "onAccountsAvailable"},
 		{kind:"VFlexBox", components: [
@@ -320,7 +323,9 @@ enyo.kind({
 			this.profileServiceUnavailable(inSender, inResponse);
 			return;
 		}
+		this.signedIn = true;
 		this.$.palmProfileItem.setDisabled(false);
+		this.$.palmProfileHint.hide();
 		this.$.palmProfileGroup.setCaption($L("Community Account"));
 	},
 
@@ -329,13 +334,44 @@ enyo.kind({
 		// nobody has signed in yet, and after a sign-out. Set the state rather than
 		// just leaving the default, because this also runs on the way back from the
 		// profile view, where the row may currently be enabled.
-		console.log("Accounts app: no profile service/token, profile editor disabled");
-		this.$.palmProfileItem.setDisabled(true);
+		this.signedIn = false;
 		this.$.palmProfileGroup.setCaption($L("Local Account"));
+		// NO_TOKEN is the Community Account service saying nobody is signed in: the
+		// row then offers to sign in (MyApps.PalmID.SignIn). Anything else (no
+		// such service on the bus, a refusal) leaves it a plain label.
+		var canSignIn = !!(inResponse && inResponse.errorCode === "NO_TOKEN");
+		console.log("Accounts app: not signed in to a Community Account" + (canSignIn ? ", sign-in offered" : ", no profile service"));
+		this.$.palmProfileItem.setDisabled(!canSignIn);
+		this.$.palmProfileHint.setShowing(canSignIn);
 		// The row label needs no special-casing: sign-out renames the local account
 		// record to "Local User", so what is stored is already what should be shown.
 	},
 
+
+	// The profile row: the profile when signed in, signing in when not.
+	profileTapped: function(inSender, inEvent) {
+		if (this.signedIn)
+			this.editPalmidProfile(inSender, inEvent);
+		else
+			this.openSignIn();
+	},
+
+	openSignIn: function() {
+		var view = this.selectViewByName("signIn");
+		if (view)
+			view.beginSignIn();
+	},
+
+	// Back from signing in. Signed in, the profile account has been named after
+	// the member (by the service), so the list is fetched again to show it; the
+	// probe that follows makes it the Community Account.
+	signInDone: function(inSender, inSignedIn) {
+		this.selectViewByName("prefsAndAccounts");
+		if (inSignedIn === true)
+			this.$.accounts.getAccounts();
+		else
+			this.$.probeProfileToken.call({});
+	},
 
 	editPalmidProfile:  function(inSender, inResults) {
 		console.log("editPalmidProfile")
