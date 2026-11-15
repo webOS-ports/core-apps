@@ -92,7 +92,9 @@ class Luna {
 			returnValue: true,
 			results: [].concat(...(Array.isArray(p) ? p : [p]).map((q) => q.years.map((y) => timeZoneRules(q.tz, y))))
 		}));
-		this.on("luna://com.palm.systemservice/time/getSystemTime", () => {
+		// Answered under both bus names, as on a device: com.palm.systemservice
+		// is the legacy alias of com.webos.service.systemservice.
+		const systemTime = () => {
 			const d = new this.win.Date();
 			const jan = new this.win.Date(d.getFullYear(), 0, 1), jul = new this.win.Date(d.getFullYear(), 6, 1);
 			const isDST = d.getTimezoneOffset() < Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
@@ -106,7 +108,9 @@ class Luna {
 				localtime: {year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate(), hour: d.getHours(), minute: d.getMinutes(), second: d.getSeconds()},
 				systemTimeSource: "ntp"
 			};
-		});
+		};
+		this.on("luna://com.palm.systemservice/time/getSystemTime", systemTime);
+		this.on("luna://com.webos.service.systemservice/time/getSystemTime", systemTime);
 	}
 
 	// fn(payload, call) answers calls whose URI starts with prefix. It returns

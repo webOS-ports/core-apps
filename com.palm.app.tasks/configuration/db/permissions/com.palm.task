@@ -22,6 +22,14 @@
     {
         "type": "db.kind",
         "object": "com.palm.task:1",
+        "caller": "com.palm.app.tasks_com.webos.service.activitymanager_proxy",
+        "operations": {
+            "read": "allow"
+        }
+    },
+    {
+        "type": "db.kind",
+        "object": "com.palm.task:1",
         "caller": "*",
         "operations": {
             "extend": "allow"

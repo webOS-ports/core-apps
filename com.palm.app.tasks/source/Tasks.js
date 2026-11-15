@@ -37,7 +37,11 @@ var Tasks = {
 	DB_SERVICE: "luna://com.palm.db/",
 	ACTIVITY_SERVICE: "luna://com.palm.activitymanager/",
 	ACCOUNTS_SERVICE: "luna://com.palm.service.accounts/",
-	SYSTEM_SERVICE: "luna://com.palm.systemservice/",
+	// The bus name ACG's time.query group lists. activitymanager checks an
+	// activity's trigger and callback URLs against the app's groups as written,
+	// so a trigger on the legacy com.palm.systemservice name is refused
+	// ("doesn't have rights to call callback/trigger").
+	SYSTEM_SERVICE: "luna://com.webos.service.systemservice/",
 	APP_MANAGER_LAUNCH: "luna://com.webos.service.applicationManager/launch",
 
 	PRIORITY_HIGH: 1,
