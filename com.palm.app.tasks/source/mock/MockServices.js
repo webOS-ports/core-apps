@@ -81,7 +81,7 @@ Tasks.MockServices = {
 		if (service === "com.palm.service.accounts" && method === "listAccounts") {
 			return {returnValue: true, results: []};
 		}
-		if (service === "com.palm.systemservice" && method === "time/getSystemTime") {
+		if (service === "com.webos.service.systemservice" && method === "time/getSystemTime") {
 			var now = new Date();
 			return {
 				returnValue: true,

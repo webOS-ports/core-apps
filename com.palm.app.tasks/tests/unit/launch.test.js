@@ -75,6 +75,41 @@ describe("Tasks launch", () => {
 		assert.deepEqual(page.env.windows.map((w) => w.type), ["dashboard"]);
 	});
 
+	// activitymanager asks the hub whether the app may call each trigger and
+	// callback URL, by the bus name as written, and refuses the activity if
+	// not ("doesn't have rights to call callback/trigger"). ACG's time.query
+	// group names com.webos.service.systemservice only, not the legacy
+	// com.palm.systemservice alias.
+	it("arms its activities on bus names its ACG groups cover", async () => {
+		page.env.launch(BOOT);
+		await page.env.settle();
+
+		const byName = {};
+		for (const a of page.env.luna.activities.scheduled()) {
+			byName[a.activity.name] = a.activity;
+		}
+		assert.equal(byName.TASKS_TIME_CHANGED_ACTIVITY.trigger.method,
+			"luna://com.webos.service.systemservice/time/getSystemTime");
+		assert.equal(byName.TASKS_DB_CHANGED_ACTIVITY.trigger.method, "luna://com.palm.db/find");
+		for (const a of Object.values(byName)) {
+			assert.equal(a.callback.method, "luna://com.webos.service.applicationManager/launch");
+		}
+	});
+
+	// activitymanager runs the database trigger as a proxy for the app, and
+	// luna-service2 names such a caller "<app>_<service>_proxy": that is the
+	// name db8 checks, not com.palm.app.tasks. Without a grant for it the
+	// trigger's find is refused ("db: permission denied") and the activity
+	// is never armed.
+	it("lets activitymanager read its tasks on its behalf", () => {
+		const permissions = JSON.parse(require("node:fs").readFileSync(
+			require("node:path").join(__dirname, "../../configuration/db/permissions/com.palm.task"), "utf8"));
+		const grant = permissions.find((p) => p.object === "com.palm.task:1" &&
+			p.caller === "com.palm.app.tasks_com.webos.service.activitymanager_proxy");
+		assert.ok(grant, "no db8 permission for the activitymanager proxy caller");
+		assert.deepEqual(grant.operations, {read: "allow"});
+	});
+
 	it("shows the lists with their counts when opened", async () => {
 		page.env.luna.db.seed([LIST, task("t1", "Milk", {position: 1000, dueDate: TODAY})]);
 		page.env.launch(BOOT);
