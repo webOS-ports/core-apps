@@ -63,14 +63,14 @@ enyo.kind({
                         {className: "mini-priority-image", kind: "Image", src: "../images/mini_priority_stamp_overlay.png"}
                     ]}
                 ]},
-                {name: "senderInfoBlock", kind: "Control", className: "enyo-item first dotted-bottom", style: "position:relative;z-index:2;min-height: 46px; padding: 13px 14px 14px 11px", components: [
+                {name: "senderInfoBlock", kind: "Control", className: "enyo-item first dotted-bottom mail-sender-block", style: "position:relative;z-index:2;", components: [
                     {kind: "VFlexBox", flex: 1, pack: "center", className: "mail-body-from-box", onclick: "showFromContactDetails", components: [
                         {kind: "HFlexBox", components: [
-                            {name: "avatarBox", showing: true, width: "121px", height: "121px", className: "avatar-image-box", components: [
-                                {kind: "Image", name: "avatarImage", width: "105px", height: "105px", style: "padding:8px;", src: this.DEFAULT_SENDER_IMAGE}
+                            {name: "avatarBox", showing: true, className: "avatar-image-box mail-avatar-box", components: [
+                                {kind: "Image", name: "avatarImage", className: "mail-avatar-image", src: this.DEFAULT_SENDER_IMAGE}
                             ]},
                             {kind: "VFlexBox", flex: 1, pack: "bottom", components: [
-                                {kind: "HFlexBox", flex: 1, pack: "bottom", components: [
+                                {kind: "HFlexBox", flex: 1, pack: "bottom", className: "mail-body-time-row", components: [
                                     {flex: 1, showing: true, components: [/* Alternate location for onlineStatus */ ]},
                                     {kind: "Control", className: "time-box", components: [
                                         {name: "whenMonth", className: "mail-when-month"},
@@ -78,7 +78,7 @@ enyo.kind({
                                         {name: "whenTime", className: "mail-when-time"}
                                     ]}
                                 ]},
-                                {kind: "HFlexBox", flex: 1, style: "padding-top:16px", components: [
+                                {kind: "HFlexBox", flex: 1, className: "mail-body-from-row", components: [
                                     {kind: "VFlexBox", pack: "center", flex: 0, components: [
                                         {name: "onlineStatus", showing: false, style: "padding:18px 0px 0px 0px;", kind: "Image", src: ""}
                                     ]},
@@ -88,7 +88,7 @@ enyo.kind({
                         ]}
                     ]}
                 ]},
-                {name: "toItem", layoutKind: "HFlexLayout", style: "position:relative;z-index:2;min-height: 50px; padding: 4px 14px 4px 14px", kind: "Item", className: "dotted-bottom", showing: false, onclick: "toggleRecipients", components: [
+                {name: "toItem", layoutKind: "HFlexLayout", style: "position:relative;z-index:2;", kind: "Item", className: "dotted-bottom mail-to-item", showing: false, onclick: "toggleRecipients", components: [
                     {name: "to", kind: "", flex: 1, allowHtml: true, className: "mail-body-recipients"},
                     {name: "ccBccButton", showing: true, kind: "Button", className: "enyo-button-light", width: "14px", height: "20px", style: "", components: [
                         {kind: "Image", style: "margin:  -6px 0px 0px -11px;", src: "../images/drawer_arrow.png"}
@@ -174,6 +174,7 @@ enyo.kind({
         this.presenceWatches = {};
         this.setUpTimeFormatter();
         this.inherited(arguments);
+        this.addRemoveClass("mail-phone", EmailApp.Util.deviceLayout().phone);
     },
 
     resetHeaderPosition: function () {

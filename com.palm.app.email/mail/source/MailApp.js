@@ -31,7 +31,7 @@ enyo.kind({
     components: [
         {kind: "ApplicationEvents", onOpenAppMenu: "openAppMenu", onBack: "backHandler", onWindowParamsChange: "windowParamsChanged",
             onResize: "resizeHandler", /*onUnload:"unloadHandler", */onWindowHidden: "windowHiddenHandler", onWindowShown: "windowShownHandler",
-            onWindowActivated: "windowActivatedHandler"},
+            onWindowActivated: "windowActivatedHandler", onKeydown: "keydownHandler"},
         {name: "checkFirstLaunch", kind: "Accounts.checkFirstLaunch", onCheckFirstLaunchResult: "_firstLaunchResponder", appId: "com.palm.app.email"},
         // TODO: replace SlidingPane style below with this, once animations are added back in:  style: "background: url(../images/Mail-2-1a-256.png) center center no-repeat, url(../images/loading-bg.png) top left repeat-x;"
         {name: "slidingPane", kind: "SlidingPane", style: "background: url(../images/loading-bg.png) top left repeat-x;", flex: 1, components: [
@@ -601,6 +601,25 @@ enyo.kind({
         EmailApp.Util.callService("palm://com.palm.applicationManager/open",
             {id: "com.palm.app.help", params: {target: url}});
     },
+    // Typing on the message list searches it, as in the legacy app on a
+    // phone with a keyboard. Only for a printable key with no modifier, while
+    // the list is on show and no text field or popup has the focus.
+    keydownHandler: function (inSender, inEvent) {
+        if (!inEvent || inEvent.ctrlKey || inEvent.altKey || inEvent.metaKey ||
+                typeof inEvent.key !== "string" || inEvent.key.length !== 1 || !inEvent.key.trim()) {
+            return;
+        }
+        var active = document.activeElement;
+        if (active && active !== document.body && active !== document.documentElement) {
+            return;
+        }
+        var pane = this.$.slidingPane;
+        if (this.view !== pane || (!pane.getMultiView() && pane.view !== this.$.mailSliding)) {
+            return;
+        }
+        this.$.mail.typeToSearch();
+    },
+
     headerTap: function () {
         if (this.$.slidingPane.view === this.$.mailSliding) {
             this.$.slidingPane.selectView(this.$.folderSliding);
@@ -661,6 +680,12 @@ enyo.kind({
 
     backHandler: function (inSender, e) {
         if (this.view == this.$.slidingPane) {
+            if (this.$.slidingPane.view === this.$.mailSliding && this.$.mail.closeSearch()) {
+                if (e) {
+                    e.preventDefault();
+                }
+                return;
+            }
             this.$.slidingPane.back(e);
         } else {
             this.inherited(arguments);

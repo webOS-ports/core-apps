@@ -821,6 +821,10 @@ img.floatRight {
     background: transparent url('../images/light_chrome_drop_shadow_header.png') bottom repeat-x;
 }
 
+.mail-search-collapsed .search-shadow {
+    height: 59px;
+}
+
 .toolbar-spacer {
     width: 18px;
 }
@@ -946,4 +950,136 @@ img.floatRight {
 
 .enyo-modaldialog .palm-paragraph {
     margin: 0 5px 10px 5px;
+}
+
+/* Sizes that were inline styles in Mail.js and MessageDisplay.js, so that the
+   phone layout below can change them. These are the tablet's. */
+
+.mail-item-row {
+    height: 89px;
+}
+
+.mail-item-text {
+    height: 60px;
+    margin-top: 14px;
+    padding-bottom: 14px;
+}
+
+.mail-sender-block {
+    min-height: 46px;
+    padding: 13px 14px 14px 11px;
+}
+
+.mail-avatar-box {
+    width: 121px;
+    height: 121px;
+}
+
+.mail-avatar-image {
+    width: 105px;
+    height: 105px;
+    padding: 8px;
+}
+
+.mail-body-from-row {
+    padding-top: 16px;
+}
+
+.mail-to-item {
+    min-height: 50px;
+    padding: 4px 14px 4px 14px;
+}
+
+/* Phone (deviceInfo.tabletUi false): the legacy app's layout on the Pre and
+   the Veer. One CSS pixel here is about the size of one on the Veer, so its
+   sizes carry over: a 73px row for sender, subject and preview, and above the
+   message one row with a small photo, the sender and the date, one line of
+   recipients, then the subject. */
+
+.mail-phone .mail-item-row {
+    height: 73px;
+}
+
+.mail-phone .mail-item-text {
+    margin-top: 6px;
+    padding-bottom: 6px;
+}
+
+.mail-phone .mail-sender-block {
+    min-height: 0;
+    padding: 6px 10px 6px 8px;
+}
+
+.mail-phone .mail-avatar-box {
+    width: 56px;
+    height: 56px;
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+}
+
+.mail-phone .mail-avatar-image {
+    width: 48px;
+    height: 48px;
+    padding: 4px;
+}
+
+/* Its date is placed at the top right (.time-box below), so the row takes
+   no room; flex 1 is an inline style. */
+.mail-phone .mail-body-time-row {
+    -webkit-box-flex: 0 !important;
+}
+
+.mail-phone .time-box {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    margin: 0;
+    text-align: right;
+}
+
+.mail-phone .mail-when-month,
+.mail-phone .mail-when-day {
+    display: inline;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 18px;
+    color: #0066cc;
+    border: none;
+    margin: 0;
+}
+
+.mail-phone .mail-when-day {
+    margin-left: 0.3em;
+}
+
+.mail-phone .mail-when-time {
+    margin-top: 2px;
+    font-size: 14px;
+}
+
+/* Centred beside the photo; the HFlexBox has align "stretch" inline. */
+.mail-phone .mail-body-from-row {
+    padding-top: 0;
+    -webkit-box-align: center !important;
+}
+
+.mail-phone .mail-body-from {
+    font-size: 22px;
+    padding-top: 0;
+    margin-right: 0;
+    padding-right: 110px;
+}
+
+.mail-phone .mail-to-item {
+    min-height: 0;
+    padding: 0 10px;
+}
+
+.mail-phone .mail-body-recipients {
+    line-height: 36px;
+}
+
+.mail-phone .mail-body-subject-label {
+    display: none;
 }
