@@ -220,10 +220,12 @@ AccountWizard.prototype._attemptWellKnownDomain = function (emailAddress, passwo
             // Found a domain that matches (there could be more than 1)
             this.isPredefinedDomain = true;
 
+            var predefined = this._usableAccountType(PredefinedAccounts[i]);
+
             // Validate the inbound server
             var data = new ProtocolSettings({
                 "accountType": "inbound",
-                "predefArray": PredefinedAccounts[i],
+                "predefArray": predefined,
                 "email": emailAddress,
                 "username": emailAddress,
                 "password": password
@@ -241,7 +243,7 @@ AccountWizard.prototype._attemptWellKnownDomain = function (emailAddress, passwo
             // outbound ProtocolSettings
             var dataSMTP = new ProtocolSettings({
                 "accountType": "outbound",
-                "predefArray": PredefinedAccounts[i],
+                "predefArray": predefined,
                 "email": emailAddress,
                 "username": emailAddress,
                 "password": password
@@ -249,6 +251,22 @@ AccountWizard.prototype._attemptWellKnownDomain = function (emailAddress, passwo
             this._validateSMTPSettings(dataSMTP);
         }
     } // end for loop
+};
+
+/**
+ * Gmail's rows name the GOOGLE account type, which needs a com.palm.google
+ * template with mail. When this system has none, Gmail is a plain IMAP
+ * account (signed in with an app password), so validate it as one.
+ * Returns the predefined row to use.
+ * @param {Array} predefined -- a row of AccountWizard.PredefinedAccounts
+ */
+AccountWizard.prototype._usableAccountType = function (predefined) {
+    if (predefined[AccountWizard.DB_TYPE] !== AccountWizard.GOOGLE || this.protValidators[AccountWizard.GOOGLE]) {
+        return predefined;
+    }
+    var asImap = predefined.slice();
+    asImap[AccountWizard.DB_TYPE] = AccountWizard.IMAP;
+    return asImap;
 };
 
 /**
