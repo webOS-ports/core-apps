@@ -150,13 +150,11 @@ describe("Email launch", () => {
 describe("Email mail card", needsRoot, () => {
 	// The mail card is a real page here.
 	const page = usePage();
-	const SET_REDIRECTS = /TypeError: this\.\$\.body\.setRedirects is not a function/;
 	// Mail.checkList logs these when the mail list has no height, which in
 	// jsdom (no layout) it never has.
 	const NO_LAYOUT = /^(Detected 0-size list component: .*|   mailList height: 0|Scheduling recovery\.|Clearing pending recovery attempt\.)$/;
-	// The page errors besides the setRedirects one (see the todo below) and
-	// the layout ones.
-	const otherErrors = () => page.env.errors.splice(0).filter((e) => !SET_REDIRECTS.test(e) && !NO_LAYOUT.test(e));
+	// The page errors besides the layout ones.
+	const otherErrors = () => page.env.errors.splice(0).filter((e) => !NO_LAYOUT.test(e));
 
 	it("shows an account's error in the error popup", async () => {
 		page.env.luna.db.seed(imapAccount("acct1", "Work", {error: {errorCode: 43000, errorText: "Server unreachable"}}));
@@ -178,7 +176,7 @@ describe("Email mail card", needsRoot, () => {
 		assert.deepEqual(otherErrors(), []);
 	});
 
-	it("renders with no errors", {todo: "MessageDisplay.rendered calls this.$.body.setRedirects, but body is a DivHtmlView, which has no redirects (mail/source/MessageDisplay.js:906)"}, async () => {
+	it("renders with no errors", async () => {
 		page.env.luna.db.seed(imapAccount("acct1", "Work"));
 		page.env.launch({});
 		await page.env.settle();

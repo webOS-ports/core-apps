@@ -30,9 +30,8 @@ const {usePage, imapAccount} = require("../fixtures");
 
 const needsRoot = LUNEOS_ROOT ? {} : {skip: "set LUNEOS_ROOT to a LuneOS root filesystem"};
 
-// The mail card's errors that are not about this: MessageDisplay.rendered's
-// setRedirects (see launch.test.js) and Mail.checkList's no-layout logging.
-const SET_REDIRECTS = /TypeError: this\.\$\.body\.setRedirects is not a function/;
+// The mail card's errors that are not about this: Mail.checkList's no-layout
+// logging (jsdom does no layout).
 const NO_LAYOUT = /^(Detected 0-size list component: .*|   mailList height: 0|Scheduling recovery\.|Clearing pending recovery attempt\.)$/;
 
 const PHONE = {tabletUi: false, keyboardAvailable: false};
@@ -60,7 +59,7 @@ async function openMailCard(page) {
 }
 
 function otherErrors(page) {
-	return page.env.errors.splice(0).filter((e) => !SET_REDIRECTS.test(e) && !NO_LAYOUT.test(e));
+	return page.env.errors.splice(0).filter((e) => !NO_LAYOUT.test(e));
 }
 
 function key(win, k, extra = {}) {
@@ -157,6 +156,19 @@ describe("Email on a phone with a keyboard", needsRoot, () => {
 		assert.deepEqual(otherErrors(page), []);
 	});
 
+	it("leaves it away while a popup is open", async () => {
+		const {mail, win} = await openMailCard(page);
+
+		mail.$.aboutFolderPopup.open();
+		key(win, "t");
+		assert.equal(mail.$.searchBox.getShowing(), false);
+
+		mail.$.aboutFolderPopup.close();
+		key(win, "t");
+		assert.equal(mail.$.searchBox.getShowing(), true);
+		assert.deepEqual(otherErrors(page), []);
+	});
+
 	it("leaves it away while a message fills the screen", async () => {
 		const {app, mail, win} = await openMailCard(page);
 
@@ -227,3 +239,162 @@ describe("Email on a phone with a keyboard", needsRoot, () => {
 	});
 });
 
+describe("Email's message view", needsRoot, () => {
+	const page = usePage({deviceInfo: PHONE_WITH_KEYBOARD});
+
+	// A message the pane can show, without going through the database.
+	function showMessage(pane, flags) {
+		pane.$.messageLoader.email = {
+			canModifyEmail: () => true,
+			getFlags: () => flags
+		};
+		pane.$.pane.selectViewByName("message", true);
+	}
+
+	function setHeight(win, height) {
+		Object.defineProperty(win, "innerHeight", {configurable: true, value: height});
+		win.dispatchEvent(new win.Event("resize"));
+	}
+
+	const topBar = (pane) => ["bodyHeader", "bodyHeaderShadow", "placeholderHeader", "placeholderHeaderShadow"]
+		.map((n) => pane.$[n].getShowing());
+
+	const menu = (app) => {
+		app.openAppMenu();
+		const shown = {};
+		for (const item of app.$.appMenu.getControls()) {
+			if (item.getShowing()) {
+				shown[item.name] = item.getCaption ? item.getCaption() : item.caption;
+			}
+		}
+		app.$.appMenu.close();
+		return shown;
+	};
+
+	it("keeps print, move, flag and mark-unread on the top toolbar on a tall screen", async () => {
+		const {app, win} = await openMailCard(page);
+		const pane = app.$.body;
+		setHeight(win, 640);
+		showMessage(pane, {read: true, flagged: false});
+
+		assert.deepEqual(topBar(pane), [true, true, true, true]);
+		const shown = menu(app);
+		for (const name of ["markReadMenuItem", "flagMenuItem", "moveToFolderMenuItem"]) {
+			assert.equal(name in shown, false, name);
+		}
+		assert.deepEqual(otherErrors(page), []);
+	});
+
+	it("puts them in the app menu on a short screen, as the legacy app had them", async () => {
+		const {app, win} = await openMailCard(page);
+		const pane = app.$.body;
+		setHeight(win, 379); // the Q25's card
+		app.$.slidingPane.setMultiView(false);
+		app.$.slidingPane.selectViewImmediate(app.$.bodySliding);
+		showMessage(pane, {read: true, flagged: false});
+
+		assert.deepEqual(topBar(pane), [false, false, false, false]);
+		let shown = menu(app);
+		assert.equal(shown.markReadMenuItem, "Mark as Unread");
+		assert.equal(shown.flagMenuItem, "Set Flag");
+		assert.equal(shown.moveToFolderMenuItem, "Move to Folder...");
+		assert.equal(shown.printMenuItem, "Print");
+
+		showMessage(pane, {read: false, flagged: true});
+		shown = menu(app);
+		assert.equal(shown.markReadMenuItem, "Mark as Read");
+		assert.equal(shown.flagMenuItem, "Remove Flag");
+
+		// Not for the list, nor for a message that cannot be changed.
+		app.$.slidingPane.selectViewImmediate(app.$.mailSliding);
+		assert.equal("flagMenuItem" in menu(app), false);
+		app.$.slidingPane.selectViewImmediate(app.$.bodySliding);
+		pane.$.messageLoader.email.canModifyEmail = () => false;
+		assert.equal("flagMenuItem" in menu(app), false);
+
+		// Taller again (turned back upright): the toolbar returns.
+		setHeight(win, 640);
+		assert.deepEqual(topBar(pane), [true, true, true, true]);
+		assert.deepEqual(otherErrors(page), []);
+	});
+
+	it("runs the menu items' actions on the message", async () => {
+		const {app, win} = await openMailCard(page);
+		const pane = app.$.body;
+		setHeight(win, 379);
+		const done = [];
+		const flags = {read: true, flagged: false};
+		pane.$.messageLoader.email = {
+			canModifyEmail: () => true,
+			getFlags: () => flags,
+			setRead: (v) => done.push(["read", v]),
+			setFlagged: (v) => done.push(["flagged", v])
+		};
+		pane.updateMenu = () => {};
+		pane.$.pane.selectViewByName("message", true);
+		app.openAppMenu();
+		const items = Object.fromEntries(app.$.appMenu.getControls().map((i) => [i.name, i]));
+		items.markReadMenuItem.owner[items.markReadMenuItem.onclick]();
+		items.flagMenuItem.owner[items.flagMenuItem.onclick]();
+		app.$.appMenu.close();
+
+		assert.deepEqual(done, [["read", false], ["flagged", true]]);
+		assert.equal(items.moveToFolderMenuItem.onclick, "moveToFolderClick");
+		assert.equal(items.moveToFolderMenuItem.owner, pane);
+		assert.deepEqual(otherErrors(page), []);
+	});
+
+	it("does not open file: links from a message, and opens the others", async () => {
+		const {app} = await openMailCard(page);
+		const display = app.$.body.$.messageLoader;
+		const opens = () => page.env.luna.callsTo("palm://com.palm.applicationManager/open").map((c) => c.payload.target);
+
+		display.openLink(null, "file:///media/internal/secret.txt");
+		display.openLink(null, "FILE:///etc/passwd");
+		display.openLink(null, "https://example.org/");
+		await page.env.settle();
+		assert.deepEqual(opens(), ["https://example.org/"]);
+		assert.deepEqual(otherErrors(page), []);
+	});
+
+	it("clears the card when it is hidden, without the WebView it no longer has", async () => {
+		page.env.luna.db.seed([{_kind: "com.palm.folder:1", _id: "acct1-inbox", accountId: "acct1", displayName: "Inbox", favorite: true}]);
+		const {app} = await openMailCard(page);
+		app.folderChosen(null, page.env.enyo.application.folderProcessor.getFolder("acct1-inbox"));
+		await page.env.settle();
+		assert.ok(app.$.mail.folder);
+
+		app.windowHiddenHandler();
+		assert.equal(app.$.mail.folder, undefined);
+		assert.deepEqual(otherErrors(page), []);
+	});
+});
+
+describe("Email's message viewer card", needsRoot, () => {
+	// The card that opens an .eml file. Its first resize (from rendered) and
+	// every activation used to throw: they called a MessagePane method that
+	// does not exist.
+	// launch: the harness runs a page's scripts after enyo.js on its launch.
+	const page = usePage({page: "emailviewer/index.html", windowParams: {}, launch: {}, deviceInfo: PHONE_WITH_KEYBOARD});
+
+	const viewer = (env) => Object.values(env.enyo.$).find((c) => c.kindName === "EmailViewerWindow");
+
+	it("opens, resizes and activates without errors", async () => {
+		await page.env.settle();
+		const v = viewer(page.env);
+		assert.ok(v);
+		v.windowActivatedHandler();
+		v.resizeHandler();
+		assert.deepEqual(page.env.errors.splice(0), []);
+	});
+
+	it("puts its top toolbar away on a short screen", async () => {
+		await page.env.settle();
+		const win = page.env.window, pane = viewer(page.env).$.messageView;
+		assert.equal(pane.$.bodyHeader.getShowing(), true);
+		Object.defineProperty(win, "innerHeight", {configurable: true, value: 379});
+		win.dispatchEvent(new win.Event("resize"));
+		assert.equal(pane.$.bodyHeader.getShowing(), false);
+		assert.deepEqual(page.env.errors.splice(0), []);
+	});
+});

@@ -85,6 +85,9 @@ enyo.kind({
             {name: "emptyTrashItem", caption: $L("Empty Trash")},
             {name: "aboutThisFolder", caption: $L("About This Folder")},
             {name: "openNewCard", caption: $L("Open Email in New Card")},
+            {name: "markReadMenuItem", caption: $L("Mark as Unread")},
+            {name: "flagMenuItem", caption: $L("Set Flag")},
+            {name: "moveToFolderMenuItem", caption: $L("Move to Folder...")},
             /* for testing */
             {name: "prefs", caption: $L("Preferences & Accounts")},
             {name: "printMenuItem", caption: $L("Print")},
@@ -271,6 +274,9 @@ enyo.kind({
                 item.onclick = handler.onclick || "";
                 item.setDisabled(handler.disabled === true); // disable only if disabled is true
                 item.setShowing(handler.showing !== false); // hide only if showing is false
+                if (handler.caption) {
+                    item.setCaption(handler.caption);
+                }
             }
         });
     },
@@ -290,7 +296,8 @@ enyo.kind({
             // FIXME: needs to be revised to work properly in single-view sliding mode (i.e. on phones)
             this.configureAppMenu(this.$.accounts, slidingViewName !== "folderSliding");
             this.configureAppMenu(this.$.mail, slidingViewName === "bodySliding");
-            this.configureAppMenu(this.$.body, false);
+            // The message is off-screen when one pane shows at a time and it is not that one.
+            this.configureAppMenu(this.$.body, !this.$.slidingPane.getMultiView() && slidingViewName !== "bodySliding");
         }
 
         // Workaround to remove Pane view styling
@@ -613,6 +620,11 @@ enyo.kind({
         if (active && active !== document.body && active !== document.documentElement) {
             return;
         }
+        // A popup (a dialog, the app menu) is open: keys reach this root
+        // handler past its event capture, but are not meant for the list.
+        if (enyo.dispatcher.captureTarget || (enyo.BasicPopup && enyo.BasicPopup.count > 0)) {
+            return;
+        }
         var pane = this.$.slidingPane;
         if (this.view !== pane || (!pane.getMultiView() && pane.view !== this.$.mailSliding)) {
             return;
@@ -693,6 +705,7 @@ enyo.kind({
     },
     resizeHandler: function () {
         this.optimizeSpace();
+        this.$.body.updateCompactChrome();
         this.inherited(arguments);
     },
 

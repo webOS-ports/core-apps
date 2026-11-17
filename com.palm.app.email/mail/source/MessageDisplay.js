@@ -226,13 +226,6 @@ enyo.kind({
             header.node.style.webkitTransform = "translateY(" + y + "px)";
         }
     },
-    openLink: function (inSender, url) {
-        // TODO remove this logging
-        //this.log("### Opening URL", url);
-
-        // Launch default app for handling this url
-        this.$.appMgrOpen.call({target: url, subscribe: false});
-    },
     webviewMousehold: function (inSender, event, tapInfo) {
         //console.log("@@@@@@@@ MOUSE HOLD @@@@@@@@@@@");
 
@@ -900,21 +893,16 @@ enyo.kind({
         this.resized(); // provided by enyo. needed for vertical reflow
         this._doingNestedScroll = undefined;
     },
-    rendered: function () {
-        this.inherited(arguments);
-
-        if (window.PalmSystem) {
-            this.$.body.setRedirects([
-                {regex: "^file:.*", cookie: "", enable: false},
-                {regex: ".*", cookie: "", enable: true}
-            ]);
-        }
-    },
-    
+    // The body used to be a WebView, told here to hand every link to openLink
+    // except file: ones. The DivHtmlView that replaced it has no redirects
+    // (setRedirects threw here) and sends every link to openLink, so that is
+    // where file: links are now held back: a link in a message is not to open
+    // a file on the device.
     openLink: function (sender, url) {
-        // TODO remove this logging
-        this.log("### Opening URL", url);
-
+        if (/^file:/i.test(url || "")) {
+            this.log("not opening a file: link from a message");
+            return;
+        }
         // Launch default app for handling this url
         this.$.appMgrOpen.call({target: url, subscribe: false});
     },

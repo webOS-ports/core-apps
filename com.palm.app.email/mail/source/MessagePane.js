@@ -40,14 +40,14 @@ enyo.kind({
         {name: "pane", kind: "Pane", flex: 1, onSelectView: "paneViewSelected", components: [
             // DEFAULT PANE
             {name: "placeholder", className: "body-placeholder", style: "text-align: center;min-width:192px;", height: "100%", kind: "VFlexBox", components: [
-                {kind: "Toolbar", className: "enyo-toolbar-light", style: "z-index:2;", components: [
+                {name: "placeholderHeader", kind: "Toolbar", className: "enyo-toolbar-light", style: "z-index:2;", components: [
                     {kind: "Control", className: "toolbar-spacer"},
                     {disabled: true, icon: "../images/header-print-icon.png"},
                     {kind: "Control", className: "toolbar-spacer"},
                     {disabled: true, icon: "../images/icons/toolbar-icon-moveto.png"},
                     {flex: 1}
                 ]},
-                {className: "header-shadow"},
+                {name: "placeholderHeaderShadow", className: "header-shadow"},
                 {kind: "Spacer", flex: 1},
                 {kind: "Image", src: "../images/email-by-webos.png"},
                 {kind: "Spacer"},
@@ -85,7 +85,7 @@ enyo.kind({
                     ]},
                     {name: "markUnreadToggle", kind: "Button", className: "no-overflow-button mark-unread-button enyo-button-light", style: "margin-right:11px;", onclick: "toggleRead", caption: $L("Mark as unread") }
                 ]},
-                {className: "header-shadow"},
+                {name: "bodyHeaderShadow", className: "header-shadow"},
                 {name: "messageLoader", kind: "MessageLoader"},
                 {className: "footer-shadow"},
                 {kind: "Toolbar", layoutKind: "HLayout", align: "center", name: "commandMenu", className: "enyo-toolbar-light", components: [
@@ -225,6 +225,35 @@ enyo.kind({
         if (this.standalone) {
             this.$.slidingDrag.hide();
         }
+        this.updateCompactChrome();
+    },
+
+    // Below this window height (CSS px) the top toolbar's print, move, flag
+    // and mark-unread go to the app menu, as the legacy app had them, so that
+    // the message gets the room. LuneOS phones are scaled to a 380-480px wide
+    // viewport, so the height follows the panel's aspect. Measured in the
+    // app: the Q25 (720x720 at 1.6) 340-380px, the Mindphone (480x800 at 1.0)
+    // 679px. Panel height / devicePixelRatio, before the status bar:
+    // hammerhead (1920 at 2.6) 738, PinePhone (1440 at 1.9) 758, sargo (2220
+    // at 2.4) 925; any of these turned sideways stays under 480. 500 sits
+    // between the two groups.
+    COMPACT_MAX_HEIGHT: 500,
+
+    isCompact: function () {
+        return window.innerHeight > 0 && window.innerHeight < this.COMPACT_MAX_HEIGHT;
+    },
+
+    // Called on create and by the window's resize handler (MailApp,
+    // EmailViewerWindow): a window resize does not reach this pane by itself.
+    updateCompactChrome: function () {
+        var compact = this.isCompact();
+        if (compact === this.compact) {
+            return;
+        }
+        this.compact = compact;
+        ["placeholderHeader", "placeholderHeaderShadow", "bodyHeader", "bodyHeaderShadow"].forEach(function (name) {
+            this.$[name].setShowing(!compact);
+        }, this);
     },
 
     destroy: function () {
@@ -237,11 +266,21 @@ enyo.kind({
 
     getAppMenuConfigs: function (viewHidden) {
         var messageLoader = this.$.messageLoader;
+        var email = messageLoader.email;
         var result;
         result = {
-            printMenuItem: {onclick: "printClick", disabled: !messageLoader.email},
-            openNewCard: {onclick: "openNewCardClick", disabled: !messageLoader.email, showing: false}
+            printMenuItem: {onclick: "printClick", disabled: !email},
+            openNewCard: {onclick: "openNewCardClick", disabled: !email, showing: false}
         };
+        // The top toolbar's actions, when it is put away (updateCompactChrome).
+        var inMenu = !!(this.compact && !viewHidden && email && email.canModifyEmail() &&
+            this.$.pane.getViewName() === "message");
+        var flags = (inMenu && email.getFlags()) || {};
+        result.markReadMenuItem = {onclick: "toggleRead", showing: inMenu,
+            caption: flags.read === false ? $L("Mark as Read") : $L("Mark as Unread")};
+        result.flagMenuItem = {onclick: "toggleFlagged", showing: inMenu,
+            caption: flags.flagged ? $L("Remove Flag") : $L("Set Flag")};
+        result.moveToFolderMenuItem = {onclick: "moveToFolderClick", showing: inMenu};
         return result;
     },
 
@@ -550,8 +589,11 @@ enyo.kind({
         var bod = this.$.messageLoader.$.body;
         bod && bod.reinitialize && bod.reinitialize();
     },
+    // The body is a DivHtmlView (HtmlView.js), which has nothing to connect
+    // or disconnect; only the WebView it replaced had. As reinitializeWebView.
     disconnectWebView: function () {
-        this.$.messageLoader.$.body.disconnect();
+        var bod = this.$.messageLoader.$.body;
+        bod && bod.disconnect && bod.disconnect();
     },
 
     NEXT_KEY: 'next',
