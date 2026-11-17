@@ -65,13 +65,19 @@ enyo.kind({
         setTimeout(enyo.hitch(this, "resizeHandler"), 1);
     },
 
+    // MessagePane has no currentMessage(); the message on show is its
+    // messageLoader (a MessageDisplay).
     windowActivatedHandler: function () {
+        var display = this.$.messageView.$.messageLoader;
         this.$.messageView.activate();
-        this.$.messageView.currentMessage().hookupSenderPhoto();
+        if (display.email) {
+            display.hookupSenderPhoto();
+        }
     },
 
     resizeHandler: function () {
-        this.$.messageView.currentMessage().resize();
+        this.$.messageView.$.messageLoader.resize();
+        this.$.messageView.updateCompactChrome();
         this.inherited(arguments);
     },
 

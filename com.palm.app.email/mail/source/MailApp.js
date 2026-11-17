@@ -31,7 +31,7 @@ enyo.kind({
     components: [
         {kind: "ApplicationEvents", onOpenAppMenu: "openAppMenu", onBack: "backHandler", onWindowParamsChange: "windowParamsChanged",
             onResize: "resizeHandler", /*onUnload:"unloadHandler", */onWindowHidden: "windowHiddenHandler", onWindowShown: "windowShownHandler",
-            onWindowActivated: "windowActivatedHandler"},
+            onWindowActivated: "windowActivatedHandler", onKeydown: "keydownHandler"},
         {name: "checkFirstLaunch", kind: "Accounts.checkFirstLaunch", onCheckFirstLaunchResult: "_firstLaunchResponder", appId: "com.palm.app.email"},
         // TODO: replace SlidingPane style below with this, once animations are added back in:  style: "background: url(../images/Mail-2-1a-256.png) center center no-repeat, url(../images/loading-bg.png) top left repeat-x;"
         {name: "slidingPane", kind: "SlidingPane", style: "background: url(../images/loading-bg.png) top left repeat-x;", flex: 1, components: [
@@ -85,6 +85,9 @@ enyo.kind({
             {name: "emptyTrashItem", caption: $L("Empty Trash")},
             {name: "aboutThisFolder", caption: $L("About This Folder")},
             {name: "openNewCard", caption: $L("Open Email in New Card")},
+            {name: "markReadMenuItem", caption: $L("Mark as Unread")},
+            {name: "flagMenuItem", caption: $L("Set Flag")},
+            {name: "moveToFolderMenuItem", caption: $L("Move to Folder...")},
             /* for testing */
             {name: "prefs", caption: $L("Preferences & Accounts")},
             {name: "printMenuItem", caption: $L("Print")},
@@ -271,6 +274,9 @@ enyo.kind({
                 item.onclick = handler.onclick || "";
                 item.setDisabled(handler.disabled === true); // disable only if disabled is true
                 item.setShowing(handler.showing !== false); // hide only if showing is false
+                if (handler.caption) {
+                    item.setCaption(handler.caption);
+                }
             }
         });
     },
@@ -290,7 +296,8 @@ enyo.kind({
             // FIXME: needs to be revised to work properly in single-view sliding mode (i.e. on phones)
             this.configureAppMenu(this.$.accounts, slidingViewName !== "folderSliding");
             this.configureAppMenu(this.$.mail, slidingViewName === "bodySliding");
-            this.configureAppMenu(this.$.body, false);
+            // The message is off-screen when one pane shows at a time and it is not that one.
+            this.configureAppMenu(this.$.body, !this.$.slidingPane.getMultiView() && slidingViewName !== "bodySliding");
         }
 
         // Workaround to remove Pane view styling
@@ -601,6 +608,30 @@ enyo.kind({
         EmailApp.Util.callService("palm://com.palm.applicationManager/open",
             {id: "com.palm.app.help", params: {target: url}});
     },
+    // Typing on the message list searches it, as in the legacy app on a
+    // phone with a keyboard. Only for a printable key with no modifier, while
+    // the list is on show and no text field or popup has the focus.
+    keydownHandler: function (inSender, inEvent) {
+        if (!inEvent || inEvent.ctrlKey || inEvent.altKey || inEvent.metaKey ||
+                typeof inEvent.key !== "string" || inEvent.key.length !== 1 || !inEvent.key.trim()) {
+            return;
+        }
+        var active = document.activeElement;
+        if (active && active !== document.body && active !== document.documentElement) {
+            return;
+        }
+        // A popup (a dialog, the app menu) is open: keys reach this root
+        // handler past its event capture, but are not meant for the list.
+        if (enyo.dispatcher.captureTarget || (enyo.BasicPopup && enyo.BasicPopup.count > 0)) {
+            return;
+        }
+        var pane = this.$.slidingPane;
+        if (this.view !== pane || (!pane.getMultiView() && pane.view !== this.$.mailSliding)) {
+            return;
+        }
+        this.$.mail.typeToSearch();
+    },
+
     headerTap: function () {
         if (this.$.slidingPane.view === this.$.mailSliding) {
             this.$.slidingPane.selectView(this.$.folderSliding);
@@ -661,6 +692,12 @@ enyo.kind({
 
     backHandler: function (inSender, e) {
         if (this.view == this.$.slidingPane) {
+            if (this.$.slidingPane.view === this.$.mailSliding && this.$.mail.closeSearch()) {
+                if (e) {
+                    e.preventDefault();
+                }
+                return;
+            }
             this.$.slidingPane.back(e);
         } else {
             this.inherited(arguments);
@@ -668,6 +705,7 @@ enyo.kind({
     },
     resizeHandler: function () {
         this.optimizeSpace();
+        this.$.body.updateCompactChrome();
         this.inherited(arguments);
     },
 

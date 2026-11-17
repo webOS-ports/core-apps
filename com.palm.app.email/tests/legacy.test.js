@@ -71,6 +71,6 @@ legacySuite({
 	},
 	todo: needsRoot.length ? {} : {
 		"EmailAppLaunch launches":
-			"MessageDisplay.rendered calls this.$.body.setRedirects, but body is a DivHtmlView, which has no redirects (mail/source/MessageDisplay.js:906)"
+			"DashboardManager.beginMessageWatch logs \"No results for beginMessageWatch\" with enyo.error when there is no mail yet, and this suite counts it as a page error (the unit tests' fixtures.js leaves it out)"
 	}
 });

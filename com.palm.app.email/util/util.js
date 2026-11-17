@@ -91,6 +91,25 @@ EmailApp.Util.onDevice = function () {
     return !window.fauxMail && window.PalmSystem;
 };
 
+// What the device says about its screen and keyboard: {phone, keyboard}.
+// phone: the device has no tablet UI (deviceInfo.tabletUi false), so a list
+// row or the message header is laid out the way the legacy app did on the
+// Pre and the Veer. keyboard: it has a hardware keyboard, so the list can be
+// searched by typing, as in the legacy app, without a search field on show.
+// Without deviceInfo (a desktop browser) it is neither: the tablet layout.
+EmailApp.Util.deviceLayout = function () {
+    var info;
+    try {
+        info = window.PalmSystem && JSON.parse(window.PalmSystem.deviceInfo);
+    } catch (e) {
+        info = null;
+    }
+    return {
+        phone: !!info && info.tabletUi === false,
+        keyboard: !!info && info.tabletUi === false && info.keyboardAvailable === true
+    };
+};
+
 // FIXME move this someplace better
 EmailApp.Util.generateUnreadCountQuery = function (folderId) {
     var query = {

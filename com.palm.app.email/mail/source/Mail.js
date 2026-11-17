@@ -67,7 +67,7 @@ enyo.kind({
                 ]}
             ]},
             {components: [
-                {name: "searchBox", style: "-webkit-border-image: none; background: white; border-style: solid;", className: "enyo-box-input", kind: "SearchInput", hint: $L("Search"), changeOnInput: true, onchange: "filterMail", onblur: "hideKeyboard", onCancel: "filterMail"}
+                {name: "searchBox", style: "-webkit-border-image: none; background: white; border-style: solid;", className: "enyo-box-input", kind: "SearchInput", hint: $L("Search"), changeOnInput: true, onchange: "filterMail", onfocus: "searchFocus", onblur: "searchBlur", onCancel: "filterMail"}
             ]}
         ]},
 //		{kind: "Divider", caption: "TODAY", showing: false, className: "today-divider"},
@@ -79,14 +79,14 @@ enyo.kind({
             {name: "divider", captureState: false, kind: "Divider", showing: false, caption: "Sometime"},
             {name: "mailItem", kind: "DarkSwipeable", tapHighlight: true, className: "mail-item", onclick: "itemClick", onDrag: "selectDraggedMessage", onConfirm: "deleteMessage",
                 components: [
-                    {kind: "HFlexBox", height: "89px", components: [
+                    {kind: "HFlexBox", className: "mail-item-row", components: [
                         {name: "icons", kind: "VFlexBox", width: "18px", align: "center", pack: "center", style: "margin-left:3px; margin-right:3px;", components: [
                             {name: "flag", captureState: false, kind: "Image", className: "mail-icon-padding", src: "../images/list-flagged.png", wantsEvents: false},
                             {name: "priorityFlag", captureState: false, kind: "Image", className: "mail-icon-padding", src: "../images/list-priority-flagged.png", wantsEvents: false},
                             {name: "status", captureState: false, kind: "Image", className: "mail-icon-padding", src: "", wantsEvents: false},
                             {name: "invite", captureState: false, kind: "Image", className: "mail-icon-padding", src: "../images/list-cal-invite.png", wantsEvents: false}
                         ]},
-                        {name: "rightflex", kind: "VFlexBox", height: "60px", width: "90%", style: "margin-top:14px; padding-bottom:14px", components: [
+                        {name: "rightflex", kind: "VFlexBox", width: "90%", className: "mail-item-text", components: [
                             {kind: "HFlexBox", components: [
                                 {name: "from", captureState: false, className: "mail-from", width: "100%", wantsEvents: false},
                                 {name: "attach", captureState: false, canGenerate: false, kind: "Image", className: "mail-attach-icon", src: "../images/attachment-icon.png", wantsEvents: false},
@@ -131,6 +131,71 @@ enyo.kind({
         enyo.keyboard.forceHide();
         enyo.keyboard.setManualMode(false);
         console.log("### we hid that keyboard, fool!");
+    },
+
+    searchFocus: function () {
+        this.searchFocused = true;
+        this.updateSearchShowing();
+    },
+
+    searchBlur: function () {
+        this.searchFocused = false;
+        this.hideKeyboard();
+        this.updateSearchShowing();
+    },
+
+    // On a phone with a hardware keyboard the search field stays out of the
+    // way until it is used, as the legacy app's filter field did: it shows
+    // while it has the focus or holds a search, and typing on the list
+    // brings it up (typeToSearch).
+    updateSearchShowing: function () {
+        if (!this.deviceLayout.keyboard) {
+            return;
+        }
+        var show = !!(this.searchFocused || this.$.searchBox.getValue());
+        if (show !== this.$.searchBox.getShowing()) {
+            this.showSearchBox(show);
+            this.resizeHandler();
+        }
+    },
+
+    // Back (or Esc) while the search field is up on a phone with a keyboard:
+    // end the search and put the field away, as back did with the legacy
+    // filter field. Returns true when it did.
+    closeSearch: function () {
+        if (!this.deviceLayout.keyboard || !this.$.searchBox.getShowing()) {
+            return false;
+        }
+        var hadValue = !!this.$.searchBox.getValue();
+        this.$.searchBox.setValue("");
+        this.searchFocused = false;
+        this.$.searchBox.forceBlur(null, true);
+        if (hadValue) {
+            this.filterMail();
+        } else {
+            this.updateSearchShowing();
+        }
+        return true;
+    },
+
+    showSearchBox: function (show) {
+        this.$.searchBox.setShowing(show);
+        // Its drop shadow is drawn under the search field; without the field
+        // it goes under the header, or it would cross the first row.
+        this.$.searchHeader.addRemoveClass("mail-search-collapsed", !show);
+    },
+
+    // A printable key went to the list, with nothing else focused: show the
+    // search field and give it the focus so that the key lands in it.
+    // Returns true when it did.
+    typeToSearch: function () {
+        if (!this.deviceLayout.keyboard || this.$.searchBox.hasFocus()) {
+            return false;
+        }
+        this.searchFocused = true;
+        this.updateSearchShowing();
+        this.$.searchBox.forceFocus(null, true);
+        return true;
     },
 
     getAppMenuConfigs: function (viewHidden) {
@@ -219,6 +284,10 @@ enyo.kind({
 
         this.setUpTimeFormatter();
 
+        this.deviceLayout = EmailApp.Util.deviceLayout();
+        this.addRemoveClass("mail-phone", this.deviceLayout.phone);
+        this.showSearchBox(!this.deviceLayout.keyboard);
+
         // Watch for account changes
         this.accountsChangedBound = this.accountsChanged.bind(this);
         enyo.application.accounts.addListener(this.accountsChangedBound);
@@ -303,6 +372,7 @@ enyo.kind({
         this.lastFolder = this.folder;
 
         this.$.searchBox.setValue("");
+        this.updateSearchShowing();
 //		console.log("Punting mailList");
         this.$.mailList.punt();
 //		console.log("Checking unread count");
@@ -407,6 +477,7 @@ enyo.kind({
 
     filterMail: function (inSender, filter) {
         this.$.mailList.punt();
+        this.updateSearchShowing();
     },
 
     autoSyncAccount: function (account, folderId) {

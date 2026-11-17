@@ -120,7 +120,7 @@ function pageScripts(html) {
 // called; they are the ones a device's PalmSystem has (mindphone,
 // 2026-11-03), so code that checks for one (enyo.string.runTextIndexer, say)
 // takes the path it takes on a device.
-function fakePalmSystem(calls, identifier) {
+function fakePalmSystem(calls, identifier, deviceInfo) {
 	const values = {
 		launchParams: "{}",
 		identifier,
@@ -129,7 +129,7 @@ function fakePalmSystem(calls, identifier) {
 		phoneRegion: "us",
 		timeFormat: "HH24",
 		TZ: process.env.TZ,
-		deviceInfo: JSON.stringify({modelName: "test", screenWidth: 720, screenHeight: 720}),
+		deviceInfo: JSON.stringify(Object.assign({modelName: "test", screenWidth: 720, screenHeight: 720}, deviceInfo)),
 		screenOrientation: "up",
 		isActivated: true,
 		useSimulatedMouseClicks: false
@@ -167,6 +167,9 @@ const HOST_NOISE = [
  *   launch     launch params: also launch() right after booting
  *   windowParams  the page's enyo.windowParams, for a page another one opens
  *   stubWindows   windows the app opens get stand-ins instead of their pages
+ *   deviceInfo    fields to add to PalmSystem.deviceInfo, in every window
+ *                 (e.g. {tabletUi: false, keyboardAvailable: true} for a
+ *                 phone with a keyboard)
  *
  * Returns:
  *   window, enyo, luna        the page, its enyo, the fake bus
@@ -323,7 +326,7 @@ function boot(options = {}) {
 		};
 
 		luna.install(win);
-		win.PalmSystem = fakePalmSystem(palmSystemLog, identifier);
+		win.PalmSystem = fakePalmSystem(palmSystemLog, identifier, options.deviceInfo);
 		// Device resources (locale files and the like); a missing one is "",
 		// as on a device.
 		// jsdom has no localStorage for file:// pages; WebAppMgr gives
@@ -489,7 +492,7 @@ function boot(options = {}) {
 				}, postMessage(data) {
 					rec.messages.push(data);
 				}};
-				w.PalmSystem = fakePalmSystem(rec.palmSystem, identifier);
+				w.PalmSystem = fakePalmSystem(rec.palmSystem, identifier, options.deviceInfo);
 			}
 			rec.window = w;
 			Object.defineProperty(rec, "name", {get: () => w.name, enumerable: true});
