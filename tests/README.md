@@ -114,6 +114,11 @@ The environment it returns has:
 with `luna.on(prefix, (payload, call) => response)`, and send to open
 subscriptions with `luna.push(prefix, response)`.
 
+As WebAppMgr's bridge does, a call whose payload has neither
+`"subscribe": true` nor `"watch": true` gets its first answer only; later
+ones go to `luna.dropped` instead. So a DB8 `watch` without `subscribe` never
+hears that it fired, as on a device.
+
 - `luna.db`, `luna.tempdb`: DB8. `seed(objects)` stores objects; `all(kind)` and
   `get(prop, value)` read them back. It supports `find` (with `watch` and
   `count`), `search`, `watch`, `put`, `merge`, `del`, `get` and `batch`; the
@@ -122,7 +127,11 @@ subscriptions with `luna.push(prefix, response)`.
   a property path through an array matches any element, and objects without
   the property match nothing. Kinds that extend others (from the app's
   `configuration/db/kinds`) are included in their parent kind. A watch fires
-  once, when its answer changes.
+  once, when its answer changes. `indexDefault(kind, prop, value)` makes
+  objects without `prop` match as if they had `value` (an index property's
+  `default`), and `revSet(kind, name, props)` keeps `name` at the object's
+  `_rev` from when it was created or one of `props` last changed (a kind's
+  `revSets`). Email's fixtures declare both from its kind file.
 - `luna.activities`: activitymanager. `scheduled()`, `get(name)`; `create`,
   `complete`, `cancel` and `getDetails` answer the way a device does.
 - Common services (account templates, connection status, preferences, time,

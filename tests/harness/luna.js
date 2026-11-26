@@ -34,6 +34,8 @@ class Luna {
 		this.calls = [];
 		this.handlers = [];
 		this.subscriptions = [];
+		// Answers the bridge did not pass on: later answers to a one-reply call.
+		this.dropped = [];
 		this.inflight = 0;
 		this.db = new Db8();
 		this.tempdb = new Db8();
@@ -163,6 +165,13 @@ class Luna {
 		if (payload.subscribe) {
 			this.subscriptions.push({uri, bridge});
 		}
+		// WebAppMgr's bridge makes a call that does not say "subscribe": true
+		// or "watch": true with LSCallOneReply: the caller gets the first
+		// answer and nothing after it (webruntime neva/pal_service/luna,
+		// IsSubscription). A db8 /watch without either gets its
+		// {"returnValue": true} and never hears that it fired.
+		bridge.oneReply = payload.subscribe !== true && payload.watch !== true;
+		bridge.replied = false;
 		const h = this.handlers.find((x) => uri.startsWith(x.prefix));
 		const response = h ? h.fn(payload, call) : {returnValue: true};
 		if (response !== undefined) {
@@ -177,9 +186,15 @@ class Luna {
 		const win = bridge.win && !bridge.win.closed ? bridge.win : this.win;
 		win.setTimeout(() => {
 			this.inflight--;
-			if (!bridge.cancelled) {
-				bridge.onservicecallback(JSON.stringify(response));
+			if (bridge.cancelled) {
+				return;
 			}
+			if (bridge.oneReply && bridge.replied) {
+				this.dropped.push(response);
+				return;
+			}
+			bridge.replied = true;
+			bridge.onservicecallback(JSON.stringify(response));
 		}, 0);
 	}
 }
@@ -267,6 +282,8 @@ class Db8 {
 	constructor() {
 		this.objects = new Map();
 		this.parents = new Map();
+		this.indexDefaults = new Map();
+		this.revSets = [];
 		this.watches = [];
 		this.nextId = 1;
 		this.rev = 1;
@@ -278,6 +295,7 @@ class Db8 {
 			const copy = JSON.parse(JSON.stringify(o));
 			copy._id = copy._id || "id" + this.nextId++;
 			copy._rev = this.rev++;
+			this.stampRevSets(this.objects.get(copy._id), copy);
 			this.objects.set(copy._id, copy);
 		}
 		this.changed();
@@ -286,6 +304,43 @@ class Db8 {
 	// Declares that kind extends the parent kinds (a kind file's "extends").
 	extend(kind, parents) {
 		this.parents.set(kind, [].concat(parents));
+	}
+
+	// Declares an index property's "default" (from a kind file): an object of
+	// kind (or a kind that extends it) without prop is indexed, and so
+	// queried, as if it had value. The object itself does not get it.
+	indexDefault(kind, prop, value) {
+		this.indexDefaults.set(kind + " " + prop, value);
+	}
+
+	// Declares a revSet (from a kind file's "revSets"): DB8 sets name to the
+	// object's new _rev when it is created or one of props changes.
+	revSet(kind, name, props) {
+		this.revSets.push({kind, name, props});
+	}
+
+	stampRevSets(before, after) {
+		for (const r of this.revSets.filter((x) => this.isKindOf(after._kind, x.kind))) {
+			const key = (o) => JSON.stringify(r.props.map((p) => values(o, p)));
+			if (!before || key(before) !== key(after)) {
+				after[r.name] = after._rev;
+			}
+		}
+	}
+
+	// values() for a query, with the index defaults of o's kinds.
+	indexed(o, prop) {
+		const found = values(o, prop);
+		if (found.length) {
+			return found;
+		}
+		for (const [key, value] of this.indexDefaults) {
+			const [kind, p] = key.split(" ");
+			if (p === prop && this.isKindOf(o._kind, kind)) {
+				return [value];
+			}
+		}
+		return found;
 	}
 
 	isKindOf(kind, ancestor) {
@@ -339,6 +394,7 @@ class Db8 {
 					const copy = JSON.parse(JSON.stringify(o));
 					copy._id = copy._id || "id" + this.nextId++;
 					copy._rev = this.rev++;
+					this.stampRevSets(this.objects.get(copy._id), copy);
 					this.objects.set(copy._id, copy);
 					return {id: copy._id, rev: copy._rev};
 				});
@@ -349,7 +405,9 @@ class Db8 {
 				for (const o of p.objects) {
 					const cur = this.objects.get(o._id);
 					if (cur) {
+						const before = JSON.parse(JSON.stringify(cur));
 						Object.assign(cur, JSON.parse(JSON.stringify(o)), {_rev: this.rev++});
+						this.stampRevSets(before, cur);
 						results.push({id: cur._id, rev: cur._rev});
 					}
 				}
@@ -403,10 +461,10 @@ class Db8 {
 			if (!ops[w.op]) {
 				throw new Error("fake db8: unsupported op " + w.op);
 			}
-			return values(o, w.prop).some((v) => ops[w.op](v, w.val));
+			return this.indexed(o, w.prop).some((v) => ops[w.op](v, w.val));
 		}));
 		if (q.orderBy) {
-			const key = (o) => values(o, q.orderBy)[0];
+			const key = (o) => this.indexed(o, q.orderBy)[0];
 			results.sort((a, b) => collate(key(a), key(b)));
 		}
 		if (q.desc) {

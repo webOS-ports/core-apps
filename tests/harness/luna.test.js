@@ -114,11 +114,57 @@ describe("fake DB8", () => {
 		db.handle("merge", {objects: [{_id: "a", n: 2}]});
 		assert.equal(fired.length, 1);
 	});
+
+	it("queries an object without an indexed property by the index's default", () => {
+		const db = new Db8();
+		db.extend("mail.imap:1", ["mail:1"]);
+		db.indexDefault("mail:1", "flags.visible", true);
+		db.seed([{_kind: "mail.imap:1", _id: "plain", n: 2}, {_kind: "mail:1", _id: "hidden", n: 1, flags: {visible: false}},
+			{_kind: "other:1", _id: "other"}]);
+		const visible = {from: "mail:1", where: [{prop: "flags.visible", op: "=", val: true}]};
+		assert.deepEqual(ids(db.handle("find", {query: visible})), ["plain"]);
+		assert.deepEqual(ids(db.handle("find", {query: {from: "other:1", where: [{prop: "flags.visible", op: "=", val: true}]}})), []);
+		assert.equal(db.objects.get("plain").flags, undefined, "the object does not get the default");
+	});
+
+	it("sets a revSet on creation and when one of its properties changes", () => {
+		const db = new Db8();
+		db.revSet("mail:1", "procRev", ["folderId", "flags.read"]);
+		db.handle("put", {objects: [{_kind: "mail:1", _id: "m", folderId: "in", flags: {read: false}}]});
+		const created = db.objects.get("m")._rev;
+		assert.equal(db.objects.get("m").procRev, created);
+		db.handle("merge", {objects: [{_id: "m", subject: "s"}]});
+		assert.equal(db.objects.get("m").procRev, created, "another property changed");
+		db.handle("merge", {objects: [{_id: "m", flags: {read: true}}]});
+		assert.equal(db.objects.get("m").procRev, db.objects.get("m")._rev);
+	});
 });
 
 describe("fake bus", () => {
 	const {Luna} = require("./luna");
 	const answer = (luna, uri, payload) => luna.handlers.find((h) => uri.startsWith(h.prefix)).fn(payload, {uri});
+
+	// What a bridge's page hears from a db8 watch that fires after it is made.
+	async function watchReplies(payload) {
+		const luna = new Luna();
+		luna.install({setTimeout});
+		const heard = [];
+		const bridge = new luna.win.PalmServiceBridge();
+		bridge.onservicecallback = (r) => heard.push(JSON.parse(r));
+		bridge.call("palm://com.palm.db/watch", JSON.stringify(Object.assign({query: {from: "w:1"}}, payload)));
+		await new Promise((r) => setTimeout(r, 0));
+		luna.db.handle("put", {objects: [{_kind: "w:1"}]});
+		await new Promise((r) => setTimeout(r, 0));
+		return {heard, dropped: luna.dropped};
+	}
+
+	it("passes on only the first answer to a call that does not subscribe, as WebAppMgr does", async () => {
+		assert.deepEqual(await watchReplies({}), {heard: [{returnValue: true}], dropped: [{returnValue: true, fired: true}]});
+	});
+
+	it("passes on every answer to a call with subscribe: true", async () => {
+		assert.deepEqual(await watchReplies({subscribe: true}), {heard: [{returnValue: true}, {returnValue: true, fired: true}], dropped: []});
+	});
 
 	it("filters account templates by capability, as the device does", () => {
 		const luna = new Luna();

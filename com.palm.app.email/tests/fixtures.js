@@ -19,6 +19,8 @@
 // Email's test setup.
 "use strict";
 
+const fs = require("node:fs");
+const path = require("node:path");
 const harness = require("../../tests/harness/fixtures");
 const {boot} = require("../../tests/harness/env");
 
@@ -26,11 +28,24 @@ const {boot} = require("../../tests/harness/env");
 // (source/DashboardManager.js beginMessageWatch), and carries on correctly.
 const EMPTY_MAILBOX = "No results for beginMessageWatch";
 
+// The index defaults of the app's email kind. mojomail never writes
+// flags.visible, and every query for visible mail relies on the default.
+const EMAIL_KIND = JSON.parse(fs.readFileSync(path.join(__dirname, "../configuration/db/kinds/com.palm.email"), "utf8"));
+
 // boot() for Email, with the empty-mailbox line not counted as a page error.
 function bootEmail(options = {}) {
 	const env = boot(Object.assign({app: "com.palm.app.email"}, options));
 	const push = env.errors.push.bind(env.errors);
 	env.errors.push = (...items) => push(...items.filter((e) => e !== EMPTY_MAILBOX));
+	for (const index of EMAIL_KIND.indexes) {
+		for (const prop of index.props.filter((p) => "default" in p)) {
+			env.luna.db.indexDefault(EMAIL_KIND.id, prop.name, prop.default);
+		}
+	}
+	// EmailProcessor watches EmailProcessorRev, which only DB8 writes.
+	for (const r of EMAIL_KIND.revSets || []) {
+		env.luna.db.revSet(EMAIL_KIND.id, r.name, r.props.map((p) => p.name));
+	}
 	return env;
 }
 

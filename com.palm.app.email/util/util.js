@@ -512,9 +512,13 @@ EmailApp.Util.MojoDBAutoFinder.prototype._watch = function () {
     var params = this._params.parameters;
     var watchFlag = params.watch;
     params.watch = undefined;
+    // Without it WebAppMgr's bridge takes the first reply only, and the
+    // later {"fired": true} never arrives.
+    params.subscribe = true;
 
     this._request = EmailApp.Util.callService(this.watchUri, params, this.callbackRouter.bind(this, this._params.onSuccess, this._params.onFailure));
     params.watch = watchFlag;
+    params.subscribe = undefined;
     //this.log("_watch token: " + this._request.service.token + " params: " + JSON.stringify(this._params.parameters));
 
 };

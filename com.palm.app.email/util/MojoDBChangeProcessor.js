@@ -320,7 +320,10 @@ EmailApp.MojoDBChangeProcessor.prototype._loadComplete = function () {
             {prop: this._revProp, op: ">", val: maxRev}
         ],
         incDel: this._incDel
-    }
+    },
+    // Without it WebAppMgr's bridge takes the first reply only, and the
+    // later {"fired": true} never arrives.
+    subscribe: true
     };
 
     if (this._request !== undefined) {
