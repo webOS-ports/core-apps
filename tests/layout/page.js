@@ -115,14 +115,20 @@ function shim(cfg) {
 
 	// Device files (locale strings and the like) by their path, which the
 	// server answers from the rootfs; a missing one is "", as on a device.
-	window.palmGetResource = function (file) {
+	// Asked for as "json" (Enyo 1's fetchAppInfo asks "const json"), the
+	// file comes back parsed, and a missing one as undefined.
+	window.palmGetResource = function (file, how) {
+		var json = /\bjson\b/.test(String(how || ""));
 		try {
 			var x = new XMLHttpRequest();
 			x.open("GET", file, false);
 			x.send();
-			return x.status === 200 ? x.responseText : "";
+			if (x.status !== 200) {
+				return json ? undefined : "";
+			}
+			return json ? JSON.parse(x.responseText) : x.responseText;
 		} catch (e) {
-			return "";
+			return json ? undefined : "";
 		}
 	};
 }
@@ -181,8 +187,12 @@ function check(opts) {
 	}
 	function isScroller(node) {
 		var c = window.enyo && enyo.$ && node.id ? enyo.$[node.id] : null;
+		// Enyo 1's scrollers, and Enyo 2's, which move what they hold by a
+		// transform behind overflow: hidden, so only the kind tells.
 		if (c && ((enyo.BasicScroller && c instanceof enyo.BasicScroller) ||
-			(enyo.VirtualScroller && c instanceof enyo.VirtualScroller))) {
+			(enyo.VirtualScroller && c instanceof enyo.VirtualScroller) ||
+			(enyo.Scroller && c instanceof enyo.Scroller) ||
+			(enyo.ScrollStrategy && c instanceof enyo.ScrollStrategy))) {
 			return true;
 		}
 		var s = getComputedStyle(node);
@@ -255,7 +265,10 @@ function check(opts) {
 	var selector = "button, input, textarea, select, a[href], .enyo-button, .enyo-tool-button, " +
 		".enyo-radiobutton, .enyo-checkbox, .enyo-toggle-button, .enyo-tabbutton, .enyo-listselector, " +
 		".enyo-picker-button, .enyo-menuitem, .enyo-grabbutton, .enyo-custom-button, .enyo-slider-button, " +
-		".enyo-input, .enyo-item";
+		".enyo-input, .enyo-item, " +
+		// Enyo 2's onyx
+		".onyx-button, .onyx-icon-button, .onyx-checkbox, .onyx-toggle-button, .onyx-radiobutton, " +
+		".onyx-input-decorator, .onyx-picker-decorator, .onyx-menu-item, .onyx-slider-knob, .onyx-item";
 	var nodes = Array.prototype.slice.call(document.querySelectorAll(selector));
 	// The outermost of nested matches (an input inside an .enyo-input).
 	nodes = nodes.filter(function (n) {
@@ -273,8 +286,14 @@ function check(opts) {
 	if (window.enyo && enyo.$) {
 		var handlers = [];
 		Object.keys(enyo.$).forEach(function (id) {
+			// Enyo 2 leaves a destroyed control's entry, as null.
 			var c = enyo.$[id], n = c && c.hasNode && c.hasNode();
+			if (!n) {
+				return;
+			}
+			// onclick in Enyo 1, ontap in Enyo 2.
 			var tappable = (typeof c.onclick === "string" && c.onclick) ||
+				(typeof c.ontap === "string" && c.ontap) ||
 				(enyo.CustomButton && c instanceof enyo.CustomButton);
 			if (n && tappable && nodes.indexOf(n) < 0) {
 				handlers.push(n);

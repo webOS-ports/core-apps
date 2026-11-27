@@ -8,6 +8,7 @@ Enyo 1.0 from source, the fake luna bus of the jsdom tests
     npm run layout                                  # every app, every device
     npm run layout -- --app clock                   # one app (end of its id)
     npm run layout -- --device q25,sargo --view alarms
+    npm run layout -- --image                       # and the image's own Enyo apps
 
 It prints one line per app, screen and device, with what is wrong beneath it,
 and writes `out/results.json` and a screenshot of each screen in
@@ -20,7 +21,8 @@ and writes `out/results.json` and a screenshot of each screen in
 | `CHROME`             | the Chromium to run. Default `chromium` |
 | `ENYO`               | the Enyo 1.0 checkout. Default `../enyo-1.0-ports` or `../enyo-1.0` next to this repository |
 | `LUNEOS_COMPONENTS`  | the luneos-components checkout, for the device list. Default `../luneos-components` |
-| `LUNEOS_ROOT`        | a LuneOS root filesystem, for MojoLoader and the Calendar libraries. Without it, Calendar is skipped |
+| `LUNEOS_ROOT`        | a LuneOS root filesystem, for MojoLoader and the Calendar libraries, and the apps `--image` lays out. Without it, Calendar is skipped |
+| `LUNEOS_APPS`        | a copy of a device's `/usr/palm/applications`: the apps as installed there, ahead of `LUNEOS_ROOT`'s (with `--image`, the image's own apps; this repository's apps still come from the checkout) |
 | `LAYOUT_OUT`         | where results and screenshots go. Default `tests/layout/out` |
 | `LAYOUT_JOBS`        | how many devices are laid out at once. Default 4 |
 | `DEBUG`              | print the pages' console output and every bus call and answer |
@@ -41,6 +43,9 @@ panel:
   notch's depth) and gesture area (4 grid units).
 - A popup alert is as wide as the card on a phone and as the shell's popup
   panel on a tablet, and as tall as its opener asked, zoomed with the page.
+- The zoom is the device's only for a page WebAppMgr takes for Mojo or Enyo
+  (by the markers it looks for in the entry page), and an app's own
+  `uiScale` in appinfo.json wins over it.
 
 Profiles that stand for no LuneOS device (`a500`, `asymmetric`, `desktop`)
 are left out.
@@ -50,10 +55,21 @@ are left out.
 `views.js` lists them. Every app gets its first screen ("start"); an app can
 add others with launch params, a seeded bus and steps run in the page (Clock's
 alarm list, empty, with one alarm and with eight, and the alarm going off).
-Notes, Calculator and Contacts are left out: LuneOS does not ship them
-(meta-webos-ports' `core-apps.bb` deletes them). `org.webosports.app.memos`
-and `org.webosports.app.calculator` take the place of the first two, and an
-Enyo 2 app of the same id that of Contacts.
+
+Of this repository's apps, Notes, Calculator and Contacts are left out: LuneOS
+does not ship them (meta-webos-ports' `core-apps.bb` deletes them).
+`org.webosports.app.memos` and `org.webosports.app.calculator` take the place
+of the first two, and an Enyo 2 app of the same id that of Contacts.
+
+## The image's apps
+
+With `--image`, every other web app the image at `LUNEOS_ROOT` shows in the
+launcher, and WebAppMgr takes for Enyo, is laid out too, as built, from
+`usr/palm/applications`: the Enyo 2 apps (Memos, Calculator, Contacts,
+Messaging, Maps, Weather, ...) and Enyo 1 apps from other repositories
+(Tweaks, Files). Each gets a "start" view; one that needs its own service
+answered gets a view in `views.js` (Files). The browser is offline: what an
+app fetches from the internet is not there.
 
 ## What is reported
 

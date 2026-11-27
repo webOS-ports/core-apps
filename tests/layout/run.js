@@ -31,13 +31,16 @@ const {spawn} = require("child_process");
 const {connect} = require("./cdp");
 const {devices} = require("./devices");
 const {shim, check} = require("./page");
-const {views} = require("./views");
+const {views, short, NOT_SHIPPED} = require("./views");
 const {Luna} = require("../harness/luna");
 
 const REPO = path.resolve(__dirname, "../..");
 const ENYO = process.env.ENYO || [path.resolve(REPO, "../enyo-1.0-ports"), path.resolve(REPO, "../enyo-1.0")]
 	.find((d) => fs.existsSync(path.join(d, "framework/enyo.js")));
 const LUNEOS_ROOT = process.env.LUNEOS_ROOT || "";
+// The apps as a device has them installed (a copy of its
+// /usr/palm/applications), ahead of the rootfs's.
+const LUNEOS_APPS = process.env.LUNEOS_APPS || "";
 const CHROME = process.env.CHROME || "chromium";
 const OUT = process.env.LAYOUT_OUT || path.join(__dirname, "out");
 const MEDIA_NOISE = /^(NotSupportedError: Failed to load because no supported source|NotAllowedError: play\(\) failed)/;
@@ -46,9 +49,13 @@ const JOBS = Math.max(1, Number(process.env.LAYOUT_JOBS) || 4);
 process.env.TZ = process.env.TEST_TZ || "Europe/Amsterdam";
 
 function args() {
-	const a = {device: [], app: [], view: []};
+	const a = {device: [], app: [], view: [], image: false};
 	const argv = process.argv.slice(2);
 	for (let i = 0; i < argv.length; i++) {
+		if (argv[i] === "--image") {
+			a.image = true;
+			continue;
+		}
 		const m = /^--(device|app|view)(?:=(.*))?$/.exec(argv[i]);
 		if (!m) {
 			throw new Error("unknown argument " + argv[i]);
@@ -59,9 +66,10 @@ function args() {
 	return a;
 }
 
-// The device's paths, served: the apps from this repository, Enyo from its
-// checkout, and the rest (MojoLoader, the Calendar libraries,
-// locale files) from a LuneOS rootfs when there is one.
+// The device's paths, served: the apps from this repository (but those the
+// image replaces), Enyo 1 from its checkout, and the rest (the image's own
+// apps, MojoLoader, the Calendar libraries, locale files) from a LuneOS
+// rootfs when there is one.
 const TYPES = {".js": "text/javascript", ".css": "text/css", ".html": "text/html", ".json": "application/json",
 	".png": "image/png", ".jpg": "image/jpeg", ".gif": "image/gif", ".svg": "image/svg+xml",
 	".ttf": "font/ttf", ".otf": "font/otf", ".woff": "font/woff", ".wav": "audio/wav", ".mp3": "audio/mpeg"};
@@ -70,8 +78,12 @@ function fileFor(urlPath) {
 	const p = path.posix.normalize(decodeURIComponent(urlPath));
 	let m;
 	if ((m = /^\/usr\/palm\/applications\/(com\.palm\.app\.[^/]+)(\/.*)?$/.exec(p)) &&
-		fs.existsSync(path.join(REPO, m[1]))) {
+		fs.existsSync(path.join(REPO, m[1])) && !NOT_SHIPPED.includes(m[1])) {
 		return path.join(REPO, m[1], m[2] || "/");
+	}
+	if (LUNEOS_APPS && (m = /^\/usr\/palm\/applications\/([^/]+)(\/.*)?$/.exec(p)) &&
+		fs.existsSync(path.join(LUNEOS_APPS, m[1]))) {
+		return path.join(LUNEOS_APPS, m[1], m[2] || "/");
 	}
 	if ((m = /^\/usr\/palm\/frameworks\/enyo\/(?:0\.10|1\.0)(\/.*)?$/.exec(p))) {
 		return path.join(ENYO, m[1] || "/");
@@ -121,7 +133,10 @@ async function startChrome() {
 	fs.rmSync(portFile, {force: true});
 	const proc = spawn(CHROME, ["--headless=new", "--disable-gpu", "--no-first-run", "--no-default-browser-check",
 		"--hide-scrollbars", "--mute-audio", "--disable-popup-blocking", "--autoplay-policy=no-user-gesture-required", "--remote-debugging-port=0", "--user-data-dir=" + profile,
-		"--force-color-profile=srgb", "--font-render-hinting=none", "about:blank"], {stdio: "ignore"});
+		"--force-color-profile=srgb", "--font-render-hinting=none",
+		// Offline: what an app fetches from the internet (Maps' tiles, the
+		// weather) would make each run differ.
+		"--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE 127.0.0.1", "about:blank"], {stdio: "ignore"});
 	for (let i = 0; i < 150 && !fs.existsSync(portFile); i++) {
 		await new Promise((r) => setTimeout(r, 100));
 	}
@@ -137,7 +152,22 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // One app in one window size: its windows attached as they open, each given
 // the shim and the device's size, the bus answered by a fresh fake.
-async function runView(cdp, base, device, view, appInfo) {
+// The device as an app sees it. WebAppMgr zooms a page by the device's legacy
+// zoom only when it takes it for a Mojo or Enyo app, and by the app's own
+// uiScale (appinfo.json) when it has one (wam, WebPageBlink::UiScaleFactor).
+function asSeenBy(device, view, appInfo) {
+	const zoom = typeof appInfo.uiScale === "number" && appInfo.uiScale > 0 ? appInfo.uiScale :
+		view.legacy ? device.zoom : 1;
+	if (zoom === device.zoom) {
+		return device;
+	}
+	return Object.assign({}, device, {zoom, zoomFrom: typeof appInfo.uiScale === "number" ? "the app's uiScale" : "no legacy zoom",
+		css: device.card.map((x) => Math.floor(x / zoom)),
+		popupWidth: Math.floor(device.popupWidth * device.zoom / zoom)});
+}
+
+async function runView(cdp, base, dev, view, appInfo) {
+	const device = asSeenBy(dev, view, appInfo);
 	const luna = new Luna();
 	luna.win = {Date, setTimeout, closed: false};
 	if (view.setup) {
@@ -428,7 +458,7 @@ async function runView(cdp, base, device, view, appInfo) {
 	}
 	const shotDir = path.join(OUT, "shots", device.name);
 	fs.mkdirSync(shotDir, {recursive: true});
-	const shot = path.join(shotDir, view.app.replace("com.palm.app.", "") + "-" + view.name + ".png");
+	const shot = path.join(shotDir, short(view.app) + "-" + view.name + ".png");
 	try {
 		const img = await cdp.send("Page.captureScreenshot", {format: "png"}, w.sessionId);
 		fs.writeFileSync(shot, Buffer.from(img.data, "base64"));
@@ -448,7 +478,10 @@ async function main() {
 		throw new Error("no Enyo 1.0: set ENYO to an enyo-1.0-ports checkout");
 	}
 	const devs = devices(a.device);
-	const todo = views(REPO).filter((v) => (!a.app.length || a.app.some((x) => v.app.endsWith(x))) &&
+	if (a.image && !LUNEOS_ROOT) {
+		throw new Error("--image needs LUNEOS_ROOT, the image's root filesystem");
+	}
+	const todo = views(REPO, a.image ? LUNEOS_ROOT : null, LUNEOS_APPS).filter((v) => (!a.app.length || a.app.some((x) => v.app.endsWith(x))) &&
 		(!a.view.length || a.view.includes(v.name)));
 	const server = await serve();
 	const base = "http://127.0.0.1:" + server.address().port;
@@ -462,7 +495,7 @@ async function main() {
 	let failed = 0;
 	try {
 		for (const view of todo) {
-			const appInfo = JSON.parse(fs.readFileSync(path.join(REPO, view.app, "appinfo.json"), "utf8"));
+			const appInfo = JSON.parse(fs.readFileSync(path.join(view.dir, "appinfo.json"), "utf8"));
 			if (view.needsRootfs && !LUNEOS_ROOT) {
 				console.log("SKIP " + view.app + " " + view.name + ": needs LUNEOS_ROOT");
 				continue;
@@ -481,7 +514,7 @@ async function main() {
 				results.push(r);
 				const bad = r.issues.length || r.error || r.errors.length;
 				failed += bad ? 1 : 0;
-				console.log((bad ? "FAIL " : "ok   ") + d.name.padEnd(12) + view.app.replace("com.palm.app.", "").padEnd(10) +
+				console.log((bad ? "FAIL " : "ok   ") + d.name.padEnd(12) + short(view.app).padEnd(10) +
 					view.name.padEnd(14) + (r.width ? r.width + "x" + r.height : "") +
 					(r.error ? "  error: " + r.error : ""));
 				for (const i of r.issues) {
