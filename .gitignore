@@ -3,3 +3,4 @@ BuildResults
 .settings
 node_modules/
 coverage/
+tests/layout/out/

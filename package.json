@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "node --test --test-reporter=spec \"tests/harness/*.test.js\" \"com.palm.app.*/tests/**/*.test.js\"",
-    "coverage": "node --test --experimental-test-coverage --test-coverage-include=\"com.palm.app.*/**/*.js\" --test-coverage-exclude=\"**/tests/**\" \"com.palm.app.*/tests/**/*.test.js\""
+    "coverage": "node --test --experimental-test-coverage --test-coverage-include=\"com.palm.app.*/**/*.js\" --test-coverage-exclude=\"**/tests/**\" \"com.palm.app.*/tests/**/*.test.js\"",
+    "layout": "node tests/layout/run.js"
   },
   "devDependencies": {
     "jsdom": "29.1.1"
