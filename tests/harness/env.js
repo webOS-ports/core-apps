@@ -254,9 +254,17 @@ function boot(options = {}) {
 		let isClosed = false;
 		const jsdomClose = win.close.bind(win);
 		Object.defineProperty(win, "closed", {get: () => isClosed, configurable: true});
+		// A browser unloads a window it closes, so a page's unload handlers
+		// run (the Clock's alarm popup snoozes from its own); jsdom's close()
+		// does not.
 		win.close = () => {
 			if (!isClosed) {
 				isClosed = true;
+				try {
+					win.dispatchEvent(new win.Event("unload"));
+				} catch (e) {
+					reportError(e);
+				}
 				jsdomClose();
 			}
 		};
@@ -433,6 +441,11 @@ function boot(options = {}) {
 			sender = win;
 			try {
 				page.launchScripts.forEach(page.runScript);
+				// The page has loaded: a browser fires load now, and Enyo's
+				// window manager answers it with the window's first
+				// windowParamsChange (manager.js addLoadListener) - how a
+				// popup gets the callbacks its opener passed it.
+				win.dispatchEvent(new win.Event("load"));
 			} finally {
 				sender = prev;
 			}

@@ -65,10 +65,15 @@ enyo.kind({
 		this.log(paramString);
 		this.startParams = JSON.parse(paramString);
 	
+		// Now, or once the prefs are in (gotPrefs) - not both. With the
+		// "else" missing here and in the two handlers below, a launch was
+		// handled twice: an alarm ringing into a running Clock also opened
+		// its main card, and a relaunch could open two of them.
 		if(enyo.application.prefs)
 		{
 			this.selectLaunch();
 		}
+		else
 		{
 			this.loadPrefs();
 		}
@@ -87,6 +92,7 @@ enyo.kind({
 		{
 			this.selectLaunch();
 		}
+		else
 		{
 			this.loadPrefs();
 		}
@@ -156,6 +162,7 @@ enyo.kind({
 				{
 					this.selectLaunch();
 				}
+				else
 				{
 					this.loadPrefs();
 				}			

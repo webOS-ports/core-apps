@@ -248,13 +248,37 @@ enyo.kind(
 	stopRingtone: function ()
 	{
 		this.log();
-		this.$.audioManager.pauseAudio(false);
+		this.$.audioManager.stopAudio();
 	},
 	
 	
+	// Whether the alarm has been snoozed or dismissed already. Closing its
+	// popup counts as a snooze (DashAlarmApp.onUnload) unless one of the
+	// popup's own buttons was used; snoozed or dismissed any other way (a
+	// volume key, a "dismiss" launch), the popup then closes behind it and
+	// asks again - by then this Alarm may be gone, and a dismissed alarm
+	// was snoozed after all and rang again.
+	boolStopped: false,
+
+	// True the first time; after that the alarm is done with.
+	stopOnce: function ()
+	{
+		if (this.boolStopped)
+		{
+			this.log("already snoozed or dismissed");
+			return false;
+		}
+		this.boolStopped = true;
+		return true;
+	},
+
 	dismissAlarm: function ()
 	{
 		this.log();
+		if (!this.stopOnce())
+		{
+			return;
+		}
 		
 		this.stopRingtone();
 		this.setSnoozed(false);
@@ -331,6 +355,10 @@ enyo.kind(
 	snoozeAlarm: function ()
 	{
 		this.log();
+		if (!this.stopOnce())
+		{
+			return;
+		}
 
 		this.stopRingtone();
 		this.closeAlarmDash();
