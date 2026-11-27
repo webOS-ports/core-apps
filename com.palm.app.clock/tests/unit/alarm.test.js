@@ -187,6 +187,21 @@ describe("Alarm", () => {
 			assert.equal(popups(page.env)[0].closed, true);
 		});
 
+		// Dismissed other than by its popup's buttons (the app relaunched
+		// with "dismiss"), the popup closes as one left without a choice and
+		// asks for a snooze: an alarm already stopped takes no second stop.
+		it("is not snoozed after all when its popup closes behind the dismiss", async () => {
+			await schedule(alarmRecord({occurs: "once"}));
+			await ring("clockAlarm1");
+			page.env.launch({action: "dismiss", key: "clockAlarm1"});
+			await page.env.settle();
+
+			assert.deepEqual(page.env.errors, []);
+			assert.equal(popups(page.env)[0].closed, true);
+			assert.equal(page.env.luna.activities.get("clockAlarm1"), undefined);
+			assert.equal(dbAlarm("clockAlarm1").enabled, false);
+		});
+
 		it("lets the screen turn off again", async () => {
 			await schedule(alarmRecord());
 			await ring("clockAlarm1");
