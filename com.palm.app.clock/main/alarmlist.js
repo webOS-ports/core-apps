@@ -29,9 +29,13 @@ enyo.kind({
 			{kind: enyo.Image, src: "images/menu-icon-alarm.png", style: "margin-top: -3px;"},
 			{content: $L("Alarms")}
 		]},
-			{kind: "Control", width: "100%", height: "70%", className: "alarms", components: [
+			// A column down to the toolbar: the list takes what the button
+			// below it leaves. It had height 70% and the list 100% of that,
+			// which put New Alarm under the list, past the bottom of a short
+			// screen (the Q25's 720x720) where it could not be reached.
+			{kind: "VFlexBox", className: "alarms", components: [
 				{name: "lblEmpty", showing: "false", content: $L("No Alarms"), style:''},
-				{name: "listAlarms", kind: "VirtualList", height: "100%", className: 'enyo-group enyo-roundy', onSetupRow: "listSetupRow", components: [
+				{name: "listAlarms", kind: "VirtualList", flex: 1, className: 'enyo-group enyo-roundy', onSetupRow: "listSetupRow", components: [
 					{name: "itemAlarm", kind: "SwipeableItem", onConfirm: "onConfirmDelete_itemAlarm", components: [
 						{kind: "HFlexBox", className:'enyo-group-inner', align:'center', components: [
 							{kind: "Control", onclick: "onclick_listAlarms", flex:1, style:'padding-left:10px', components: [
