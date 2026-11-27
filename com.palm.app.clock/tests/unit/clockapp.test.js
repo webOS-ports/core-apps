@@ -64,6 +64,42 @@ describe("ClockApp", () => {
 		assert.deepEqual(cards(), []);
 	});
 
+	// What the app asked Enyo's window manager to bring up, by window name.
+	function spyActivations() {
+		const names = [], w = page.env.enyo.windows, activate = w.activate;
+		w.activate = function (url, name) {
+			names.push(name);
+			return activate.apply(this, arguments);
+		};
+		return names;
+	}
+
+	// A launch is handled once, not again when the prefs it reloads come in.
+	// Handled twice, it activated the main window twice in a row, and on a
+	// device, where Enyo knows a window by name only once its page has loaded,
+	// that opened two main cards.
+	it("activates the main window once when relaunched while running", async () => {
+		page.env.launch({});
+		await page.env.settle();
+		const activated = spyActivations();
+		page.env.launch({});
+		await page.env.settle();
+
+		assert.deepEqual(activated, ["com.palm.app.clock.main"]);
+	});
+
+	it("only rings, without bringing up the main window, when an alarm rings while it runs", async () => {
+		page.env.luna.db.seed([alarmRecord()]);
+		page.env.launch({action: "update"});
+		await page.env.settle();
+		const activated = spyActivations();
+		page.env.launch({action: "ring", key: "clockAlarm1", setTime: "2026-11-03 16:00:00"});
+		await page.env.settle();
+
+		assert.equal(popups(page.env).length, 1);
+		assert.equal(activated.includes("com.palm.app.clock.main"), false);
+	});
+
 	it("ignores an 'update' launch", async () => {
 		page.env.launch({action: "update"});
 		await page.env.settle();
