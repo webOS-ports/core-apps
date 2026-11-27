@@ -36,6 +36,8 @@ Example:
       jasmine.js                 runs the old Jasmine 1.x specs
       device/                    answers recorded from a device
       *.test.js                  tests of the harness itself
+    tests/layout/                every app laid out on every device, in
+                                 Chromium: npm run layout (its README.md)
     com.palm.app.<app>/tests/
       unit/*.test.js             the app's tests
       legacy/                    the Jasmine specs that came with the app
