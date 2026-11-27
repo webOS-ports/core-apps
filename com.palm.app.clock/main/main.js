@@ -274,6 +274,11 @@ enyo.kind({
 		this.log(intViewIndex);
 		
 		this.$.paneMainView.selectViewByIndex(this.$.radSelectView.getValue());
+		// The face fits the room it has, which it may not have had while the
+		// alarm list was showing (a rotation, a resize).
+		if (this.clock && this.clock.scaleClock) {
+			this.clock.scaleClock();
+		}
 
 		if(intViewIndex === 1)
 		{

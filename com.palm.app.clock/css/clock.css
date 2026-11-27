@@ -33,6 +33,10 @@
 
 .analog {
 	margin: auto;
+	/* The hands are face-sized squares, rotated: their corners reach past the
+	   face, widening the page and lying over the toolbar below. What they
+	   draw is all inside the face. */
+	overflow: hidden;
 	/*display: none;*/ /*TODO: Add this back when onWindowActivated bug is fixed */
 }
 
