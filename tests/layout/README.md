@@ -20,7 +20,7 @@ and writes `out/results.json` and a screenshot of each screen in
 | `CHROME`             | the Chromium to run. Default `chromium` |
 | `ENYO`               | the Enyo 1.0 checkout. Default `../enyo-1.0-ports` or `../enyo-1.0` next to this repository |
 | `LUNEOS_COMPONENTS`  | the luneos-components checkout, for the device list. Default `../luneos-components` |
-| `LUNEOS_ROOT`        | a LuneOS root filesystem, for MojoLoader and the Calendar and Contacts libraries. Without it, Calendar and Contacts are skipped |
+| `LUNEOS_ROOT`        | a LuneOS root filesystem, for MojoLoader and the Calendar libraries. Without it, Calendar is skipped |
 | `LAYOUT_OUT`         | where results and screenshots go. Default `tests/layout/out` |
 | `LAYOUT_JOBS`        | how many devices are laid out at once. Default 4 |
 | `DEBUG`              | print the pages' console output and every bus call and answer |
@@ -50,6 +50,10 @@ are left out.
 `views.js` lists them. Every app gets its first screen ("start"); an app can
 add others with launch params, a seeded bus and steps run in the page (Clock's
 alarm list, empty, with one alarm and with eight, and the alarm going off).
+Notes, Calculator and Contacts are left out: LuneOS does not ship them
+(meta-webos-ports' `core-apps.bb` deletes them). `org.webosports.app.memos`
+and `org.webosports.app.calculator` take the place of the first two, and an
+Enyo 2 app of the same id that of Contacts.
 
 ## What is reported
 

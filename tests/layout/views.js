@@ -68,20 +68,19 @@ const EXTRA = [
 			return {action: "ring", key: "clockAlarm1", setTime: d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" +
 				p(d.getDate()) + " " + p(d.getHours()) + ":" + p(d.getMinutes()) + ":" + p(d.getSeconds())};
 		},
-		window: "dashAlarm\\.html"},
-	// More memos than any screen holds: the grid has to bring the last ones
-	// into reach.
-	{app: "com.palm.app.notes", name: "many",
-		setup: (luna) => luna.db.seed(Array.from({length: 20}, (_, i) => ({_kind: "com.palm.note:1",
-			_id: "memo" + (i + 1), color: ["yellow", "pink", "blue", "green"][i % 4], position: String.fromCharCode(97 + i),
-			title: "Memo " + (i + 1), text: "Memo " + (i + 1), displayText: "Memo " + (i + 1)})))}
+		window: "dashAlarm\\.html"}
 ];
 
-const NEEDS_ROOTFS = ["com.palm.app.calendar", "com.palm.app.contacts"];
+const NEEDS_ROOTFS = ["com.palm.app.calendar"];
+
+// Apps LuneOS does not ship: meta-webos-ports' core-apps.bb deletes them
+// from the image. org.webosports.app.memos and .calculator take the place
+// of the first two, and an Enyo 2 app of the same id that of Contacts.
+const NOT_SHIPPED = ["com.palm.app.notes", "com.palm.app.calculator", "com.palm.app.contacts"];
 
 function views(repo) {
 	const apps = fs.readdirSync(repo).filter((d) => /^com\.palm\.app\./.test(d) &&
-		fs.existsSync(path.join(repo, d, "appinfo.json"))).sort();
+		fs.existsSync(path.join(repo, d, "appinfo.json")) && !NOT_SHIPPED.includes(d)).sort();
 	const out = [];
 	for (const app of apps) {
 		const own = EXTRA.filter((v) => v.app === app);

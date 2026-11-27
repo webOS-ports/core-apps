@@ -60,7 +60,7 @@ function args() {
 }
 
 // The device's paths, served: the apps from this repository, Enyo from its
-// checkout, and the rest (MojoLoader, the Calendar and Contacts libraries,
+// checkout, and the rest (MojoLoader, the Calendar libraries,
 // locale files) from a LuneOS rootfs when there is one.
 const TYPES = {".js": "text/javascript", ".css": "text/css", ".html": "text/html", ".json": "application/json",
 	".png": "image/png", ".jpg": "image/jpeg", ".gif": "image/gif", ".svg": "image/svg+xml",
