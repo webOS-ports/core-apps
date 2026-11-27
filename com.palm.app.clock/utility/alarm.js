@@ -248,7 +248,7 @@ enyo.kind(
 	stopRingtone: function ()
 	{
 		this.log();
-		this.$.audioManager.pauseAudio(false);
+		this.$.audioManager.stopAudio();
 	},
 	
 	

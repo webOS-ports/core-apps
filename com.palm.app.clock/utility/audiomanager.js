@@ -108,6 +108,23 @@ enyo.kind(
 		return this.boolAudioPlaying;
 	},
 	
+	// Stops the sound and lets go of it. A paused element keeps its stream
+	// open, and audiod holds the music down while an alarm's stream is open:
+	// after a snooze or dismiss the music stayed silent until the browser
+	// closed the paused stream, some ten seconds later. With no source and a
+	// load(), the element drops its stream at once. (load() with no src
+	// attribute empties the element; it raises no error, so the default
+	// sound is not played in its place.)
+	stopAudio: function ()
+	{
+		this.log();
+		this.boolLoop = false;
+		this.objAudio.pause();
+		this.objAudio.removeAttribute("src");
+		this.objAudio.load();
+		this.boolAudioPlaying = false;
+	},
+
 	onAudioConnected: function (event)
 	{
 		

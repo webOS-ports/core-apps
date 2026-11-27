@@ -26,6 +26,17 @@ const assert = require("node:assert/strict");
 const {usePage, alarmRecord, popups} = require("../fixtures");
 
 describe("Alarm", () => {
+	// Stopped and let go of: paused, then emptied with load() and no source,
+	// so the browser closes the stream and audiod gives the music back at
+	// once, not when it would close a paused stream some seconds later.
+	function assertSoundReleased() {
+		const ops = page.env.audio.slice(-2);
+		assert.deepEqual(ops.map((a) => a.op), ["pause", "load"]);
+		assert.equal(ops[1].src, "");
+		// and no default sound started in its place
+		assert.notEqual(page.env.audio.at(-1).op, "play");
+	}
+
 	// A cold page: prefs are loaded from the database, as on a device.
 	const page = usePage({now: "2026-11-04T06:00:00", prefs: null});
 
@@ -152,7 +163,7 @@ describe("Alarm", () => {
 			await ring("clockAlarm1");
 			await press("dismiss", "clockAlarm1");
 
-			assert.equal(page.env.audio.at(-1).op, "pause");
+			assertSoundReleased();
 			assert.equal(popups(page.env)[0].closed, true);
 			assert.equal(scheduledAt("clockAlarm1"), "2026-11-05 07:05:00");
 		});
@@ -193,7 +204,7 @@ describe("Alarm", () => {
 			await ring("clockAlarm1");
 			await press("snooze", "clockAlarm1");
 
-			assert.equal(page.env.audio.at(-1).op, "pause");
+			assertSoundReleased();
 			assert.equal(popups(page.env)[0].closed, true);
 			assert.equal(scheduledAt("clockAlarm1"), "2026-11-04 07:10:00");
 		});
